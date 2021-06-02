@@ -1,6 +1,6 @@
 NAME		= lib.a
 
-CC			= ~/.brew/bin/g++-9
+CC			= clang++ -std=c++17
 FLAGS		= -g -Wall -Wextra -Werror
 
 INCLUDES	= ./includes/lib.hpp
@@ -15,9 +15,12 @@ MATH		= fabs.cpp \
 
 STRING		= count_char.cpp
 
-SRC_CAT 	= math string
+TESTER		= ProgramTester.cpp
+
+SRC_CAT 	= math string tester
 SRCS		= $(addprefix math/, $(MATH))
 SRCS		+= $(addprefix string/, $(STRING))
+SRCS		+= $(addprefix tester/, $(TESTER))
 
 
 BIN			= $(SRCS:%.cpp=%.o)

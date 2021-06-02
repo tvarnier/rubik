@@ -3,7 +3,9 @@
 // ----- Constructors ----- //
 
 Cube::Cube() : m_cube({0x00000000, 0x11111111, 0x22222222, 0x33333333, 0x44444444, 0x55555555 }), m_center({0, 1, 2, 3, 4, 5})
-{}
+{
+    initMoveMap();
+}
 Cube::Cube(const Cube& other)
 {
     m_cube = other.m_cube;
@@ -59,7 +61,24 @@ void        Cube::print()
     lib::printendl("\n===========================");
 }
 
-void        Cube::getColor(COLOR color)
+void        Cube::initMoveMap()
+{
+    std::array<std::pair<std::string, moveFunction>, 18> moves = {{
+        {"U", &Cube::up}, {"U'", &Cube::upR}, {"U2", &Cube::up2},
+        {"D", &Cube::down}, {"D'", &Cube::downR}, {"D2", &Cube::down2},
+        {"R", &Cube::right}, {"R'", &Cube::rightR}, {"R2", &Cube::right2},
+        {"L", &Cube::left}, {"L'", &Cube::leftR}, {"L2", &Cube::left2},
+        {"F", &Cube::front}, {"F'", &Cube::frontR}, {"F2", &Cube::front2},
+        {"B", &Cube::back}, {"B'", &Cube::backR}, {"B2", &Cube::back2}
+    }};
+
+    for ( int i = 0; i < 18; ++i)
+        moveMap.insert(moves[i]);
+}
+
+int         Cube::move(const std::string m) { if (moveMap[m]) { (this->*moveMap[m])() ; return (0); } else return (1); }
+
+void        Cube::getColor(const COLOR color)
 {
     switch ( color )
         {

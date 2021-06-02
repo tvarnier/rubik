@@ -72,6 +72,8 @@
 
 class Cube {
 
+    typedef void (Cube::*moveFunction)(void); // function pointer type
+
     public :
         Cube();					    // Constructor
 		Cube(const Cube& other);	// Constructor
@@ -81,6 +83,17 @@ class Cube {
         void        print();
 
         /*     Movements     */
+
+        int         parseAndMove(std::string moves);
+
+        int         move(const std::string m);
+
+    private :
+        std::array<int, 6>  m_cube;
+        std::array<int, 6>  m_center;
+        std::map<std::string, moveFunction> moveMap;
+
+        void        initMoveMap();
 
         void        up();
         void        upR();
@@ -103,21 +116,17 @@ class Cube {
         void        backR();
         void        back2();
 
-    private :
-        std::array<int, 6>  m_cube;
-        std::array<int, 6>  m_center;
+        std::vector<std::string>    parseMoves(std::string moves);
 
-        void            getColor(COLOR color);
-        int             getColorFromIndex(int face, int x, int y);
-        int             getColorFromPos(int face, int pos);
+        void        getColor(const COLOR color);
+        int         getColorFromIndex(int face, int x, int y);
+        int         getColorFromPos(int face, int pos);
 
-        void            invert(int op1[4], int op2[4], int op3[4], int op4[4]);
+        void        invert(int op1[4], int op2[4], int op3[4], int op4[4]);
 
         std::array<int, 3>   getValuesCubie(int op[4]);
         std::array<int, 3>   swapCubie(int op[4], std::array<int, 3> replacer);
-        
 
-        // Rotations
 
 
 };

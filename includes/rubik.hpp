@@ -9,6 +9,8 @@
 # include <algorithm>
 # include <set>
 # include <unordered_map>
+# include <map>
+# include <array>
 # include <functional>
 # include <regex>
 # include <array>
@@ -16,8 +18,6 @@
 # include <list>
 # include <fstream>
 # include <iomanip>
-
-# include <curses.h>
 
 # include "../lib/includes/lib.hpp"
 

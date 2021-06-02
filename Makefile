@@ -1,17 +1,18 @@
 NAME		= rubik
 
-CC			= g++-9
-FLAGS		= -g -Wall -Wextra -Werror -O3
+CC			= clang++ -std=c++17
+FLAGS		= -O3 
 LIB			= lib/lib.a
 
 INCLUDES	= ./includes/rubik.hpp
 
 SRC			= main.cpp
 
-OBJ			= Cube/Cube.cpp			\
-			  Cube/CubeMovement.cpp
+OBJ			= Cube/Cube.cpp \
+			  Cube/CubeMovement.cpp \
+			  Cube/CubeParse.cpp
 OBJ_DIR		= objects/
-OBJ_SUBDIR	= Objects/Cube
+OBJ_SUBDIR	= objects/Cube
 
 SRC_PATH	= ./srcs/
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
@@ -29,7 +30,7 @@ BIN_SUBDIR  += $(addprefix $(BIN_PATH), $(OBJ_SUBDIR))
 all: $(NAME)
 
 $(NAME): $(LIB) $(BIN_PATH) $(BIN_SUBDIR) $(BINS)
-	$(CC) $(FLAGS) $(BINS) $(LIB) -lncurses -o $@
+	$(CC) $(FLAGS) $(BINS) $(LIB) -o $@
 
 $(BIN_PATH):
 	@ mkdir $@

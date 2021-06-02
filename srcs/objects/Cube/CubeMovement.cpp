@@ -114,9 +114,9 @@ void        Cube::right()
 {
     m_cube[RIGHT] = rotate(m_cube[RIGHT]);
     int inv1[4] = {BACK, UL, L, DL};
-    int inv2[4] = {DOWN, UR, U, UL};
+    int inv2[4] = {DOWN, DR, R, UR};
     int inv3[4] = {FRONT, DR, R, UR};
-    int inv4[4] = {UP, DL, D, DR};
+    int inv4[4] = {UP, DR, R, UR};
     invert(inv1, inv2, inv3, inv4);
 }
 
@@ -124,9 +124,9 @@ void        Cube::rightR()
 {
     m_cube[RIGHT] = reverseRotate(m_cube[RIGHT]);
     int inv1[4] = {BACK, UL, L, DL};
-    int inv2[4] = {UP, DL, D, DR};
+    int inv2[4] = {UP, DR, R, UR};
     int inv3[4] = {FRONT, DR, R, UR};
-    int inv4[4] = {DOWN, UR, U, UL};
+    int inv4[4] = {DOWN, DR, R, UR};
     invert(inv1, inv2, inv3, inv4);
 }
 
@@ -138,9 +138,9 @@ void        Cube::left()
 {
     m_cube[LEFT] = rotate(m_cube[LEFT]);
     int inv1[4] = {FRONT, UL, L, DL};
-    int inv2[4] = {DOWN, UR, U, UL};
+    int inv2[4] = {DOWN, UL, L, DL};
     int inv3[4] = {BACK, DR, R, UR};
-    int inv4[4] = {UP, DL, D, DR};
+    int inv4[4] = {UP, UL, L, DL};
     invert(inv1, inv2, inv3, inv4);
 }
 
@@ -148,9 +148,9 @@ void        Cube::leftR()
 {
     m_cube[LEFT] = reverseRotate(m_cube[LEFT]);
     int inv1[4] = {FRONT, UL, L, DL};
-    int inv2[4] = {UP, DL, D, DR};
+    int inv2[4] = {UP, UL, L, DL};
     int inv3[4] = {BACK, DR, R, UR};
-    int inv4[4] = {DOWN, UR, U, UL};
+    int inv4[4] = {DOWN, UL, L, DL};
     invert(inv1, inv2, inv3, inv4);
 }
 
@@ -186,9 +186,9 @@ void        Cube::back()
 {
     m_cube[BACK] = rotate(m_cube[BACK]);
     int inv1[4] = {LEFT, UL, L, DL};
-    int inv2[4] = {DOWN, UR, U, UL};
+    int inv2[4] = {DOWN, DL, D, DR};
     int inv3[4] = {RIGHT, DR, R, UR};
-    int inv4[4] = {UP, DL, D, DR};
+    int inv4[4] = {UP, UR, U, UL};
     invert(inv1, inv2, inv3, inv4);
 }
 
@@ -196,9 +196,9 @@ void        Cube::backR()
 {
     m_cube[BACK] = reverseRotate(m_cube[BACK]);
     int inv1[4] = {LEFT, UL, L, DL};
-    int inv2[4] = {UP, DL, D, DR};
+    int inv2[4] = {UP, UR, U, UL};
     int inv3[4] = {RIGHT, DR, R, UR};
-    int inv4[4] = {DOWN, UR, U, UL};
+    int inv4[4] = {DOWN, DL, D, DR};
     invert(inv1, inv2, inv3, inv4);
 }
 
