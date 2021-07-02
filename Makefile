@@ -10,9 +10,14 @@ SRC			= main.cpp
 
 OBJ			= Cube/Cube.cpp \
 			  Cube/CubeMovement.cpp \
-			  Cube/CubeParse.cpp
+			  Kociemba/Kociemba.cpp \
+			  Kociemba/KociembaCoordinates.cpp \
+			  Kociemba/KociembaMoveTables.cpp \
+			  Kociemba/KociembaDephts.cpp \
+			  Kociemba/KociembaSolve.cpp
 OBJ_DIR		= objects/
-OBJ_SUBDIR	= objects/Cube
+OBJ_SUBDIR	= objects/Cube \
+			  objects/Kociemba
 
 SRC_PATH	= ./srcs/
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
@@ -42,7 +47,7 @@ $(LIB):
 	@ make -C lib
 
 $(BIN_PATH)%.o: $(SRC_PATH)%.cpp
-	$(CC) -I includes -o $@ -c $< $(FLAGS)
+	$(CC) -I includes -I /Users/tvarnier/.brew/include -o $@ -c $< $(FLAGS)
 
 clean:
 	@ make -C lib clean

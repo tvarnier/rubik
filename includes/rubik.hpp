@@ -8,6 +8,7 @@
 # include <sstream>
 # include <algorithm>
 # include <set>
+# include <unordered_set>
 # include <unordered_map>
 # include <map>
 # include <array>
@@ -18,10 +19,11 @@
 # include <list>
 # include <fstream>
 # include <iomanip>
+# include <queue>
 
 # include "../lib/includes/lib.hpp"
 
-# include "../srcs/objects/Cube/Cube.hpp"
-class Cube;
+# include "../srcs/objects/Kociemba/Kociemba.hpp"
+class Kociemba;
 
 #endif

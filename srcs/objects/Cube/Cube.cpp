@@ -1,124 +1,70 @@
-# include "Cube.hpp"
+#include "Cube.hpp"
 
-// ----- Constructors ----- //
+std::map<std::string, Cube::moveFunction> Cube::moveMap = {
+    {"U", &Cube::up}, {"U'", &Cube::upR}, {"U2", &Cube::up2},
+    {"D", &Cube::down}, {"D'", &Cube::downR}, {"D2", &Cube::down2},
+    {"R", &Cube::right}, {"R'", &Cube::rightR}, {"R2", &Cube::right2},
+    {"L", &Cube::left}, {"L'", &Cube::leftR}, {"L2", &Cube::left2},
+    {"F", &Cube::front}, {"F'", &Cube::frontR}, {"F2", &Cube::front2},
+    {"B", &Cube::back}, {"B'", &Cube::backR}, {"B2", &Cube::back2}
+};
 
-Cube::Cube() : m_cube({0x00000000, 0x11111111, 0x22222222, 0x33333333, 0x44444444, 0x55555555 }), m_center({0, 1, 2, 3, 4, 5})
+Cube::Cube()
 {
-    initMoveMap();
-}
-Cube::Cube(const Cube& other)
-{
-    m_cube = other.m_cube;
-}
+    /*for (CORNERS i = URF; i <  8; i = (CORNERS) ((unsigned int)i + 1) )
+        m_corners[i] = std::make_pair(i, 0);
 
-void        Cube::print()
-{
-    lib::printendl("===========================\n");
-
-    int face = 0;
-    int row = 0;
-
-    for (row = 0; row < 3; ++row)
-    {
-        lib::print("        ");
-        for (int i = 0; i < 3; ++i)
-        {
-            getColor((COLOR)getColorFromIndex(face, row, i));
-            lib::print(" ");
-        }
-        cout << std::endl;
-    }
-
-    lib::printendl("");
-
-    for (row = 0; row < 3; ++row)
-    {
-        for (face = 1; face < 5; ++face)
-        {
-            for (int i = 0; i < 3; ++i)
-            {
-                getColor((COLOR)getColorFromIndex(face, row, i));
-                lib::print(" ");
-            }
-            lib::print("  ");
-        }
-        cout << std::endl;
-    }
-
-    lib::printendl("");
-
-    for (row = 0; row < 3; ++row)
-    {
-        lib::print("        ");
-        for (int i = 0; i < 3; ++i)
-        {
-            getColor((COLOR)getColorFromIndex(face, row, i));
-            lib::print(" ");
-        }
-        cout << std::endl;
-    }
-
-    lib::printendl("\n===========================");
-}
-
-void        Cube::initMoveMap()
-{
-    std::array<std::pair<std::string, moveFunction>, 18> moves = {{
-        {"U", &Cube::up}, {"U'", &Cube::upR}, {"U2", &Cube::up2},
-        {"D", &Cube::down}, {"D'", &Cube::downR}, {"D2", &Cube::down2},
-        {"R", &Cube::right}, {"R'", &Cube::rightR}, {"R2", &Cube::right2},
-        {"L", &Cube::left}, {"L'", &Cube::leftR}, {"L2", &Cube::left2},
-        {"F", &Cube::front}, {"F'", &Cube::frontR}, {"F2", &Cube::front2},
-        {"B", &Cube::back}, {"B'", &Cube::backR}, {"B2", &Cube::back2}
-    }};
-
-    for ( int i = 0; i < 18; ++i)
-        moveMap.insert(moves[i]);
+    for (  EDGES i = UR;  i < 12; i =   (EDGES) ((unsigned int)i + 1) )
+        m_edges[i] = std::make_pair(i, 0);*/
 }
 
 int         Cube::move(const std::string m) { if (moveMap[m]) { (this->*moveMap[m])() ; return (0); } else return (1); }
 
-void        Cube::getColor(const COLOR color)
+void        Cube::shuffle(int iterations)
 {
-    switch ( color )
-        {
-            case COLOR::CWHITE:
-                lib::print(WHITE, "W");
-                break;
-            case COLOR::CGREEN:
-                lib::print(GREEN, "G");
-                break;
-            case COLOR::CRED:
-                lib::print(RED, "R");
-                break;
-            case COLOR::CBLUE:
-                lib::print(BLUE, "B");
-                break;
-            case COLOR::CORANGE:
-                lib::print(MAGENTA, "O");
-                break;
-            case COLOR::CYELLOW:
-                lib::print(YELLOW, "Y");
-                break;
-            default:
-                break;
-        }
+    int     lastMove(-1);
+    /*moveFunction    arrayMoves[6][3] = {
+        { &Cube::up, &Cube::upR, &Cube::up2 },
+        { &Cube::down, &Cube::downR, &Cube::down2 },
+        { &Cube::right, &Cube::rightR, &Cube::right2 },
+        { &Cube::left, &Cube::leftR, &Cube::left2 },
+        { &Cube::front, &Cube::frontR, &Cube::front2 },
+        { &Cube::back, &Cube::backR, &Cube::back2 }
+    };*/
+    moveFunction    arrayMoves[6][3] = {
+        { &Cube::up, &Cube::upR, &Cube::up2 },
+        { &Cube::down, &Cube::downR, &Cube::down2 },
+        { &Cube::right2, &Cube::right2, &Cube::right2 },
+        { &Cube::left2, &Cube::left2, &Cube::left2 },
+        { &Cube::front2, &Cube::front2, &Cube::front2 },
+        { &Cube::back2, &Cube::back2, &Cube::back2 }
+    };
+
+    srand (time(NULL));
+
+    int r = rand() % 18 + 0;
+
+    while (iterations)
+    {
+        if (r / 3 == lastMove)
+            r += 3;
+        for (auto it = moveMap.begin(); it != moveMap.end(); ++it)
+            if (it->second == arrayMoves[r / 3][r % 3])      
+                std::printf("%s \n", std::string(it->first).c_str());
+        (this->*arrayMoves[r / 3][r % 3])();
+        lastMove = r / 3;
+        r = rand() % 15 + 0;
+        --iterations;
+    }
 }
 
-int         Cube::getColorFromIndex(int face, int x, int y)
+Cube&               Cube::operator = (const Cube& other)
 {
-    int     face_value = m_cube[face];
-    int     index = x * 3 + y;
-    int     pos[] = { 0, 1, 2, 7, -1, 3, 6, 5, 4  };
+    // Guard self assignment
+    if (this == &other)
+        return *this;
 
-    index = pos[index];
-    if (index == -1)
-        return (m_center[face]);
-    return ( face_value >> (( 8 - index - 1) * 4) & 0xF );
-}
-
-int         Cube::getColorFromPos(int face, int pos)
-{
-    int     face_value = m_cube[face];
-    return ( face_value >> (( 8 - pos - 1) * 4) & 0xF );
+    m_corners = other.m_corners; 
+    m_edges = other.m_edges; 
+    return *this;
 }

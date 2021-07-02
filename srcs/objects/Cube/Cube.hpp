@@ -1,134 +1,106 @@
 #ifndef CUBE_HPP
 # define CUBE_HPP
 
-# include "rubik.hpp"
+# include <string>
+# include <iostream>
+# include <limits>
+# include <iterator>
+# include <sstream>
+# include <algorithm>
+# include <set>
+# include <unordered_map>
+# include <map>
+# include <array>
+# include <functional>
+# include <regex>
+# include <array>
+# include <cmath>
+# include <list>
+# include <fstream>
+# include <iomanip>
+# include <queue>
 
-# define UP     0
-# define LEFT   1
-# define FRONT  2
-# define RIGHT  3
-# define BACK   4
-# define DOWN   5
+enum CORNERS : unsigned int {URF=0,UFL=1,ULB=2,UBR=3,DFR=4,DLF=5,DBL=6,DRB=7};
+enum EDGES : unsigned int {UR=0,UF=1,UL=2,UB=3,DR=4,DF=5,DL=6,DB=7,FR=8,FL=9,BL=10,BR=11};
 
-# define UL     0
-# define U      1
-# define UR     2
-# define R      3
-# define DR     4
-# define D      5
-# define DL     6
-# define L      7
+# define UP         0
+# define RIGHT      1
+# define FRONT      2
+# define DOWN       3
+# define LEFT       4
+# define BACK       5
+# define ROT_URF3   6 // 120° clockwise rotation around the long diagonal URF-DBL
+# define ROT_F2     7 // 180° rotation around the axis through the F and B centers
+# define ROT_U4     8 // 90° clockwise rotation around the axis through the U and D centers
+# define MIRR_LR2   9 // reflection at the plane through the U, D, F, B centers
 
-/**
-   * A raw Rubik's Cube model.  This is _not_ what is drawn.  It's a fairly
-   * fast Rubik's Cube model used by the solver, and kept in sync with the
-   * drawable Rubik's Cube WorldObject.
-   *
-   * The cube is laid out as follows.
-   *
-   * The sides:
-   *
-   *    U
-   *  L F R B
-   *    D
-   *
-   * Color wise:
-   *
-   *          W W W
-   *          W W W
-   *          W W W
-   *
-   *  G G G   R R R   B B B   O O O
-   *  G G G   R R R   B B B   O O O
-   *  G G G   R R R   B B B   O O O
-   *
-   *          Y Y Y
-   *          Y Y Y
-   *          Y Y Y
-   *
-   * Index wise:
-   *
-   *
-   *              0  1  2
-   *              7     3
-   *              6  5  4
-   *
-   *   8  9 10   16 17 18   24 25 26   32 33 34
-   *  15    11   23    19   31    27   39    35
-   *  14 13 12   22 21 20   30 29 28   38 37 36
-   *
-   *             40 41 42
-   *             47    43
-   *             46 45 44
-   *
-   * Centers:
-   *
-   *    0
-   *  1 2 3 4
-   *    5
-   */
+struct corners {
+    std::array<CORNERS, 8>          p;
+    std::array<unsigned int, 8>     o;
+    corners() 
+    {
+        for ( CORNERS i = URF; i < 8; i = (CORNERS) ((unsigned int)i + 1) )
+        { p[i] = i; o[i] = 0; }
+    }
+};
 
+struct edges {
+    std::array<EDGES, 12>           p;
+    std::array<unsigned int, 12>    o;
+    edges() 
+    {
+        for ( EDGES i = UR; i < 12; i = (EDGES) ((unsigned int)i + 1) )
+        { p[i] = i; o[i] = 0; }
+    }
+};
 
+class Cube
+{
+    public:
+        Cube();
 
-class Cube {
+        int             move(const std::string m);
 
-    typedef void (Cube::*moveFunction)(void); // function pointer type
+        void            shuffle(int iterations = 100);
 
-    public :
-        Cube();					    // Constructor
-		Cube(const Cube& other);	// Constructor
+        void            up();
+        void            upR();
+        void            up2();
+        void            down();
+        void            downR();
+        void            down2();
 
-        enum class  COLOR {CWHITE, CGREEN, CRED, CBLUE, CORANGE, CYELLOW};
+        void            right();
+        void            rightR();
+        void            right2();
+        void            left();
+        void            leftR();
+        void            left2();
 
-        void        print();
+        void            front();
+        void            frontR();
+        void            front2();
+        void            back();
+        void            backR();
+        void            back2();
 
-        /*     Movements     */
+        typedef void (Cube::*moveFunction)(void);
+        static std::map<std::string, moveFunction>              moveMap;
 
-        int         parseAndMove(std::string moves);
+        corners     m_corners;
+        edges       m_edges;
 
-        int         move(const std::string m);
+        void                    rotation(const unsigned int& rot);
+        static std::array<CORNERS, 8>   rotateCornPerm(const std::array<CORNERS, 8>& cornPerm, const unsigned int& rot);
+        static std::array<EDGES, 12>    rotateEdgePerm(const std::array<EDGES, 12>& edgePerm, const unsigned int& rot);
 
-    private :
-        std::array<int, 6>  m_cube;
-        std::array<int, 6>  m_center;
-        std::map<std::string, moveFunction> moveMap;
+        static std::array<CORNERS, 8>   multCornPerm(const std::array<CORNERS, 8>& first, const std::array<CORNERS, 8>& second);
+        static std::array<EDGES, 12>    multEdgePerm(const std::array<EDGES, 12>& first, const std::array<EDGES, 12>& second);
 
-        void        initMoveMap();
+        Cube            operator + (Cube const &obj);
+        Cube&           operator=(const Cube& other);     
 
-        void        up();
-        void        upR();
-        void        up2();
-        void        down();
-        void        downR();
-        void        down2();
-
-        void        right();
-        void        rightR();
-        void        right2();
-        void        left();
-        void        leftR();
-        void        left2();
-
-        void        front();
-        void        frontR();
-        void        front2();
-        void        back();
-        void        backR();
-        void        back2();
-
-        std::vector<std::string>    parseMoves(std::string moves);
-
-        void        getColor(const COLOR color);
-        int         getColorFromIndex(int face, int x, int y);
-        int         getColorFromPos(int face, int pos);
-
-        void        invert(int op1[4], int op2[4], int op3[4], int op4[4]);
-
-        std::array<int, 3>   getValuesCubie(int op[4]);
-        std::array<int, 3>   swapCubie(int op[4], std::array<int, 3> replacer);
-
-
-
+    private:
 };
 
 #endif
