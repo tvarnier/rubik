@@ -1,5 +1,84 @@
 # include "Kociemba.hpp"
 
+/* ===================== P2 ===================== */
+
+void    Kociemba::generate_CornerOrientation_MoveTable()
+{
+    for (int i = 0; i < CORNER_ORIENTATION_MOVETABLE_SIZE; ++i)
+    {
+        for (int y = 0; y < P1_NBR_MOVE; ++y)
+            CornerOrientation_MoveTable[i][y] = 0;
+    }
+
+    for (unsigned int raw = 0; raw < CORNER_ORIENTATION_MOVETABLE_SIZE; ++raw)
+    {
+        std::array<unsigned int, 8> cornOrient = generateCornerOrientation(raw);
+        unsigned int moveId = 0;
+        for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
+        {
+            std::array<unsigned int, 8>  cornOrientRotated = cornOrient;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
+            {
+                cornOrientRotated = Cube::rotateCornOrient(cornOrientRotated, rotateId);
+                CornerOrientation_MoveTable[raw][moveId] = cornerOrientationCoordinates(cornOrientRotated);
+                ++moveId;
+            }
+        }
+    }
+}
+
+void    Kociemba::generate_EdgeOrientation_MoveTable()
+{
+    for (int i = 0; i < EDGE_ORIENTATION_MOVETABLE_SIZE; ++i)
+    {
+        for (int y = 0; y < P1_NBR_MOVE; ++y)
+            EdgeOrientation_MoveTable[i][y] = 0;
+    }
+
+    for (unsigned int raw = 0; raw < EDGE_ORIENTATION_MOVETABLE_SIZE; ++raw)
+    {
+        std::array<unsigned int, 12> edgeOrient = generateEdgeOrientation(raw);
+        unsigned int moveId = 0;
+        for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
+        {
+            std::array<unsigned int, 12>  edgeOrientRotated = edgeOrient;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
+            {
+                edgeOrientRotated = Cube::rotateEdgeOrient(edgeOrientRotated, rotateId);
+                EdgeOrientation_MoveTable[raw][moveId] = edgeOrientationCoordinates(edgeOrientRotated);
+                ++moveId;
+            }
+        }
+    }
+}
+
+void    Kociemba::generate_UdSlice_MoveTable()
+{
+    for (int i = 0; i < UD_SLICE_MOVETABLE_SIZE; ++i)
+    {
+        for (int y = 0; y < P1_NBR_MOVE; ++y)
+            UdSlice_MoveTable[i][y] = 0;
+    }
+
+    for (unsigned int raw = 0; raw < UD_SLICE_MOVETABLE_SIZE; ++raw)
+    {
+        std::array<EDGES, 12> edgePerm = generateUDSlice(raw);
+        unsigned int moveId = 0;
+        for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
+        {
+            std::array<EDGES, 12>  edgePermRotated = edgePerm;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
+            {
+                edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
+                UdSlice_MoveTable[raw][moveId] = UDSliceCoordinates(edgePermRotated);
+                ++moveId;
+            }
+        }
+    }
+}
+
+/* ===================== P2 ===================== */
+
 void    Kociemba::generate_CornerPermutation_MoveTable()
 {
     for (int i = 0; i < CORNER_PERMUTATION_MOVETABLE_SIZE; ++i)
@@ -26,18 +105,6 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
             }
         }
     }
-
-    /*for (unsigned int i = 0; i < CORNER_PERMUTATION_MOVETABLE_SIZE; ++i)
-    {
-        std::printf("%05u [ ", i);
-        for (unsigned int y = 0; y < P2_NBR_MOVE; ++y)
-        {
-            std::printf("%05u", CornerPermutation_MoveTable[i][y]);
-            if (y != P2_NBR_MOVE - 1)
-                std::printf(", ");
-        }
-        std::printf(" ]\n");
-    }*/
 }
 
 void    Kociemba::generate_P2EdgePermutation_MoveTable()
@@ -94,22 +161,13 @@ void    Kociemba::generate_UdSliceSorted_MoveTable()
             }
         }
     }
-
-    /*for (unsigned int i = 0; i < UD_SLICE_SORTED_MOVETABLE_SIZE; ++i)
-    {
-        std::printf("%05u [ ", i);
-        for (unsigned int y = 0; y < P2_NBR_MOVE; ++y)
-        {
-            std::printf("%05u", UdSliceSorted_MoveTable[i][y]);
-            if (y != P2_NBR_MOVE - 1)
-                std::printf(", ");
-        }
-        std::printf(" ]\n");
-    }*/
 }
 
 int     Kociemba::generate_moveTables()
 {
+    generate_CornerOrientation_MoveTable();
+    generate_EdgeOrientation_MoveTable();
+    generate_UdSlice_MoveTable();
     generate_CornerPermutation_MoveTable();
     generate_P2EdgePermutation_MoveTable();
     generate_UdSliceSorted_MoveTable();

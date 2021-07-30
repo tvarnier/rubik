@@ -16,23 +16,14 @@ int         Cube::move(const std::string m) { if (moveMap[m]) { (this->*moveMap[
 void        Cube::shuffle(int iterations)
 {
     int     lastMove(-1);
-    /*moveFunction    arrayMoves[6][3] = {
+    moveFunction    arrayMoves[6][3] = {
         { &Cube::up, &Cube::upR, &Cube::up2 },
         { &Cube::down, &Cube::downR, &Cube::down2 },
         { &Cube::right, &Cube::rightR, &Cube::right2 },
         { &Cube::left, &Cube::leftR, &Cube::left2 },
         { &Cube::front, &Cube::frontR, &Cube::front2 },
         { &Cube::back, &Cube::backR, &Cube::back2 }
-    };*/
-    moveFunction    arrayMoves[6][3] = {
-        { &Cube::up, &Cube::upR, &Cube::up2 },
-        { &Cube::down, &Cube::downR, &Cube::down2 },
-        { &Cube::right2, &Cube::right2, &Cube::right2 },
-        { &Cube::left2, &Cube::left2, &Cube::left2 },
-        { &Cube::front2, &Cube::front2, &Cube::front2 },
-        { &Cube::back2, &Cube::back2, &Cube::back2 }
     };
-
     srand (time(NULL));
 
     int r = rand() % 18 + 0;

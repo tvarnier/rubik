@@ -14,6 +14,20 @@ unsigned int        Kociemba::cornerOrientationCoordinates(const std::array<unsi
     return (coord);
 }
 
+std::array<unsigned int, 8> Kociemba::generateCornerOrientation(unsigned int coord)
+{
+    std::array<unsigned int, 8> tmp = {};
+
+    unsigned int modulo = 1;
+
+    for (int i = 6; i >= 0; --i)
+    {
+        tmp[i] = (coord / modulo) % 3;
+        modulo *= 3;
+    }
+    return (tmp);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned int        Kociemba::cornerPermutationCoordinates(const std::array<CORNERS, 8>& cornerPermutation)
@@ -62,9 +76,23 @@ unsigned int        Kociemba::edgeOrientationCoordinates(const std::array<unsign
     for ( unsigned int i = 0; i < 11; ++i)
     {
         coord += edgeOrientation[i] * modulo;
-        modulo /= 3;
+        modulo /= 2;
     }
     return (coord);
+}
+
+std::array<unsigned int, 12> Kociemba::generateEdgeOrientation(unsigned int coord)
+{
+    std::array<unsigned int, 12> tmp = {};
+
+    unsigned int modulo = 1;
+
+    for (int i = 10; i >= 0; --i)
+    {
+        tmp[i] = (coord / modulo) % 2;
+        modulo *= 2;
+    }
+    return (tmp);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,18 +163,40 @@ static int          binomialCoeff(int n, int k)
 unsigned int        Kociemba::UDSliceCoordinates(const std::array<EDGES, 12>& edgePermutation)
 {
     int             coord(0);
-    bool            first(false);
     int             coeff(-1);
 
-    for (unsigned int i = 1; i < 12; ++i)
+    for (unsigned int i = 0; i < 12; ++i)
     {
         if (edgePermutation[i] >= FR)
             coeff += 1;
         else if (coeff >= 0)
+        {
             coord += binomialCoeff((int)i , coeff);
+        }
     }
 
     return ((unsigned int)coord);
+}
+
+std::array<EDGES, 12>   Kociemba::generateUDSlice(unsigned int coord)
+{
+    std::array<EDGES, 12> tmp {UR,UR,UR,UR,UR,UR,UR,UR,UR,UR,UR,UR};
+    int coeff((( coord >= binomialCoeff(11 , 3)) ? 3 : 2));
+    int tmpCoord(coord);
+
+    for (int i = 11 ; i >= 0 && coeff >= 0; --i)
+    {
+        unsigned int bc = binomialCoeff((int)i , coeff);
+        if (tmpCoord >= bc)
+            tmpCoord -= bc;
+        else
+        {
+            tmp[i] = FR;
+            --coeff;
+        }
+    }
+
+    return tmp;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

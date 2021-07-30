@@ -14,6 +14,63 @@ struct StateP2 {
     }
 };
 
+/* ============================ COEO ============================ */
+
+char    Kociemba::getValue_P1_COEO_PruneTable(unsigned long long index) { return ( (Kociemba::P1_COEO_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
+void    Kociemba::setValue_P1_COEO_PruneTable(unsigned long long index, char value) { Kociemba::P1_COEO_PruneTable[index / 4] =  Kociemba::P1_COEO_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
+void    Kociemba::getNewCoords_COEO(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2) {
+    newCoord1 = CornerOrientation_MoveTable[coord1][moveId];
+    newCoord2 = EdgeOrientation_MoveTable[coord2][moveId];
+}
+void    Kociemba::fileRead_COEO(std::ifstream& file, size_t length) { file.read(P1_COEO_PruneTable, length); }
+int     Kociemba::filePut_COEO(std::string filename) {
+    FILE *file = fopen(std::string("./pruningTables/" + filename).c_str(), "w");
+    int results = fputs(P1_COEO_PruneTable, file);
+    if (results == EOF) {
+        std::printf("FAIL TO WRITE\n");
+    }
+    fclose(file);
+    return (0);
+}
+
+/* ============================ COUS ============================ */
+
+char    Kociemba::getValue_P1_COUS_PruneTable(unsigned long long index) { return ( (Kociemba::P1_COUS_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
+void    Kociemba::setValue_P1_COUS_PruneTable(unsigned long long index, char value) { Kociemba::P1_COUS_PruneTable[index / 4] =  Kociemba::P1_COUS_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
+void    Kociemba::getNewCoords_COUS(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2) {
+    newCoord1 = CornerOrientation_MoveTable[coord1][moveId];
+    newCoord2 = UdSlice_MoveTable[coord2][moveId];
+}
+void    Kociemba::fileRead_COUS(std::ifstream& file, size_t length) { file.read(P1_COUS_PruneTable, length); }
+int     Kociemba::filePut_COUS(std::string filename) {
+    FILE *file = fopen(std::string("./pruningTables/" + filename).c_str(), "w");
+    int results = fputs(P1_COUS_PruneTable, file);
+    if (results == EOF) {
+        std::printf("FAIL TO WRITE\n");
+    }
+    fclose(file);
+    return (0);
+}
+
+/* ============================ USEO ============================ */
+
+char    Kociemba::getValue_P1_USEO_PruneTable(unsigned long long index) { return ( (Kociemba::P1_USEO_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
+void    Kociemba::setValue_P1_USEO_PruneTable(unsigned long long index, char value) { Kociemba::P1_USEO_PruneTable[index / 4] =  Kociemba::P1_USEO_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
+void    Kociemba::getNewCoords_USEO(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2) {
+    newCoord1 = UdSlice_MoveTable[coord1][moveId];
+    newCoord2 = EdgeOrientation_MoveTable[coord2][moveId];
+}
+void    Kociemba::fileRead_USEO(std::ifstream& file, size_t length) { file.read(P1_USEO_PruneTable, length); }
+int     Kociemba::filePut_USEO(std::string filename) {
+    FILE *file = fopen(std::string("./pruningTables/" + filename).c_str(), "w");
+    int results = fputs(P1_USEO_PruneTable, file);
+    if (results == EOF) {
+        std::printf("FAIL TO WRITE\n");
+    }
+    fclose(file);
+    return (0);
+}
+
 /* ============================ CPEP ============================ */
 
 char    Kociemba::getValue_P2_CPEP_PruneTable(unsigned long long index) { return ( (Kociemba::P2_CPEP_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
@@ -188,6 +245,48 @@ void    Kociemba::create_pruneTable(
 
 void    Kociemba::generate_pruneTables()
 {
+    create_pruneTable(
+        "P1_COEO",
+        1119744,
+        CORNER_ORIENTATION_MOVETABLE_SIZE,
+        EDGE_ORIENTATION_MOVETABLE_SIZE,
+        P1_NBR_MOVE, 
+        &Kociemba::setValue_P1_COEO_PruneTable,
+        &Kociemba::getValue_P1_COEO_PruneTable,
+        &Kociemba::getNewCoords_COEO,
+        &Kociemba::fileRead_COEO,
+        &Kociemba::filePut_COEO
+    );
+    ///////////////////////////////////////////////////////////////////////
+    create_pruneTable(
+        "P1_COUS",
+        270642,
+        CORNER_ORIENTATION_MOVETABLE_SIZE,
+        UD_SLICE_MOVETABLE_SIZE,
+        P1_NBR_MOVE, 
+        &Kociemba::setValue_P1_COUS_PruneTable,
+        &Kociemba::getValue_P1_COUS_PruneTable,
+        &Kociemba::getNewCoords_COUS,
+        &Kociemba::fileRead_COUS,
+        &Kociemba::filePut_COUS
+    );
+    ///////////////////////////////////////////////////////////////////////
+    create_pruneTable(
+        "P1_USEO",
+        253440,
+        UD_SLICE_MOVETABLE_SIZE,
+        EDGE_ORIENTATION_MOVETABLE_SIZE,
+        P1_NBR_MOVE, 
+        &Kociemba::setValue_P1_USEO_PruneTable,
+        &Kociemba::getValue_P1_USEO_PruneTable,
+        &Kociemba::getNewCoords_USEO,
+        &Kociemba::fileRead_USEO,
+        &Kociemba::filePut_USEO
+    );
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     
     create_pruneTable(
         "P2_CPEP",

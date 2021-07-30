@@ -23,7 +23,7 @@ int		main(int ac, char **av)
 	for (auto it = el.begin(); it != el.end(); ++it)
 		rubik.move(*it);*/
 
-	rubik.shuffle(30);
+	rubik.shuffle(10);
 
 	k.solve(rubik);
 

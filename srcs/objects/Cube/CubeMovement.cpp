@@ -85,12 +85,30 @@ std::array<CORNERS, 8>  Cube::rotateCornPerm(const std::array<CORNERS, 8>& cornP
     }
     return tmp;
 }
+std::array<unsigned int, 8>  Cube::rotateCornOrient(const std::array<unsigned int, 8>& cornOrient, const unsigned int& rot)
+{
+    std::array<unsigned int, 8>     tmp;
+    for (unsigned int i = 0; i < 8; ++i)
+    {
+        tmp[i] = (CornerCubieMoveOrientation[rot][i] + cornOrient[CornerCubieMovePosition[rot][i]]) % 3;
+    }
+    return tmp;
+}
 std::array<EDGES, 12>  Cube::rotateEdgePerm(const std::array<EDGES, 12>& edgePerm, const unsigned int& rot)
 {
     std::array<EDGES, 12>     tmp;
     for (unsigned int i = 0; i < 12; ++i)
     {
        tmp[i] = edgePerm[EdgeCubieMovePosition[rot][i]];
+    }
+    return tmp;
+}
+std::array<unsigned int, 12>  Cube::rotateEdgeOrient(const std::array<unsigned int, 12>& edgeOrient, const unsigned int& rot)
+{
+    std::array<unsigned int, 12>     tmp;
+    for (unsigned int i = 0; i < 12; ++i)
+    {
+        tmp[i] = (EdgeCubieMoveOrientation[rot][i] + edgeOrient[EdgeCubieMovePosition[rot][i]]) % 2;
     }
     return tmp;
 }
