@@ -57,11 +57,26 @@ struct edges {
 class Cube
 {
     public:
+        corners     m_corners;
+        edges       m_edges;
+
         Cube();
 
         int             move(const std::string m);
-
         void            shuffle(int iterations = 100);
+
+        void                            rotation(const unsigned int& rot);
+        static std::array<CORNERS, 8>   rotateCornPerm(const std::array<CORNERS, 8>& cornPerm, const unsigned int& rot);
+        static std::array<EDGES, 12>    rotateEdgePerm(const std::array<EDGES, 12>& edgePerm, const unsigned int& rot);
+        static std::array<CORNERS, 8>   multCornPerm(const std::array<CORNERS, 8>& first, const std::array<CORNERS, 8>& second);
+        static std::array<EDGES, 12>    multEdgePerm(const std::array<EDGES, 12>& first, const std::array<EDGES, 12>& second);
+
+        Cube            operator + (Cube const &obj);
+        Cube&           operator=(const Cube& other);
+
+    private:
+        typedef void (Cube::*moveFunction)(void);
+        static std::map<std::string, moveFunction>              moveMap;
 
         void            up();
         void            upR();
@@ -83,24 +98,6 @@ class Cube
         void            back();
         void            backR();
         void            back2();
-
-        typedef void (Cube::*moveFunction)(void);
-        static std::map<std::string, moveFunction>              moveMap;
-
-        corners     m_corners;
-        edges       m_edges;
-
-        void                    rotation(const unsigned int& rot);
-        static std::array<CORNERS, 8>   rotateCornPerm(const std::array<CORNERS, 8>& cornPerm, const unsigned int& rot);
-        static std::array<EDGES, 12>    rotateEdgePerm(const std::array<EDGES, 12>& edgePerm, const unsigned int& rot);
-
-        static std::array<CORNERS, 8>   multCornPerm(const std::array<CORNERS, 8>& first, const std::array<CORNERS, 8>& second);
-        static std::array<EDGES, 12>    multEdgePerm(const std::array<EDGES, 12>& first, const std::array<EDGES, 12>& second);
-
-        Cube            operator + (Cube const &obj);
-        Cube&           operator=(const Cube& other);     
-
-    private:
 };
 
 #endif

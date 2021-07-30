@@ -1,88 +1,99 @@
 #include "Kociemba.hpp"
 
-struct StateSolver {
+struct StateP2 {
     unsigned int        cornPerm;
     unsigned int        edgePerm;
-    unsigned int        depht;
-    unsigned int        score;
-    std::vector<int>    way;
+    unsigned int        udSlice;
+    int                 depht;
+    uint8_t             CPEP;
+    uint8_t             CPUS;
+    uint8_t             USEP;
+    std::vector<int>    path;
 
-    StateSolver(unsigned int cP = 0, unsigned int eP = 0, unsigned int d = 0, unsigned s = 0, std::vector<int> w = std::vector<int>()) 
-        : cornPerm(cP), edgePerm(eP), depht(d), score(s), way(w) {}
+    StateP2(unsigned int cp = 0, unsigned int ep = 0, unsigned int us = 0, int d = 0, uint8_t cpep = 0, uint8_t cpus = 0, uint8_t usep = 0, const std::vector<int>& p = std::vector<int>())
+    : cornPerm(cp), edgePerm(ep), udSlice(us), depht(d), CPEP(cpep), CPUS(cpus), USEP(usep), path(p) {}
 
-    bool operator<(const StateSolver& other) const
-    {
-        return score > other.score;
-    }
+    bool operator<(const StateP2& other) const { return (depht > other.depht); }
+    bool operator==(const StateP2& other) const { return (cornPerm == other.cornPerm && edgePerm == other.edgePerm && udSlice == other.udSlice); }
 };
 
-std::string     P2Moves(int& i)
+std::string moveP2(int i)
 {
-    std::array<std::string, 10> t = { "U","U'","U2","R2","F2","D","D'","D2","L2","B2" };
-    return (t[i]);
+    std::string moves[10] = {
+        "U", "U2", "U'", "R2", "F2", "D", "D2", "D'", "L2", "B2"
+    };
+    return (moves[i]);
 }
 
-bool    done[40320 * 40320];
-
-int     Kociemba::solveP2(Cube rubik)
+int     pruneDiff(uint8_t currentDepht, uint8_t newDepht)
 {
-    std::priority_queue<StateSolver>    Q;
+    if (currentDepht == 1 && newDepht == 3)
+        return -1;
+    else if (currentDepht == 3 && newDepht == 1)
+        return +1;
+    else
+        return (newDepht - currentDepht);
+}
 
-    for (int i = 0; i < 40320 * 40320; ++i)
-        done[i] = false;
+void    Kociemba::solveP2(Cube rubik)
+{
+    std::priority_queue<StateP2>            open;
+    std::unordered_set<unsigned long long>  close;
 
-    size_t size(0);
+    unsigned int cornPerm = cornerPermutationCoordinates(rubik.m_corners.p);
+    unsigned int edgePerm = phase2EdgePermutationCoordinates(rubik.m_edges.p);
+    unsigned int udSlice = UDSliceSortedCoordinates(rubik.m_edges.p);
 
-    std::vector<int>    newWay(0);
-
-    Q.emplace(
-        cornerPermutationCoordinates(rubik.m_corners.p),
-        phase2EdgePermutationCoordinates(rubik.m_edges.p),
-        0 , 0, newWay
+    open.emplace(
+        cornPerm,
+        edgePerm,
+        udSlice,
+        0,
+        getValue_P2_CPEP_PruneTable(cornPerm * P2_EDGE_PERMUTATION_MOVETABLE_SIZE + edgePerm),
+        getValue_P2_CPUS_PruneTable(cornPerm * UD_SLICE_SORTED_MOVETABLE_SIZE + udSlice),
+        getValue_P2_USEP_PruneTable(udSlice * P2_EDGE_PERMUTATION_MOVETABLE_SIZE + edgePerm)
     );
-    while (!Q.empty())
+    close.emplace(open.top().cornPerm * P2_EDGE_PERMUTATION_MOVETABLE_SIZE * UD_SLICE_SORTED_MOVETABLE_SIZE + open.top().edgePerm * UD_SLICE_SORTED_MOVETABLE_SIZE + open.top().udSlice);
+
+    while (!open.empty())
     {
-        StateSolver   current = Q.top();
-        Q.pop();
-        if (!current.cornPerm && !current.edgePerm)
+        StateP2 current = open.top();
+        open.pop();
+
+        if (current.cornPerm == 0 && current.edgePerm == 0 && current.udSlice == 0)
         {
-            lib::printendl("SOLVED : ", current.depht);
-            for (auto i = current.way.begin(); i != current.way.end(); ++i)
-            {
-                std::printf("%s\n", P2Moves(*i).c_str());
-            }
-            break ;
+            std::printf("\n%lu : ", current.path.size());
+            for (auto it = current.path.begin(); it != current.path.end(); ++it)
+                std::printf("%s ", moveP2(*it).c_str());
+            std::printf("\n");
+            return ;
         }
-
-        ++size;
-        /*if (size % 1 == 0)
-            std::printf("% 8u : % 2u\n", size, current.score);*/
-
-        if (current.depht < 18 && !done[current.cornPerm * 40320 + current.edgePerm])
+        else
         {
-            done[current.cornPerm * 40320 + current.edgePerm] = true;
-            for (int i = 0; i < 10; ++i)
+            for (int i = 0; i < P2_NBR_MOVE; ++i)
             {
-                unsigned int newCornPerm = CornerPermutation_MoveTable[current.cornPerm].first[i];
-                unsigned int newEdgePerm = P2EdgePermutation_MoveTable[current.edgePerm].first[i];
-                newWay = current.way;
-                newWay.push_back(i);
-                Q.emplace(
-                    newCornPerm,
-                    newEdgePerm,
-                    current.depht + 1,
-                    (CornerPermutation_MoveTable[newCornPerm].second + P2EdgePermutation_MoveTable[newEdgePerm].second) + (current.depht + 1) * 2,
-                    newWay
-                );
+                unsigned int newCornPerm    = CornerPermutation_MoveTable[current.cornPerm][i];
+                unsigned int newEdgePerm    = P2EdgePermutation_MoveTable[current.edgePerm][i];
+                unsigned int newUdSlice     = UdSliceSorted_MoveTable[current.udSlice][i];
+                uint8_t      newCPEP  = getValue_P2_CPEP_PruneTable(newCornPerm * P2_EDGE_PERMUTATION_MOVETABLE_SIZE + newEdgePerm);
+                uint8_t      newCPUS  = getValue_P2_CPUS_PruneTable(newCornPerm * UD_SLICE_SORTED_MOVETABLE_SIZE + newUdSlice);
+                uint8_t      newUSEP  = getValue_P2_USEP_PruneTable(newUdSlice * P2_EDGE_PERMUTATION_MOVETABLE_SIZE + newEdgePerm);
+
+                int          newDepht       = current.depht + pruneDiff(current.CPEP, newCPEP) + pruneDiff(current.CPUS, newCPUS) + pruneDiff(current.USEP, newUSEP);
+                
+                if (close.find(newCornPerm * P2_EDGE_PERMUTATION_MOVETABLE_SIZE * UD_SLICE_SORTED_MOVETABLE_SIZE + newEdgePerm * UD_SLICE_SORTED_MOVETABLE_SIZE + newUdSlice) == close.end())
+                {
+                    close.insert(newCornPerm * P2_EDGE_PERMUTATION_MOVETABLE_SIZE * UD_SLICE_SORTED_MOVETABLE_SIZE + newEdgePerm * UD_SLICE_SORTED_MOVETABLE_SIZE + newUdSlice);
+                    std::vector<int> newPath = current.path;
+                    newPath.push_back(i);
+                    open.emplace(newCornPerm, newEdgePerm, newUdSlice, newDepht + 3, newCPEP, newCPUS, newUSEP, newPath);
+                }
             }
         }
-
     }
-    return (0);
 }
 
-int     Kociemba::solve(Cube rubik)
+void    Kociemba::solve(Cube rubik)
 {
     solveP2(rubik);
-    return (0);
 }

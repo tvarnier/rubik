@@ -9,14 +9,7 @@ std::map<std::string, Cube::moveFunction> Cube::moveMap = {
     {"B", &Cube::back}, {"B'", &Cube::backR}, {"B2", &Cube::back2}
 };
 
-Cube::Cube()
-{
-    /*for (CORNERS i = URF; i <  8; i = (CORNERS) ((unsigned int)i + 1) )
-        m_corners[i] = std::make_pair(i, 0);
-
-    for (  EDGES i = UR;  i < 12; i =   (EDGES) ((unsigned int)i + 1) )
-        m_edges[i] = std::make_pair(i, 0);*/
-}
+Cube::Cube() {}
 
 int         Cube::move(const std::string m) { if (moveMap[m]) { (this->*moveMap[m])() ; return (0); } else return (1); }
 
@@ -50,20 +43,19 @@ void        Cube::shuffle(int iterations)
             r += 3;
         for (auto it = moveMap.begin(); it != moveMap.end(); ++it)
             if (it->second == arrayMoves[r / 3][r % 3])      
-                std::printf("%s \n", std::string(it->first).c_str());
+                std::printf("%s ", std::string(it->first).c_str());
         (this->*arrayMoves[r / 3][r % 3])();
         lastMove = r / 3;
         r = rand() % 15 + 0;
         --iterations;
     }
+    printf("\n");
 }
 
 Cube&               Cube::operator = (const Cube& other)
 {
-    // Guard self assignment
     if (this == &other)
         return *this;
-
     m_corners = other.m_corners; 
     m_edges = other.m_edges; 
     return *this;

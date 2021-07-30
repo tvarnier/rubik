@@ -1,7 +1,7 @@
 NAME		= rubik
 
 CC			= clang++ -std=c++17
-FLAGS		= -O3 
+FLAGS		= -O3
 LIB			= lib/lib.a
 
 INCLUDES	= ./includes/rubik.hpp
@@ -13,7 +13,7 @@ OBJ			= Cube/Cube.cpp \
 			  Kociemba/Kociemba.cpp \
 			  Kociemba/KociembaCoordinates.cpp \
 			  Kociemba/KociembaMoveTables.cpp \
-			  Kociemba/KociembaDephts.cpp \
+			  Kociemba/KociembaPruneTables.cpp \
 			  Kociemba/KociembaSolve.cpp
 OBJ_DIR		= objects/
 OBJ_SUBDIR	= objects/Cube \

@@ -14,6 +14,8 @@ unsigned int        Kociemba::cornerOrientationCoordinates(const std::array<unsi
     return (coord);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 unsigned int        Kociemba::cornerPermutationCoordinates(const std::array<CORNERS, 8>& cornerPermutation)
 {
     unsigned int fact = 1;
@@ -49,6 +51,8 @@ std::array<CORNERS, 8>  Kociemba::generateCornerPermutation(unsigned int coord)
     return (tmp);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 unsigned int        Kociemba::edgeOrientationCoordinates(const std::array<unsigned int, 12>& edgeOrientation)
 {
     unsigned int modulo = 1024;
@@ -63,6 +67,8 @@ unsigned int        Kociemba::edgeOrientationCoordinates(const std::array<unsign
     return (coord);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 unsigned int        Kociemba::edgePermutationCoordinates(const std::array<EDGES, 12>& edgePermutation)
 {
     unsigned int fact = 1;
@@ -76,6 +82,8 @@ unsigned int        Kociemba::edgePermutationCoordinates(const std::array<EDGES,
     }
     return (coord);
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned int        Kociemba::phase2EdgePermutationCoordinates(const std::array<EDGES, 12>& edgePermutation)
 {
@@ -112,6 +120,8 @@ std::array<EDGES, 12>  Kociemba::generateP2EdgePermutation(unsigned int coord)
     return (tmp);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static int          binomialCoeff(int n, int k)
 {
     if (k > n)
@@ -139,13 +149,14 @@ unsigned int        Kociemba::UDSliceCoordinates(const std::array<EDGES, 12>& ed
     return ((unsigned int)coord);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned int        Kociemba::UDSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation)
 {
     unsigned int    coord(0);
     unsigned int    nbr_slice(3);
 
-    for (int i = 12; i > 0 && nbr_slice; --i)
+    for (int i = 11; i >= 0 && nbr_slice; --i)
     {
         if (edgePermutation[i] >= FR)
         {
@@ -161,4 +172,29 @@ unsigned int        Kociemba::UDSliceSortedCoordinates(const std::array<EDGES, 1
     }
 
     return (coord);
+}
+
+std::array<EDGES, 12>  Kociemba::generateUDSliceSorted(unsigned int coord)
+{
+    std::array<EDGES, 12> tmp {UR,UF,UL,UB,DR,DF,DL,DB,FR,FL,BL,BR};
+
+    unsigned int    nbr_slice(3);
+    unsigned int    fact(6);
+
+    for (unsigned int i = 11; i > 8; --i)
+    {
+        unsigned int    greater = coord / fact;
+        EDGES           t = tmp[i - greater];
+        while (greater)
+        {
+            tmp[i - greater] = tmp[i - greater + 1];
+            --greater;
+        }
+        tmp[i] = t;
+        coord %= fact;
+        fact /= nbr_slice;
+        nbr_slice--;
+    }
+
+    return (tmp);
 }
