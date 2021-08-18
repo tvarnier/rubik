@@ -47,7 +47,7 @@ $(LIB):
 	@ make -C lib
 
 $(BIN_PATH)%.o: $(SRC_PATH)%.cpp
-	$(CC) -I includes -I /Users/tvarnier/.brew/include -o $@ -c $< $(FLAGS)
+	$(CC) -I includes -o $@ -c $< $(FLAGS)
 
 clean:
 	@ make -C lib clean

@@ -1,19 +1,5 @@
 #include "Kociemba.hpp"
 
-struct StateP2 {
-    unsigned int    coord1;
-    unsigned int    coord2;
-    unsigned int    depht;
-
-    StateP2(unsigned int c1 = 0, unsigned int c2 = 0, unsigned int d = 0)
-    : coord1(c1), coord2(c2), depht(d) {}
-
-    bool operator<(const StateP2& other) const
-    {
-        return depht > other.depht;
-    }
-};
-
 /* ============================ COEO ============================ */
 
 char    Kociemba::getValue_P1_COEO_PruneTable(unsigned long long index) { return ( (Kociemba::P1_COEO_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
@@ -149,6 +135,20 @@ int     Kociemba::filePut_USEP(std::string filename) {
 
 /* ============================ ---- ============================ */
 
+struct State {
+    unsigned int    coord1;
+    unsigned int    coord2;
+    unsigned int    depht;
+
+    State(unsigned int c1 = 0, unsigned int c2 = 0, unsigned int d = 0)
+    : coord1(c1), coord2(c2), depht(d) {}
+
+    bool operator<(const State& other) const
+    {
+        return depht > other.depht;
+    }
+};
+
 void    Kociemba::generatePruneTable(
     unsigned int c1size,
     unsigned int c2Size,
@@ -158,7 +158,7 @@ void    Kociemba::generatePruneTable(
     void (Kociemba::*getNewCoords)(int, const unsigned int&, const unsigned int&, unsigned int&, unsigned int&)
 )
 {
-    std::priority_queue<StateP2>    Q;
+    std::priority_queue<State>    Q;
     unsigned int                    newCoord1;
     unsigned int                    newCoord2;
     unsigned long long              newIndex;
