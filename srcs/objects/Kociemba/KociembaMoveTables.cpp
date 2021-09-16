@@ -13,6 +13,7 @@ void    Kociemba::generate_CornerOrientation_MoveTable()
     for (unsigned int raw = 0; raw < CORNER_ORIENTATION_MOVETABLE_SIZE; ++raw)
     {
         std::array<unsigned int, 8> cornOrient = generateCornerOrientation(raw);
+
         unsigned int moveId = 0;
         for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
         {

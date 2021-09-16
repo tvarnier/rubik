@@ -20,11 +20,22 @@ std::array<unsigned int, 8> Kociemba::generateCornerOrientation(unsigned int coo
 
     unsigned int modulo = 1;
 
+    unsigned int total = 0;
+
     for (int i = 6; i >= 0; --i)
     {
         tmp[i] = (coord / modulo) % 3;
+        total += tmp[i];
         modulo *= 3;
     }
+    if (total % 3)
+        tmp[7] = 3 - (total % 3);
+
+    if (coord != cornerOrientationCoordinates(tmp))
+    {
+        printf("\n\n  %u : ERROR | \n\n", coord);
+    }
+
     return (tmp);
 }
 
@@ -86,12 +97,16 @@ std::array<unsigned int, 12> Kociemba::generateEdgeOrientation(unsigned int coor
     std::array<unsigned int, 12> tmp = {};
 
     unsigned int modulo = 1;
+    unsigned int total = 0;
 
     for (int i = 10; i >= 0; --i)
     {
         tmp[i] = (coord / modulo) % 2;
+        total += tmp[i];
         modulo *= 2;
     }
+    if (total % 2)
+        tmp[11] = 2 - (total % 2);
     return (tmp);
 }
 
@@ -180,19 +195,27 @@ unsigned int        Kociemba::UDSliceCoordinates(const std::array<EDGES, 12>& ed
 
 std::array<EDGES, 12>   Kociemba::generateUDSlice(unsigned int coord)
 {
-    std::array<EDGES, 12> tmp {UR,UR,UR,UR,UR,UR,UR,UR,UR,UR,UR,UR};
+    std::array<EDGES, 12> tmp {UR,UF,UL,UB,DR,DF,DL,DB,FR,FL,BL,BR};
     int coeff((( coord >= binomialCoeff(11 , 3)) ? 3 : 2));
     int tmpCoord(coord);
 
-    for (int i = 11 ; i >= 0 && coeff >= 0; --i)
+    unsigned int edge = (unsigned int)7;
+    unsigned int sliceEdge = (unsigned int)11 - (3 - coeff);
+
+    for (int i = 11 - (3 - coeff); i >= 0 && coeff >= 0; --i)
     {
         unsigned int bc = binomialCoeff((int)i , coeff);
         if (tmpCoord >= bc)
+        {
             tmpCoord -= bc;
+            tmp[i] = (EDGES)edge;
+            --edge;
+        }
         else
         {
-            tmp[i] = FR;
             --coeff;
+            tmp[i] = (EDGES)sliceEdge;
+            --sliceEdge;
         }
     }
 

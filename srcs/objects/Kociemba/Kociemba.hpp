@@ -31,13 +31,13 @@ class   Kociemba
         static char     P2_CPUS_PruneTable[241920];
         static char     P2_USEP_PruneTable[241920];
 
-        std::array< std::array<unsigned int, 16>,  CORNER_ORIENTATION_MOVETABLE_SIZE >  CornerOrientation_MoveTable {};
-        std::array< std::array<unsigned int, 16>,    EDGE_ORIENTATION_MOVETABLE_SIZE >  EdgeOrientation_MoveTable   {};
-        std::array< std::array<unsigned int, 16>,            UD_SLICE_MOVETABLE_SIZE >  UdSlice_MoveTable           {};
+        std::array< std::array<unsigned int, 18>,  CORNER_ORIENTATION_MOVETABLE_SIZE >  CornerOrientation_MoveTable {};
+        std::array< std::array<unsigned int, 18>,    EDGE_ORIENTATION_MOVETABLE_SIZE >  EdgeOrientation_MoveTable   {};
+        std::array< std::array<unsigned int, 18>,            UD_SLICE_MOVETABLE_SIZE >  UdSlice_MoveTable           {};
 
-        std::array< std::array<unsigned int, 10>, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >  CornerPermutation_MoveTable {};
-        std::array< std::array<unsigned int, 10>,  CORNER_PERMUTATION_MOVETABLE_SIZE >  P2EdgePermutation_MoveTable {};
-        std::array< std::array<unsigned int, 10>,     UD_SLICE_SORTED_MOVETABLE_SIZE >  UdSliceSorted_MoveTable     {};
+        std::array< std::array<unsigned int, 18>, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >  CornerPermutation_MoveTable {};
+        std::array< std::array<unsigned int, 18>,  CORNER_PERMUTATION_MOVETABLE_SIZE >  P2EdgePermutation_MoveTable {};
+        std::array< std::array<unsigned int, 18>,     UD_SLICE_SORTED_MOVETABLE_SIZE >  UdSliceSorted_MoveTable     {};
 
         //  Coordinates
 

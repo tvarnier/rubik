@@ -1,6 +1,6 @@
 #include "Cube.hpp"
 
-const std::array< std::array< CORNERS,  8 >, 10 >   CornerCubieMovePosition =
+const std::array< std::array< CORNERS,  8 >, 6 >   CornerCubieMovePosition =
 {{
     { UBR, URF, UFL, ULB, DFR, DLF, DBL, DRB },     // U
     { DFR, UFL, ULB, URF, DRB, DLF, DBL, UBR },     // R
@@ -8,13 +8,9 @@ const std::array< std::array< CORNERS,  8 >, 10 >   CornerCubieMovePosition =
     { URF, UFL, ULB, UBR, DLF, DBL, DRB, DFR },     // D
     { URF, ULB, DBL, UBR, DFR, UFL, DLF, DRB },     // L
     { URF, UFL, UBR, DRB, DFR, DLF, ULB, DBL },     // B
-    { URF, DFR, DLF, UFL, UBR, DRB, DBL, ULB },     // ROT_URF3
-    { DLF, DFR, DRB, DBL, UFL, URF, UBR, ULB },     // ROT_F2
-    { UBR, URF, UFL, ULB, DRB, DFR, DLF, DBL },     // ROT_U4
-    { UFL, URF, UBR, ULB, DLF, DFR, DRB, DBL }      // MIRR_LR2
     
 }};
-const std::array< std::array< unsigned int,  8 >, 10 >  CornerCubieMoveOrientation =
+const std::array< std::array< unsigned int,  8 >, 6 >  CornerCubieMoveOrientation =
 {{
     { 0, 0, 0, 0, 0, 0, 0, 0 },     //U
     { 2, 0, 0, 1, 1, 0, 0, 2 },     //R
@@ -22,13 +18,9 @@ const std::array< std::array< unsigned int,  8 >, 10 >  CornerCubieMoveOrientati
     { 0, 0, 0, 0, 0, 0, 0, 0 },     //D
     { 0, 1, 2, 0, 0, 2, 1, 0 },     //L
     { 0, 0, 1, 2, 0, 0, 2, 1 },     //B
-    { 1, 2, 1, 2, 2, 1, 2, 1 },     // ROT_URF3
-    { 0, 0, 0, 0, 0, 0, 0, 0 },     // ROT_F2
-    { 0, 0, 0, 0, 0, 0, 0, 0 },     // ROT_U4
-    { 3, 3, 3, 3, 3, 3, 3, 3 }      // MIRR_LR2
 }};
 
-const std::array< std::array< EDGES, 12 >, 10 > EdgeCubieMovePosition =
+const std::array< std::array< EDGES, 12 >, 6 > EdgeCubieMovePosition =
 {{
     { UB, UR, UF, UL, DR, DF, DL, DB, FR, FL, BL, BR }, // U
     { FR, UF, UL, UB, BR, DF, DL, DB, DR, FL, BL, UR }, // R
@@ -36,13 +28,9 @@ const std::array< std::array< EDGES, 12 >, 10 > EdgeCubieMovePosition =
     { UR, UF, UL, UB, DF, DL, DB, DR, FR, FL, BL, BR }, // D
     { UR, UF, BL, UB, DR, DF, FL, DB, FR, UL, DL, BR }, // L
     { UR, UF, UL, BR, DR, DF, DL, BL, FR, FL, UB, DB }, // B
-    { UF, FR, DF, FL, UB, BR, DB, BL, UR, DR, DL, UL }, // ROT_URF3
-    { DL, DF, DR, DB, UL, UF, UR, UB, FL, FR, BR, BL }, // ROT_F2
-    { UB, UR, UF, UL, DB, DR, DF, DL, BR, FR, FL, BL }, // ROT_U4
-    { UL, UF, UR, UB, DL, DF, DR, DB, FL, FR, BR, BL }  // MIRR_LR2
 }};
 
-const std::array< std::array< unsigned int, 12 >, 10 >  EdgeCubieMoveOrientation =
+const std::array< std::array< unsigned int, 12 >, 6 >  EdgeCubieMoveOrientation =
 {{
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // U
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // R
@@ -50,10 +38,6 @@ const std::array< std::array< unsigned int, 12 >, 10 >  EdgeCubieMoveOrientation
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // D
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // L
     { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1 }, // B
-    { 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1 }, // ROT_URF3
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // ROT_F2
-    { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, // ROT_U4
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }  // MIRR_LR2
 }};
 
 void        Cube::rotation(const unsigned int& rot)
