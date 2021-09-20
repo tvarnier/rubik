@@ -84,7 +84,7 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
 {
     for (int i = 0; i < CORNER_PERMUTATION_MOVETABLE_SIZE; ++i)
     {
-        for (int y = 0; y < P2_NBR_MOVE; ++y)
+        for (int y = 0; y < 18; ++y)
             CornerPermutation_MoveTable[i][y] = 0;
     }
 
@@ -95,12 +95,12 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
         for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
         {
             std::array<CORNERS, 8>  cornPermRotated = cornPerm;
-            unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
-            for (unsigned int nbrRotate = 0; nbrRotate < maxRotation ; ++nbrRotate)
+            // unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
             {
                 cornPermRotated = Cube::rotateCornPerm(cornPermRotated, rotateId);
-                if (rotateId != UP && rotateId != DOWN)
-                    cornPermRotated = Cube::rotateCornPerm(cornPermRotated, rotateId);
+                // if (rotateId != UP && rotateId != DOWN)
+                //     cornPermRotated = Cube::rotateCornPerm(cornPermRotated, rotateId);
                 CornerPermutation_MoveTable[raw][moveId] = cornerPermutationCoordinates(cornPermRotated);
                 ++moveId;
             }
@@ -112,7 +112,7 @@ void    Kociemba::generate_P2EdgePermutation_MoveTable()
 {
     for (int i = 0; i < P2_EDGE_PERMUTATION_MOVETABLE_SIZE; ++i)
     {
-        for (int y = 0; y < P2_NBR_MOVE; ++y)
+        for (int y = 0; y < 18; ++y)
             P2EdgePermutation_MoveTable[i][y] = 0;
     }
 
@@ -123,12 +123,12 @@ void    Kociemba::generate_P2EdgePermutation_MoveTable()
         for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
         {
             std::array<EDGES, 12> edgePermRotated = edgePerm;
-            unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
-            for (unsigned int nbrRotate = 0; nbrRotate < maxRotation ; ++nbrRotate)
+            // unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
             {
                 edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
-                if (rotateId != UP && rotateId != DOWN)
-                    edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
+                // if (rotateId != UP && rotateId != DOWN)
+                //     edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
                 P2EdgePermutation_MoveTable[raw][moveId] = phase2EdgePermutationCoordinates(edgePermRotated);
                 ++moveId;
             }
@@ -140,7 +140,7 @@ void    Kociemba::generate_UdSliceSorted_MoveTable()
 {
     for (int i = 0; i < UD_SLICE_SORTED_MOVETABLE_SIZE; ++i)
     {
-        for (int y = 0; y < P2_NBR_MOVE; ++y)
+        for (int y = 0; y < 18; ++y)
             UdSliceSorted_MoveTable[i][y] = 0;
     }
 
@@ -151,12 +151,12 @@ void    Kociemba::generate_UdSliceSorted_MoveTable()
         for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
         {
             std::array<EDGES, 12> edgePermRotated = edgePerm;
-            unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
-            for (unsigned int nbrRotate = 0; nbrRotate < maxRotation ; ++nbrRotate)
+            // unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
             {
                 edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
-                if (rotateId != UP && rotateId != DOWN)
-                    edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
+                // if (rotateId != UP && rotateId != DOWN)
+                //     edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
                 UdSliceSorted_MoveTable[raw][moveId] = UDSliceSortedCoordinates(edgePermRotated);
                 ++moveId;
             }

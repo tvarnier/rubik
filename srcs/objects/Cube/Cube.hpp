@@ -29,10 +29,6 @@ enum EDGES : unsigned int {UR=0,UF=1,UL=2,UB=3,DR=4,DF=5,DL=6,DB=7,FR=8,FL=9,BL=
 # define DOWN       3
 # define LEFT       4
 # define BACK       5
-# define ROT_URF3   6 // 120° clockwise rotation around the long diagonal URF-DBL
-# define ROT_F2     7 // 180° rotation around the axis through the F and B centers
-# define ROT_U4     8 // 90° clockwise rotation around the axis through the U and D centers
-# define MIRR_LR2   9 // reflection at the plane through the U, D, F, B centers
 
 struct corners {
     std::array<CORNERS, 8>          p;

@@ -1,5 +1,8 @@
 #include "Kociemba.hpp"
 
+char    Kociemba::getValue_P1_PruneTable(unsigned long long index) { return ( (Kociemba::P1_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
+void    Kociemba::setValue_P1_PruneTable(unsigned long long index, char value) { Kociemba::P1_PruneTable[index / 4] =  Kociemba::P1_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
+
 /* ============================ COEO ============================ */
 
 char    Kociemba::getValue_P1_COEO_PruneTable(unsigned long long index) { return ( (Kociemba::P1_COEO_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
@@ -135,19 +138,76 @@ int     Kociemba::filePut_USEP(std::string filename) {
 
 /* ============================ ---- ============================ */
 
-struct State {
+struct StatePruning {
     unsigned int    coord1;
     unsigned int    coord2;
     unsigned int    depht;
 
-    State(unsigned int c1 = 0, unsigned int c2 = 0, unsigned int d = 0)
+    StatePruning(unsigned int c1 = 0, unsigned int c2 = 0, unsigned int d = 0)
     : coord1(c1), coord2(c2), depht(d) {}
 
-    bool operator<(const State& other) const
+    bool operator<(const StatePruning& other) const
     {
         return depht > other.depht;
     }
 };
+
+struct StateP1 {
+    unsigned int    coord1;
+    unsigned int    coord2;
+    unsigned int    coord3;
+    unsigned int    depht;
+
+    StateP1(unsigned int c1 = 0, unsigned int c2 = 0, unsigned int c3 = 0, unsigned int d = 0)
+    : coord1(c1), coord2(c2), coord3(c3), depht(d) {}
+
+    bool operator<(const StateP1& other) const
+    {
+        return depht > other.depht;
+    }
+};
+
+void    Kociemba::generatePruneTable_P1()
+{
+    std::priority_queue<StateP1>    Q;
+    unsigned int                    newCoord1;
+    unsigned int                    newCoord2;
+    unsigned int                    newCoord3;
+
+    unsigned long long              newIndex;
+
+    unsigned long long              size(1);
+    unsigned long long              lastSize(1);
+    unsigned int                    lastDepht(0);
+
+    Q.emplace(0, 0, 0, 0);
+    setValue_P1_PruneTable(0, 1);
+
+    while (!Q.empty())
+    {
+        for (unsigned int i = 0; i < P1_NBR_MOVE; ++i)
+        {
+            if (Q.top().depht != lastDepht)
+            {
+                std::printf("Depht : %u - %llu\n", Q.top().depht, size - lastSize);
+                lastSize = size;
+                lastDepht = Q.top().depht;
+            }
+            newCoord1 = CornerOrientation_MoveTable[Q.top().coord1][i];
+            newCoord2 = EdgeOrientation_MoveTable[Q.top().coord2][i];
+            newCoord3 = UdSlice_MoveTable[Q.top().coord3][i];
+            newIndex = newCoord1 * EDGE_ORIENTATION_MOVETABLE_SIZE * UD_SLICE_MOVETABLE_SIZE + newCoord2 * UD_SLICE_MOVETABLE_SIZE+ newCoord3;
+            if (getValue_P1_PruneTable(newIndex) == 0)
+            {
+                setValue_P1_PruneTable(newIndex, ((Q.top().depht + 1) % 3) + 1);
+                Q.emplace(newCoord1, newCoord2, newCoord3, Q.top().depht + 1);
+                ++size;
+            }
+        }
+        Q.pop();
+    }
+    lib::printendl("Size :: ", size);
+}
 
 void    Kociemba::generatePruneTable(
     unsigned int c1size,
@@ -158,7 +218,7 @@ void    Kociemba::generatePruneTable(
     void (Kociemba::*getNewCoords)(int, const unsigned int&, const unsigned int&, unsigned int&, unsigned int&)
 )
 {
-    std::priority_queue<State>    Q;
+    std::priority_queue<StatePruning>    Q;
     unsigned int                    newCoord1;
     unsigned int                    newCoord2;
     unsigned long long              newIndex;
@@ -245,6 +305,37 @@ void    Kociemba::create_pruneTable(
 
 void    Kociemba::generate_pruneTables()
 {
+    std::ifstream file;
+    file.open(std::string("./pruningTables/P1").c_str());
+    if (file)
+    {
+        lib::printendl("Loading P1 Prune Table ...");
+        file.seekg(0, std::ios::end);
+        size_t length = file.tellg();
+        file.seekg(0, std::ios::beg);
+        if (length > 554273280)
+        {
+            length = 554273280;
+        }
+        file.read(P1_PruneTable, length);
+    }
+    else
+    {
+        lib::printendl("Creating P1 Prune Table ...");
+        generatePruneTable_P1();
+
+        FILE *file = fopen(std::string("./pruningTables/P1").c_str(), "w");
+        int results = fputs(P1_PruneTable, file);
+        if (results == EOF) {
+            std::printf("FAIL TO WRITE\n");
+        }
+        fclose(file);
+
+        lib::printendl("P1 Prune Table Created.");
+    }
+
+    //////////////////////////////////////////////////////////////
+
     create_pruneTable(
         "P1_COEO",
         1119744,

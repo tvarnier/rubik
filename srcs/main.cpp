@@ -16,17 +16,17 @@ int		main(int ac, char **av)
 	Cube	 rubik;
 
 	// std::string moves = "R L' D' U' R2 F2 D";//R U D'";
-
+	// std::string moves = "B2 D' U2";
 	// std::vector<string> el = {};
 	// split(std::string(moves), ' ', el);
 
 	// for (auto it = el.begin(); it != el.end(); ++it)
 	// 	rubik.move(*it);
 
-	rubik.shuffle(1);
+	rubik.shuffle(100);
 
-	// rubik.move("B'");
-	// rubik.move("F'");
+	// rubik.move("F");
+	// rubik.move("U");
 	// rubik.move("D'");
 
 	k.solve(rubik);
