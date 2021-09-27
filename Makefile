@@ -15,8 +15,7 @@ OBJ			= Cube/Cube.cpp \
 			  Kociemba/KociembaSymmetries.cpp \
 			  Kociemba/KociembaMoveTables.cpp \
 			  Kociemba/KociembaPruneTables.cpp \
-			  Kociemba/KociembaDepht.cpp \
-			  Kociemba/KociembaSolve.cpp
+			  Kociemba/KociembaDepht.cpp
 OBJ_DIR		= objects/
 OBJ_SUBDIR	= objects/Cube \
 			  objects/Kociemba

@@ -70,6 +70,8 @@ class Cube
         
         static std::array<CORNERS, 8>   rotateCornPerm(const std::array<CORNERS, 8>& cornPerm, const unsigned int& rot);
         static std::array<unsigned int, 8>  rotateCornOrient(const std::array<unsigned int, 8>& cornOrient, const unsigned int& rot);
+        
+        static edges                    rotateEdges(const edges& edgeCoord, const unsigned int& rot);
         static std::array<EDGES, 12>    rotateEdgePerm(const std::array<EDGES, 12>& edgePerm, const unsigned int& rot);
         static std::array<unsigned int, 12> rotateEdgeOrient(const std::array<unsigned int, 12>& edgeOrient, const unsigned int& rot);
 

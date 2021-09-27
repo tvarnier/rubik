@@ -9,6 +9,7 @@ class Cube;
 # define CORNER_ORIENTATION_MOVETABLE_SIZE  2187
 # define EDGE_ORIENTATION_MOVETABLE_SIZE    2048
 # define UD_SLICE_MOVETABLE_SIZE            495
+# define FLIP_UD_SLICE_MOVETABLE_SIZE       1013760
 
 # define CORNER_PERMUTATION_MOVETABLE_SIZE  40320
 # define P2_EDGE_PERMUTATION_MOVETABLE_SIZE 40320
@@ -24,19 +25,14 @@ class   Kociemba
         void    solve(Cube rubik);
 
     private:
-        static char     P1_PruneTable[554273280];
-        static char     P1_COEO_PruneTable[1119744];
-        static char     P1_COUS_PruneTable[270642];
-        static char     P1_USEO_PruneTable[253440];
-        static char     P2_CPEP_PruneTable[406425600];
-        static char     P2_CPUS_PruneTable[241920];
-        static char     P2_USEP_PruneTable[241920];
+        static char     P1_PruneTable[35227103];
 
         static char     P2_PruneTable[27901440];
 
         std::array< std::array<unsigned int, 18>,  CORNER_ORIENTATION_MOVETABLE_SIZE >  CornerOrientation_MoveTable {};
         std::array< std::array<unsigned int, 18>,    EDGE_ORIENTATION_MOVETABLE_SIZE >  EdgeOrientation_MoveTable   {};
         std::array< std::array<unsigned int, 18>,            UD_SLICE_MOVETABLE_SIZE >  UdSlice_MoveTable           {};
+        std::vector< std::array<unsigned int, 18> >  FlipUdSlice_MoveTable       {};
 
         std::array< std::array<unsigned int, 18>,  CORNER_PERMUTATION_MOVETABLE_SIZE >  CornerPermutation_MoveTable {};
         std::array< std::array<unsigned int, 18>, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >  P2EdgePermutation_MoveTable {};
@@ -49,10 +45,15 @@ class   Kociemba
         std::array< Cube, 16 >    symCubes {};
         std::array< Cube, 16 > symInvCubes {};
 
+        std::array< unsigned int, 2768 >    CornPerm_SymRep {};
+        std::array< std::pair< unsigned int, std::vector<unsigned int> >, CORNER_PERMUTATION_MOVETABLE_SIZE >    CornPerm_Sym {};
 
-        std::array< std::array<unsigned int, 18>, 2768>  CornPermSym_MoveTable {};
-        std::array< unsigned int, 2768 >    CornSymRep {};
-        std::array< std::pair< unsigned int, std::vector<unsigned int> >, CORNER_PERMUTATION_MOVETABLE_SIZE >    CornSym {};
+        std::array< unsigned int, 64430 >    FlipUdSlice_SymRep {};
+        std::vector< std::pair< unsigned int, std::vector<unsigned int> > >    FlipUdSlice_Sym {};
+
+
+        static std::vector< std::array<unsigned int, 16> > P2EdgePermSym_MoveTable;
+        static std::vector< std::array<unsigned int, 16> > CornOrientSym_MoveTable;
 
         //  Coordinates
 
@@ -91,6 +92,7 @@ class   Kociemba
         void    generate_CornerOrientation_MoveTable();
         void    generate_EdgeOrientation_MoveTable();
         void    generate_UdSlice_MoveTable();
+        void    generate_FlipUdSlice_MoveTable();
 
         void    generate_CornerPermutation_MoveTable();
         void    generate_P2EdgePermutation_MoveTable();
@@ -190,47 +192,47 @@ class   Kociemba
 
 
         //  Solve
-        struct State {
-            unsigned int        cornOrient;
-            unsigned int        edgeOrient;
-            unsigned int        udSlice;
-            uint8_t             COEO;
-            uint8_t             COUS;
-            uint8_t             USEO;
+        // struct State {
+        //     unsigned int        cornOrient;
+        //     unsigned int        edgeOrient;
+        //     unsigned int        udSlice;
+        //     uint8_t             COEO;
+        //     uint8_t             COUS;
+        //     uint8_t             USEO;
 
-            unsigned int        cornPerm;
-            unsigned int        edgePerm;
-            unsigned int        udSliceSorted;
-            uint8_t             CPEP;
-            uint8_t             CPUS;
-            uint8_t             USEP;
+        //     unsigned int        cornPerm;
+        //     unsigned int        edgePerm;
+        //     unsigned int        udSliceSorted;
+        //     uint8_t             CPEP;
+        //     uint8_t             CPUS;
+        //     uint8_t             USEP;
 
-            short               phase;
-            int                 depht;
-            uint8_t             P1Depht;
-            int                 P2Depht;
-            std::vector<int>    path;
+        //     short               phase;
+        //     int                 depht;
+        //     uint8_t             P1Depht;
+        //     int                 P2Depht;
+        //     std::vector<int>    path;
 
-            State(unsigned int co = 0, unsigned int eo = 0, unsigned int us = 0,
-                    uint8_t coeo = 0, uint8_t cous = 0, uint8_t useo = 0,
-                    unsigned int cp = 0, unsigned int ep = 0, unsigned int uss = 0,
-                    uint8_t cpep = 0, uint8_t cpus = 0, uint8_t usep = 0,
-                    short ph = 1, int d = 0, uint8_t p1d = 0, int p2d = 0, const std::vector<int>& p = std::vector<int>())
-            : cornOrient(co), edgeOrient(eo), udSlice(us), COEO(coeo), COUS(cous), USEO(useo),
-            cornPerm(cp), edgePerm(ep), udSliceSorted(uss), CPEP(cpep), CPUS(cpus), USEP(usep),
-            phase(ph), depht(d), P1Depht(p1d), P2Depht(p2d), path(p) {}
+        //     State(unsigned int co = 0, unsigned int eo = 0, unsigned int us = 0,
+        //             uint8_t coeo = 0, uint8_t cous = 0, uint8_t useo = 0,
+        //             unsigned int cp = 0, unsigned int ep = 0, unsigned int uss = 0,
+        //             uint8_t cpep = 0, uint8_t cpus = 0, uint8_t usep = 0,
+        //             short ph = 1, int d = 0, uint8_t p1d = 0, int p2d = 0, const std::vector<int>& p = std::vector<int>())
+        //     : cornOrient(co), edgeOrient(eo), udSlice(us), COEO(coeo), COUS(cous), USEO(useo),
+        //     cornPerm(cp), edgePerm(ep), udSliceSorted(uss), CPEP(cpep), CPUS(cpus), USEP(usep),
+        //     phase(ph), depht(d), P1Depht(p1d), P2Depht(p2d), path(p) {}
 
-            bool operator<(const State& other) const { return ((depht == other.depht) ? path.size() > other.path.size() : depht > other.depht); }
-            bool operator==(const State& other) const { return (path == other.path); }
-        };
+        //     bool operator<(const State& other) const { return ((depht == other.depht) ? path.size() > other.path.size() : depht > other.depht); }
+        //     bool operator==(const State& other) const { return (path == other.path); }
+        // };
 
-        void    solveP1(Cube& rubik);
-        void    solveP2(Cube& rubik);
+        // void    solveP1(Cube& rubik);
+        // void    solveP2(Cube& rubik);
 
-        void    generateP1(std::priority_queue<State>& open, std::unordered_set<size_t>& close, State& current, const Cube& rubik);
-        void    generateP2(std::priority_queue<State>& open, std::unordered_set<size_t>& close, State& current);
+        // void    generateP1(std::priority_queue<State>& open, std::unordered_set<size_t>& close, State& current, const Cube& rubik);
+        // void    generateP2(std::priority_queue<State>& open, std::unordered_set<size_t>& close, State& current);
 
-        void    solveSucess(Cube& rubik, State& solution, size_t& nbrOpenedStates);
+        // void    solveSucess(Cube& rubik, State& solution, size_t& nbrOpenedStates);
 
         int      Phase2Depht(unsigned int cornPerm, unsigned int EdgePerm, unsigned int udSliceSorted);
 };

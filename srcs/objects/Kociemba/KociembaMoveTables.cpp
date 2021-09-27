@@ -26,6 +26,16 @@ void    Kociemba::generate_CornerOrientation_MoveTable()
             }
         }
     }
+
+    Kociemba::CornOrientSym_MoveTable.resize(2187);
+
+    for (unsigned int raw = 0; raw < 2187; ++raw)
+    {
+        struct corners corner;
+        corner.o = generateCornerOrientation(raw);
+        for (int sym = 0; sym < 16; ++sym)
+            Kociemba::CornOrientSym_MoveTable[raw][sym] = cornerOrientationCoordinates(Cube::multCorners( Cube::multCorners(symInvCubes[sym].m_corners, corner), symCubes[sym].m_corners ).o);
+    }
 }
 
 void    Kociemba::generate_EdgeOrientation_MoveTable()
@@ -78,6 +88,67 @@ void    Kociemba::generate_UdSlice_MoveTable()
     }
 }
 
+void    Kociemba::generate_FlipUdSlice_MoveTable()
+{
+    lib::printendl("HEY");
+    FlipUdSlice_MoveTable.resize(1013760);
+    lib::printendl("HEY");
+
+    std::array<unsigned int, 16> tmpSyms {};
+    int repId(-1);
+
+    FlipUdSlice_Sym.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
+
+    for (unsigned int raw = 0; raw < FLIP_UD_SLICE_MOVETABLE_SIZE; ++raw)
+    {
+        struct edges Coord;
+        Coord.o = generateEdgeOrientation(raw / UD_SLICE_MOVETABLE_SIZE);
+        Coord.p = generateUDSlice(raw % UD_SLICE_MOVETABLE_SIZE);
+
+        int i(0);
+        for (i = 0; i < 16; ++i)
+        {
+            struct edges tmpCoord = Coord;
+
+            tmpCoord = Cube::multEdges(Cube::multEdges(symCubes[i].m_edges, tmpCoord), symInvCubes[i].m_edges);
+
+            unsigned int coord = edgeOrientationCoordinates(tmpCoord.o) * UD_SLICE_MOVETABLE_SIZE + UDSliceCoordinates(tmpCoord.p);
+            
+            if (coord < raw)
+                break ;
+            
+            tmpSyms[i] = coord;
+        }
+
+        if (i == 16)
+        {
+            FlipUdSlice_SymRep[++repId] = raw;
+            for (int sym = 0; sym < 16; ++sym)
+            {
+                FlipUdSlice_Sym[tmpSyms[sym]].first = repId;
+                FlipUdSlice_Sym[tmpSyms[sym]].second.push_back(sym);
+            }
+        }
+
+        unsigned int edgeOrientation = raw / UD_SLICE_MOVETABLE_SIZE;
+        unsigned int udSlice = raw % UD_SLICE_MOVETABLE_SIZE;
+
+        unsigned int moveId = 0;
+        for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
+        {
+            struct edges tmpCoord = Coord;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
+            {
+                tmpCoord = Cube::rotateEdges(tmpCoord, rotateId);
+                FlipUdSlice_MoveTable[raw][moveId] = edgeOrientationCoordinates(tmpCoord.o) * UD_SLICE_MOVETABLE_SIZE + UDSliceCoordinates(tmpCoord.p);
+                ++moveId;
+            }
+        }
+    }
+
+    lib::printendl("HEY");
+}
+
 /* ===================== P2 ===================== */
 
 void    Kociemba::generate_CornerPermutation_MoveTable()
@@ -96,7 +167,7 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
 
         if (getCornPermSymRep(cornPerm) == raw)
         {
-            CornSymRep[++repId] = raw;
+            CornPerm_SymRep[++repId] = raw;
             printf(" %5d : [ ", raw);
             for (int i = 0; i < 16; ++i)
             {
@@ -105,10 +176,9 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
                 tmp = Cube::multCornPerm( Cube::multCornPerm(symCubes[i].m_corners.p, cornPerm), symInvCubes[i].m_corners.p );
                 unsigned int coord = cornerPermutationCoordinates(tmp);
                 
-                //if (raw == 0)
                 printf(" %5d ", coord);
-                CornSym[coord].first = repId;
-                CornSym[coord].second.push_back(i);
+                CornPerm_Sym[coord].first = repId;
+                CornPerm_Sym[coord].second.push_back(i);
             }
             printf("]\n");
         }
@@ -117,12 +187,9 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
         for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
         {
             std::array<CORNERS, 8>  cornPermRotated = cornPerm;
-            // unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
             for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
             {
                 cornPermRotated = Cube::rotateCornPerm(cornPermRotated, rotateId);
-                // if (rotateId != UP && rotateId != DOWN)
-                //     cornPermRotated = Cube::rotateCornPerm(cornPermRotated, rotateId);
                 CornerPermutation_MoveTable[raw][moveId] = cornerPermutationCoordinates(cornPermRotated);
                 ++moveId;
             }
@@ -133,7 +200,7 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
 
 
 
-    for (unsigned int sym = 0; sym < 2768; ++sym)
+    /*for (unsigned int sym = 0; sym < 2768; ++sym)
     {
         unsigned int raw = CornSymRep[sym];
         std::array<CORNERS, 8> cornPerm = generateCornerPermutation(raw);
@@ -151,7 +218,7 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
             }
         }
 
-    }
+    }*/
 }
 
 void    Kociemba::generate_P2EdgePermutation_MoveTable()
@@ -179,6 +246,15 @@ void    Kociemba::generate_P2EdgePermutation_MoveTable()
                 ++moveId;
             }
         }
+    }
+
+    Kociemba::P2EdgePermSym_MoveTable.resize(40320);
+
+    for (unsigned int raw = 0; raw < 40320; ++raw)
+    {
+        std::array<EDGES, 12> edgePerm = generateP2EdgePermutation(raw);
+        for (int sym = 0; sym < 16; ++sym)
+            Kociemba::P2EdgePermSym_MoveTable[raw][sym] = phase2EdgePermutationCoordinates(Cube::multEdgePerm( Cube::multEdgePerm(symInvCubes[sym].m_edges.p, edgePerm), symCubes[sym].m_edges.p ));
     }
 }
 
@@ -215,6 +291,8 @@ int     Kociemba::generate_moveTables()
     generate_CornerOrientation_MoveTable();
     generate_EdgeOrientation_MoveTable();
     generate_UdSlice_MoveTable();
+    generate_FlipUdSlice_MoveTable();
+
     generate_CornerPermutation_MoveTable();
     generate_P2EdgePermutation_MoveTable();
     generate_UdSliceSorted_MoveTable();
