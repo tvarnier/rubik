@@ -12,6 +12,7 @@ OBJ			= Cube/Cube.cpp \
 			  Cube/CubeMovement.cpp \
 			  Kociemba/Kociemba.cpp \
 			  Kociemba/KociembaCoordinates.cpp \
+			  Kociemba/KociembaSymmetries.cpp \
 			  Kociemba/KociembaMoveTables.cpp \
 			  Kociemba/KociembaPruneTables.cpp \
 			  Kociemba/KociembaDepht.cpp \

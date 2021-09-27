@@ -30,6 +30,11 @@ enum EDGES : unsigned int {UR=0,UF=1,UL=2,UB=3,DR=4,DF=5,DL=6,DB=7,FR=8,FL=9,BL=
 # define LEFT       4
 # define BACK       5
 
+# define ROT_URF3       6
+# define ROT_F2         7
+# define ROT_U4         8
+# define ROT_LR2        9
+
 struct corners {
     std::array<CORNERS, 8>          p;
     std::array<unsigned int, 8>     o;
@@ -68,10 +73,13 @@ class Cube
         static std::array<EDGES, 12>    rotateEdgePerm(const std::array<EDGES, 12>& edgePerm, const unsigned int& rot);
         static std::array<unsigned int, 12> rotateEdgeOrient(const std::array<unsigned int, 12>& edgeOrient, const unsigned int& rot);
 
-        static std::array<CORNERS, 8>   multCornPerm(const std::array<CORNERS, 8>& first, const std::array<CORNERS, 8>& second);
-        static std::array<EDGES, 12>    multEdgePerm(const std::array<EDGES, 12>& first, const std::array<EDGES, 12>& second);
+        static Cube                     multCube(const Cube& first, const Cube& second);
 
-        Cube            operator + (Cube const &obj);
+        static corners                  multCorners(const corners& first, const corners& second);
+        static std::array<CORNERS, 8>   multCornPerm(const std::array<CORNERS, 8>& first, const std::array<CORNERS, 8>& second);
+        static edges                    multEdges(const edges& first, const edges& second);
+        static std::array<EDGES,  12>   multEdgePerm(const std::array<EDGES, 12>& first, const std::array<EDGES, 12>& second);
+
         Cube&           operator=(const Cube& other);
 
     private:

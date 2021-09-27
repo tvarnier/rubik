@@ -32,6 +32,8 @@ class   Kociemba
         static char     P2_CPUS_PruneTable[241920];
         static char     P2_USEP_PruneTable[241920];
 
+        static char     P2_PruneTable[27901440];
+
         std::array< std::array<unsigned int, 18>,  CORNER_ORIENTATION_MOVETABLE_SIZE >  CornerOrientation_MoveTable {};
         std::array< std::array<unsigned int, 18>,    EDGE_ORIENTATION_MOVETABLE_SIZE >  EdgeOrientation_MoveTable   {};
         std::array< std::array<unsigned int, 18>,            UD_SLICE_MOVETABLE_SIZE >  UdSlice_MoveTable           {};
@@ -43,6 +45,15 @@ class   Kociemba
         std::array< unsigned int,  CORNER_PERMUTATION_MOVETABLE_SIZE >                  CornerPermutation_DephtTable {};
         std::array< unsigned int, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >                  EdgePermutation_DephtTable {};
         std::array< unsigned int,     UD_SLICE_SORTED_MOVETABLE_SIZE >                  UdSliceSorted_DephtTable {};
+
+        std::array< Cube, 16 >    symCubes {};
+        std::array< Cube, 16 > symInvCubes {};
+
+
+        std::array< std::array<unsigned int, 18>, 2768>  CornPermSym_MoveTable {};
+        std::array< unsigned int, 2768 >    CornSymRep {};
+        std::array< std::pair< unsigned int, std::vector<unsigned int> >, CORNER_PERMUTATION_MOVETABLE_SIZE >    CornSym {};
+
         //  Coordinates
 
         static unsigned int             cornerOrientationCoordinates(const std::array<unsigned int, 8>& cornerOrientation);
@@ -65,6 +76,14 @@ class   Kociemba
         unsigned int                    UDSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
         std::array<EDGES, 12>           generateUDSliceSorted(unsigned int coord);
     
+        // Symmetries
+
+        void    generate_symmetries();
+        void    generate_symCubes();
+        void    generate_symInvCubes();
+
+        unsigned int    getCornPermSymRep(const std::array<CORNERS, 8> cornPerm);
+
         //  MoveTables
 
         int     generate_moveTables();
@@ -82,6 +101,7 @@ class   Kociemba
         void    generate_pruneTables();
         
         void    generatePruneTable_P1();
+        void    generatePruneTable_P2();
 
         void    generatePruneTable(
             unsigned int c1size,
@@ -106,6 +126,9 @@ class   Kociemba
 
         char    getValue_P1_PruneTable(unsigned long long index);
         void    setValue_P1_PruneTable(unsigned long long index, char value);
+
+        char    getValue_P2_PruneTable(unsigned long long index);
+        void    setValue_P2_PruneTable(unsigned long long index, char value);
 
         char    getValue_P1_COEO_PruneTable(unsigned long long index);
         void    setValue_P1_COEO_PruneTable(unsigned long long index, char value);

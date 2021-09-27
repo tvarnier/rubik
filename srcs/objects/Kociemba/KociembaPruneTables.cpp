@@ -3,6 +3,9 @@
 char    Kociemba::getValue_P1_PruneTable(unsigned long long index) { return ( (Kociemba::P1_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
 void    Kociemba::setValue_P1_PruneTable(unsigned long long index, char value) { Kociemba::P1_PruneTable[index / 4] =  Kociemba::P1_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
 
+char    Kociemba::getValue_P2_PruneTable(unsigned long long index) { return ( (Kociemba::P2_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
+void    Kociemba::setValue_P2_PruneTable(unsigned long long index, char value) { Kociemba::P2_PruneTable[index / 4] =  Kociemba::P2_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
+
 /* ============================ COEO ============================ */
 
 char    Kociemba::getValue_P1_COEO_PruneTable(unsigned long long index) { return ( (Kociemba::P1_COEO_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
@@ -209,6 +212,63 @@ void    Kociemba::generatePruneTable_P1()
     lib::printendl("Size :: ", size);
 }
 
+void    Kociemba::generatePruneTable_P2()
+{
+    std::priority_queue<StatePruning>    Q;
+    unsigned int                    newCoord1;
+    unsigned int                    newCoord2;
+
+    unsigned long long              newIndex;
+
+    unsigned long long              size(1);
+    unsigned long long              lastSize(1);
+    unsigned int                    lastDepht(0);
+
+    Q.emplace(0, 0, 0);
+    setValue_P2_PruneTable(0, 1);
+
+    while (!Q.empty())
+    {
+        for (unsigned int i = 0; i < 18; ++i)
+        {
+            if ((i / 3 == UP || i / 3 == DOWN)
+                    || (i % 3 == 1))
+            {
+                if (Q.top().depht != lastDepht)
+                {
+                    std::printf("Depht : %u - %llu\n", Q.top().depht, size - lastSize);
+                    lastSize = size;
+                    lastDepht = Q.top().depht;
+                }
+
+                newCoord1 = CornerPermutation_MoveTable[Q.top().coord1][i];
+                newCoord2 = P2EdgePermutation_MoveTable[Q.top().coord2][i];
+                unsigned int rep = CornSym[newCoord1].first;
+
+                bool created = false;
+
+                for (auto sym : CornSym[newCoord1].second)
+                {
+                    unsigned int newEdgeSym = phase2EdgePermutationCoordinates(Cube::multEdgePerm( Cube::multEdgePerm(symInvCubes[sym].m_edges.p, generateP2EdgePermutation(newCoord2)), symCubes[sym].m_edges.p ));
+                    
+                    newIndex = newEdgeSym * 2768 + rep;
+                    if (getValue_P2_PruneTable(newIndex) == 0)
+                    {
+                        setValue_P2_PruneTable(newIndex, ((Q.top().depht + 1) % 3) + 1);
+                        Q.emplace(CornSymRep[rep], newEdgeSym, Q.top().depht + 1);
+                        ++size;
+                    }
+                }
+                if (created)
+                {
+                }
+            }
+        }
+        Q.pop();
+    }
+    lib::printendl("Size :: ", size);
+}
+
 void    Kociemba::generatePruneTable(
     unsigned int c1size,
     unsigned int c2Size,
@@ -305,19 +365,19 @@ void    Kociemba::create_pruneTable(
 
 void    Kociemba::generate_pruneTables()
 {
-    std::ifstream file;
-    file.open(std::string("./pruningTables/P1").c_str());
-    if (file)
+    std::ifstream fileP1;
+    fileP1.open(std::string("./pruningTables/P1").c_str());
+    if (fileP1)
     {
         lib::printendl("Loading P1 Prune Table ...");
-        file.seekg(0, std::ios::end);
-        size_t length = file.tellg();
-        file.seekg(0, std::ios::beg);
+        fileP1.seekg(0, std::ios::end);
+        size_t length = fileP1.tellg();
+        fileP1.seekg(0, std::ios::beg);
         if (length > 554273280)
         {
             length = 554273280;
         }
-        file.read(P1_PruneTable, length);
+        fileP1.read(P1_PruneTable, length);
     }
     else
     {
@@ -332,6 +392,37 @@ void    Kociemba::generate_pruneTables()
         fclose(file);
 
         lib::printendl("P1 Prune Table Created.");
+    }
+
+
+
+    std::ifstream fileP2;
+    fileP2.open(std::string("./pruningTables/P2").c_str());
+    if (fileP2)
+    {
+        lib::printendl("Loading P2 Prune Table ...");
+        fileP2.seekg(0, std::ios::end);
+        size_t length = fileP2.tellg();
+        fileP2.seekg(0, std::ios::beg);
+        if (length > 27901440)
+        {
+            length = 27901440;
+        }
+        fileP2.read(P2_PruneTable, length);
+    }
+    else
+    {
+        lib::printendl("Creating P2 Prune Table ...");
+        generatePruneTable_P2();
+
+        FILE *file = fopen(std::string("./pruningTables/P2").c_str(), "w");
+        int results = fputs(P2_PruneTable, file);
+        if (results == EOF) {
+            std::printf("FAIL TO WRITE\n");
+        }
+        fclose(file);
+
+        lib::printendl("P2 Prune Table Created.");
     }
 
     //////////////////////////////////////////////////////////////

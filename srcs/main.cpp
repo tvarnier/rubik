@@ -23,13 +23,12 @@ int		main(int ac, char **av)
 	// for (auto it = el.begin(); it != el.end(); ++it)
 	// 	rubik.move(*it);
 
-	rubik.shuffle(100);
+	// rubik.shuffle(5);
 
-	// rubik.move("F");
-	// rubik.move("U");
+	//rubik.move("U");
 	// rubik.move("D'");
 
-	k.solve(rubik);
+	// k.solve(rubik);
 
 	return (0);
 }

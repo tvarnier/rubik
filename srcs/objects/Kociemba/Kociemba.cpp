@@ -1,6 +1,7 @@
 #include "Kociemba.hpp"
 
 char Kociemba::P1_PruneTable[554273280] = {};
+char Kociemba::P2_PruneTable[27901440] = {};
 
 char Kociemba::P1_COEO_PruneTable[1119744] = {};
 char Kociemba::P1_COUS_PruneTable[270642] = {};
@@ -11,7 +12,8 @@ char Kociemba::P2_CPUS_PruneTable[241920] = {};
 char Kociemba::P2_USEP_PruneTable[241920] = {};
 
 Kociemba::Kociemba() {
+    generate_symmetries();
     generate_moveTables();
     generate_pruneTables();
-    generate_dephtTables();
+    // generate_dephtTables();
 }

@@ -274,12 +274,12 @@ void    Kociemba::solveP1(Cube& rubik)
 
         /* ===== DEBUG ===== */
 
-        printf("%s %d :: %2d - ( %5u %5u %5u | %5u %5u %5u ) [%2lu]%s ", (current.phase == 1) ? RED : GREEN, current.phase, current.depht, current.cornOrient, current.edgeOrient, current.udSlice, current.cornPerm, current.edgePerm, current.udSliceSorted, current.path.size(), RESET);
-        for (auto it = current.path.begin(); it != current.path.end(); ++it)
-        {
-            std::printf("%s ", moveP1(*it).c_str());
-        }
-        std::printf("\n");
+        // printf("%s %d :: %2d - ( %5u %5u %5u | %5u %5u %5u ) [%2lu]%s ", (current.phase == 1) ? RED : GREEN, current.phase, current.depht, current.cornOrient, current.edgeOrient, current.udSlice, current.cornPerm, current.edgePerm, current.udSliceSorted, current.path.size(), RESET);
+        // for (auto it = current.path.begin(); it != current.path.end(); ++it)
+        // {
+        //     std::printf("%s ", moveP1(*it).c_str());
+        // }
+        // std::printf("\n");
         
         opened++;
 

@@ -88,9 +88,31 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
             CornerPermutation_MoveTable[i][y] = 0;
     }
 
+    int repId(-1);
+
     for (unsigned int raw = 0; raw < CORNER_PERMUTATION_MOVETABLE_SIZE; ++raw)
     {
         std::array<CORNERS, 8> cornPerm = generateCornerPermutation(raw);
+
+        if (getCornPermSymRep(cornPerm) == raw)
+        {
+            CornSymRep[++repId] = raw;
+            printf(" %5d : [ ", raw);
+            for (int i = 0; i < 16; ++i)
+            {
+
+                std::array< CORNERS, 8 >    tmp;
+                tmp = Cube::multCornPerm( Cube::multCornPerm(symCubes[i].m_corners.p, cornPerm), symInvCubes[i].m_corners.p );
+                unsigned int coord = cornerPermutationCoordinates(tmp);
+                
+                //if (raw == 0)
+                printf(" %5d ", coord);
+                CornSym[coord].first = repId;
+                CornSym[coord].second.push_back(i);
+            }
+            printf("]\n");
+        }
+
         unsigned int moveId = 0;
         for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
         {
@@ -105,6 +127,30 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
                 ++moveId;
             }
         }
+    }
+
+    std::printf("nbRepId : %d\n", repId);
+
+
+
+    for (unsigned int sym = 0; sym < 2768; ++sym)
+    {
+        unsigned int raw = CornSymRep[sym];
+        std::array<CORNERS, 8> cornPerm = generateCornerPermutation(raw);
+        unsigned int moveId = 0;
+        for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
+        {
+            std::array<CORNERS, 8>  cornPermRotated = cornPerm;
+            // unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
+            {
+                cornPermRotated = Cube::rotateCornPerm(cornPermRotated, rotateId);
+                CornPermSym_MoveTable[sym][moveId] = cornerPermutationCoordinates(cornPermRotated);
+                if (sym == 0) lib::printendl(":: ", CornPermSym_MoveTable[sym][moveId] );
+                ++moveId;
+            }
+        }
+
     }
 }
 
