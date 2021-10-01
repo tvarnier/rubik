@@ -88,16 +88,9 @@ void    Kociemba::generate_UdSlice_MoveTable()
     }
 }
 
-void    Kociemba::generate_FlipUdSlice_MoveTable()
+void    Kociemba::generateFlipUdSLiceRep()
 {
-    lib::printendl("HEY");
-    FlipUdSlice_MoveTable.resize(1013760);
-    lib::printendl("HEY");
-
-    std::array<unsigned int, 16> tmpSyms {};
     int repId(-1);
-
-    FlipUdSlice_Sym.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
 
     for (unsigned int raw = 0; raw < FLIP_UD_SLICE_MOVETABLE_SIZE; ++raw)
     {
@@ -109,44 +102,90 @@ void    Kociemba::generate_FlipUdSlice_MoveTable()
         for (i = 0; i < 16; ++i)
         {
             struct edges tmpCoord = Coord;
-
             tmpCoord = Cube::multEdges(Cube::multEdges(symCubes[i].m_edges, tmpCoord), symInvCubes[i].m_edges);
-
             unsigned int coord = edgeOrientationCoordinates(tmpCoord.o) * UD_SLICE_MOVETABLE_SIZE + UDSliceCoordinates(tmpCoord.p);
             
             if (coord < raw)
                 break ;
-            
-            tmpSyms[i] = coord;
         }
 
         if (i == 16)
-        {
             FlipUdSlice_SymRep[++repId] = raw;
+    }
+    printf("RepId : %d\n", repId);
+}
+
+void    Kociemba::getFLipUdSLiceRep()
+{
+    std::ifstream fileP1;
+    fileP1.open(std::string("./data/flipUdSLice_Rep").c_str());
+    if (fileP1)
+    {
+        lib::printendl("Loading FlipUdSlice Rep ...");
+        fileP1.seekg(0, std::ios::end);
+        size_t length = fileP1.tellg();
+        fileP1.seekg(0, std::ios::beg);
+        if (length > 257720 )
+        {
+            length = 257720 ;
+        }
+        fileP1.read((char*)FlipUdSlice_SymRep.data(), length);
+    }
+    else
+    {
+        lib::printendl("Creating FlipUdSlice Rep ...");
+        
+        generateFlipUdSLiceRep();
+
+        std::fstream file;
+        file.open(std::string("./data/flipUdSLice_Rep").c_str(), std::fstream::out);
+        file.write((char*)FlipUdSlice_SymRep.data(), 257720 );
+        file.close();
+
+        lib::printendl("FlipUdSlice Rep Created.");
+    }
+}
+
+void    Kociemba::generate_FlipUdSlice_MoveTable()
+{
+    FlipUdSlice_MoveTable.resize(1013760);
+    FlipUdSlice_Sym.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
+
+    getFLipUdSLiceRep();
+
+    size_t repId(0);
+
+    for (unsigned int raw = 0; raw < FLIP_UD_SLICE_MOVETABLE_SIZE; ++raw)
+    {
+        if (raw == FlipUdSlice_SymRep[repId])
+        {
+            struct edges Coord;
+            Coord.o = generateEdgeOrientation(raw / UD_SLICE_MOVETABLE_SIZE);
+            Coord.p = generateUDSlice(raw % UD_SLICE_MOVETABLE_SIZE);
+
             for (int sym = 0; sym < 16; ++sym)
             {
-                FlipUdSlice_Sym[tmpSyms[sym]].first = repId;
-                FlipUdSlice_Sym[tmpSyms[sym]].second.push_back(sym);
-            }
-        }
+                struct edges tmpCoord = Coord;
 
-        unsigned int edgeOrientation = raw / UD_SLICE_MOVETABLE_SIZE;
-        unsigned int udSlice = raw % UD_SLICE_MOVETABLE_SIZE;
+                tmpCoord = Cube::multEdges(Cube::multEdges(symCubes[sym].m_edges, tmpCoord), symInvCubes[sym].m_edges);
+
+                unsigned int coord = edgeOrientationCoordinates(tmpCoord.o) * UD_SLICE_MOVETABLE_SIZE + UDSliceCoordinates(tmpCoord.p);                
+                FlipUdSlice_Sym[coord].first = repId;
+                FlipUdSlice_Sym[coord].second.push_back(sym);
+            }
+            repId++;
+        }
 
         unsigned int moveId = 0;
         for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
         {
-            struct edges tmpCoord = Coord;
             for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
             {
-                tmpCoord = Cube::rotateEdges(tmpCoord, rotateId);
-                FlipUdSlice_MoveTable[raw][moveId] = edgeOrientationCoordinates(tmpCoord.o) * UD_SLICE_MOVETABLE_SIZE + UDSliceCoordinates(tmpCoord.p);
+                FlipUdSlice_MoveTable[raw][moveId] = EdgeOrientation_MoveTable[raw / UD_SLICE_MOVETABLE_SIZE][moveId] * UD_SLICE_MOVETABLE_SIZE + UdSlice_MoveTable[raw % UD_SLICE_MOVETABLE_SIZE][moveId];//;
                 ++moveId;
             }
         }
     }
-
-    lib::printendl("HEY");
 }
 
 /* ===================== P2 ===================== */
@@ -168,19 +207,18 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
         if (getCornPermSymRep(cornPerm) == raw)
         {
             CornPerm_SymRep[++repId] = raw;
-            printf(" %5d : [ ", raw);
+            //printf(" %5d : [ ", raw);
             for (int i = 0; i < 16; ++i)
             {
-
                 std::array< CORNERS, 8 >    tmp;
                 tmp = Cube::multCornPerm( Cube::multCornPerm(symCubes[i].m_corners.p, cornPerm), symInvCubes[i].m_corners.p );
                 unsigned int coord = cornerPermutationCoordinates(tmp);
                 
-                printf(" %5d ", coord);
+                //printf(" %5d ", coord);
                 CornPerm_Sym[coord].first = repId;
                 CornPerm_Sym[coord].second.push_back(i);
             }
-            printf("]\n");
+           // printf("]\n");
         }
 
         unsigned int moveId = 0;
@@ -195,8 +233,6 @@ void    Kociemba::generate_CornerPermutation_MoveTable()
             }
         }
     }
-
-    std::printf("nbRepId : %d\n", repId);
 
 
 

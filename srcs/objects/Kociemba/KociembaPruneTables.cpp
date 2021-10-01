@@ -3,8 +3,8 @@
 char    Kociemba::getValue_P1_PruneTable(unsigned long long index) { return ( (Kociemba::P1_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
 void    Kociemba::setValue_P1_PruneTable(unsigned long long index, char value) { Kociemba::P1_PruneTable[index / 4] =  Kociemba::P1_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
 
-char    Kociemba::getValue_P2_PruneTable(unsigned long long index) { return ( (Kociemba::P2_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
-void    Kociemba::setValue_P2_PruneTable(unsigned long long index, char value) { Kociemba::P2_PruneTable[index / 4] =  Kociemba::P2_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
+// char    Kociemba::getValue_P2_PruneTable(unsigned long long index) { return ( (Kociemba::P2_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
+// void    Kociemba::setValue_P2_PruneTable(unsigned long long index, char value) { Kociemba::P2_PruneTable[index / 4] =  Kociemba::P2_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
 
 // /* ============================ COEO ============================ */
 
@@ -65,8 +65,8 @@ void    Kociemba::setValue_P2_PruneTable(unsigned long long index, char value) {
 
 // /* ============================ CPEP ============================ */
 
-// char    Kociemba::getValue_P2_CPEP_PruneTable(unsigned long long index) { return ( (Kociemba::P2_CPEP_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
-// void    Kociemba::setValue_P2_CPEP_PruneTable(unsigned long long index, char value) { Kociemba::P2_CPEP_PruneTable[index / 4] =  Kociemba::P2_CPEP_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
+char    Kociemba::getValue_P2_CPEP_PruneTable(unsigned long long index) { return ( (Kociemba::P2_CPEP_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
+void    Kociemba::setValue_P2_CPEP_PruneTable(unsigned long long index, char value) { Kociemba::P2_CPEP_PruneTable[index / 4] =  Kociemba::P2_CPEP_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
 // void    Kociemba::getNewCoords_CPEP(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2) {
 //     newCoord1 = CornerPermutation_MoveTable[coord1][moveId];
 //     newCoord2 = P2EdgePermutation_MoveTable[coord2][moveId];
@@ -82,62 +82,62 @@ void    Kociemba::setValue_P2_PruneTable(unsigned long long index, char value) {
 //     return (0);
 // }
 
-// /* ============================ CPUS ============================ */
+/* ============================ CPUS ============================ */
 
-// char    Kociemba::getValue_P2_CPUS_PruneTable(unsigned long long index)
-// {
-//     return ( (Kociemba::P2_CPUS_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 );
-// }
+char    Kociemba::getValue_P2_CPUS_PruneTable(unsigned long long index)
+{
+    return ( (Kociemba::P2_CPUS_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 );
+}
 
-// void    Kociemba::setValue_P2_CPUS_PruneTable(unsigned long long index, char value)
-// {
-//     Kociemba::P2_CPUS_PruneTable[index / 4] =  Kociemba::P2_CPUS_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) );
-// }
+void    Kociemba::setValue_P2_CPUS_PruneTable(unsigned long long index, char value)
+{
+    Kociemba::P2_CPUS_PruneTable[index / 4] =  Kociemba::P2_CPUS_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) );
+}
 
-// void    Kociemba::getNewCoords_CPUS(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2)
-// {
-//     newCoord1 = CornerPermutation_MoveTable[coord1][moveId];
-//     newCoord2 = UdSliceSorted_MoveTable[coord2][moveId];
-// }
+void    Kociemba::getNewCoords_CPUS(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2)
+{
+    newCoord1 = CornerPermutation_MoveTable[coord1][moveId];
+    newCoord2 = UdSliceSorted_MoveTable[coord2][moveId];
+}
 
-// void    Kociemba::fileRead_CPUS(std::ifstream& file, size_t length) { file.read(P2_CPUS_PruneTable, length); }
-// int     Kociemba::filePut_CPUS(std::string filename) {
-//     FILE *file = fopen(std::string("./pruningTables/" + filename).c_str(), "w");
-//     int results = fputs(P2_CPUS_PruneTable, file);
-//     if (results == EOF) {
-//         std::printf("FAIL TO WRITE\n");
-//     }
-//     fclose(file);
-//     return (0);
-// }
+void    Kociemba::fileRead_CPUS(std::ifstream& file, size_t length) { file.read(P2_CPUS_PruneTable, length); }
+int     Kociemba::filePut_CPUS(std::string filename) {
+    FILE *file = fopen(std::string("./pruningTables/" + filename).c_str(), "w");
+    int results = fputs(P2_CPUS_PruneTable, file);
+    if (results == EOF) {
+        std::printf("FAIL TO WRITE\n");
+    }
+    fclose(file);
+    return (0);
+}
 
-// /* ============================ USEP ============================ */
+/* ============================ USEP ============================ */
 
-// char    Kociemba::getValue_P2_USEP_PruneTable(unsigned long long index)
-// {
-//     return ( (Kociemba::P2_USEP_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 );
-// }
+char    Kociemba::getValue_P2_USEP_PruneTable(unsigned long long index)
+{
+    return ( (Kociemba::P2_USEP_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 );
+}
 
-// void    Kociemba::setValue_P2_USEP_PruneTable(unsigned long long index, char value)
-// {
-//     Kociemba::P2_USEP_PruneTable[index / 4] =  Kociemba::P2_USEP_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) );
-// }
+void    Kociemba::setValue_P2_USEP_PruneTable(unsigned long long index, char value)
+{
+    Kociemba::P2_USEP_PruneTable[index / 4] =  Kociemba::P2_USEP_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) );
+}
 
-// void    Kociemba::getNewCoords_USEP(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2)
-// {
-//     newCoord1 = UdSliceSorted_MoveTable[coord1][moveId];
-//     newCoord2 = P2EdgePermutation_MoveTable[coord2][moveId];
-// }
-// void    Kociemba::fileRead_USEP(std::ifstream& file, size_t length) { file.read(P2_USEP_PruneTable, length); }
-// int     Kociemba::filePut_USEP(std::string filename) {
-//     FILE *file = fopen(std::string("./pruningTables/" + filename).c_str(), "w");
-//     int results = fputs(P2_USEP_PruneTable, file);
-//     if (results == EOF) {
-//         std::printf("FAIL TO WRITE\n");
-//     }
-//     fclose(file);
-//     return (0);
-// }
+void    Kociemba::getNewCoords_USEP(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2)
+{
+    newCoord1 = UdSliceSorted_MoveTable[coord1][moveId];
+    newCoord2 = P2EdgePermutation_MoveTable[coord2][moveId];
+}
+void    Kociemba::fileRead_USEP(std::ifstream& file, size_t length) { file.read(P2_USEP_PruneTable, length); }
+int     Kociemba::filePut_USEP(std::string filename) {
+    FILE *file = fopen(std::string("./pruningTables/" + filename).c_str(), "w");
+    int results = fputs(P2_USEP_PruneTable, file);
+    if (results == EOF) {
+        std::printf("FAIL TO WRITE\n");
+    }
+    fclose(file);
+    return (0);
+}
 
 /* ============================ ---- ============================ */
 
@@ -150,21 +150,6 @@ struct StatePruning {
     : coord1(c1), coord2(c2), depht(d) {}
 
     bool operator<(const StatePruning& other) const
-    {
-        return depht > other.depht;
-    }
-};
-
-struct StateP1 {
-    unsigned int    coord1;
-    unsigned int    coord2;
-    unsigned int    coord3;
-    unsigned int    depht;
-
-    StateP1(unsigned int c1 = 0, unsigned int c2 = 0, unsigned int c3 = 0, unsigned int d = 0)
-    : coord1(c1), coord2(c2), coord3(c3), depht(d) {}
-
-    bool operator<(const StateP1& other) const
     {
         return depht > other.depht;
     }
@@ -200,13 +185,9 @@ void    Kociemba::generatePruneTable_P1()
             newCoord2 = FlipUdSlice_MoveTable[Q.top().coord2][i];
             unsigned int rep = FlipUdSlice_Sym[newCoord2].first;
 
-            bool created = false;
-
             for (auto sym : FlipUdSlice_Sym[newCoord2].second)
             {
                 unsigned int newCornOrient = Kociemba::CornOrientSym_MoveTable[newCoord1][sym];
-                //unsigned int newCornOrient = phase2EdgePermutationCoordinates(Cube::multEdgePerm( Cube::multEdgePerm(symInvCubes[sym].m_edges.p, generateP2EdgePermutation(newCoord2)), symCubes[sym].m_edges.p ));
-                
                 newIndex = rep * 2187 + newCornOrient;
                 if (getValue_P1_PruneTable(newIndex) == 0)
                 {
@@ -234,7 +215,7 @@ void    Kociemba::generatePruneTable_P2()
     unsigned int                    lastDepht(0);
 
     Q.emplace(0, 0, 0);
-    setValue_P2_PruneTable(0, 1);
+    setValue_P2_CPEP_PruneTable(0, 1);
 
     while (!Q.empty())
     {
@@ -254,17 +235,13 @@ void    Kociemba::generatePruneTable_P2()
                 newCoord2 = P2EdgePermutation_MoveTable[Q.top().coord2][i];
                 unsigned int rep = CornPerm_Sym[newCoord1].first;
 
-                bool created = false;
-
                 for (auto sym : CornPerm_Sym[newCoord1].second)
                 {
-                    unsigned int newEdgeSym = Kociemba::P2EdgePermSym_MoveTable[newCoord2][sym];
-                    //unsigned int newEdgeSym = phase2EdgePermutationCoordinates(Cube::multEdgePerm( Cube::multEdgePerm(symInvCubes[sym].m_edges.p, generateP2EdgePermutation(newCoord2)), symCubes[sym].m_edges.p ));
-                    
+                    unsigned int newEdgeSym = Kociemba::P2EdgePermSym_MoveTable[newCoord2][sym]; 
                     newIndex = newEdgeSym * 2768 + rep;
-                    if (getValue_P2_PruneTable(newIndex) == 0)
+                    if (getValue_P2_CPEP_PruneTable(newIndex) == 0)
                     {
-                        setValue_P2_PruneTable(newIndex, ((Q.top().depht + 1) % 3) + 1);
+                        setValue_P2_CPEP_PruneTable(newIndex, ((Q.top().depht + 1) % 3) + 1);
                         Q.emplace(CornPerm_SymRep[rep], newEdgeSym, Q.top().depht + 1);
                         ++size;
                     }
@@ -404,10 +381,10 @@ void    Kociemba::generate_pruneTables()
 
 
     std::ifstream fileP2;
-    fileP2.open(std::string("./pruningTables/P2").c_str());
+    fileP2.open(std::string("./pruningTables/P2_CPEP").c_str());
     if (fileP2)
     {
-        lib::printendl("Loading P2 Prune Table ...");
+        lib::printendl("Loading P2_CPEP Prune Table ...");
         fileP2.seekg(0, std::ios::end);
         size_t length = fileP2.tellg();
         fileP2.seekg(0, std::ios::beg);
@@ -415,21 +392,21 @@ void    Kociemba::generate_pruneTables()
         {
             length = 27901440;
         }
-        fileP2.read(P2_PruneTable, length);
+        fileP2.read(P2_CPEP_PruneTable, length);
     }
     else
     {
-        lib::printendl("Creating P2 Prune Table ...");
+        lib::printendl("Creating P2_CPEP Prune Table ...");
         generatePruneTable_P2();
 
-        FILE *file = fopen(std::string("./pruningTables/P2").c_str(), "w");
-        int results = fputs(P2_PruneTable, file);
+        FILE *file = fopen(std::string("./pruningTables/P2_CPEP").c_str(), "w");
+        int results = fputs(P2_CPEP_PruneTable, file);
         if (results == EOF) {
             std::printf("FAIL TO WRITE\n");
         }
         fclose(file);
 
-        lib::printendl("P2 Prune Table Created.");
+        lib::printendl("P2_CPEP Prune Table Created.");
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -488,7 +465,7 @@ void    Kociemba::generate_pruneTables()
         &Kociemba::getNewCoords_CPEP,
         &Kociemba::fileRead_CPEP,
         &Kociemba::filePut_CPEP
-    );
+    );*/
     ///////////////////////////////////////////////////////////////////////
     create_pruneTable(
         "P2_CPUS",
@@ -514,5 +491,5 @@ void    Kociemba::generate_pruneTables()
         &Kociemba::getNewCoords_USEP,
         &Kociemba::fileRead_USEP,
         &Kociemba::filePut_USEP
-    );*/
+    );
 }

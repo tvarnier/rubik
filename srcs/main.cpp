@@ -15,20 +15,28 @@ int		main(int ac, char **av)
 	Kociemba k;
 	Cube	 rubik;
 
-	// std::string moves = "R L' D' U' R2 F2 D";//R U D'";
-	// std::string moves = "B2 D' U2";
-	// std::vector<string> el = {};
-	// split(std::string(moves), ' ', el);
+	
+	// F R' L U2 R2 L2
 
-	// for (auto it = el.begin(); it != el.end(); ++it)
-	// 	rubik.move(*it);
+	// F B L D2 R2 D2
 
-	// rubik.shuffle(5);
+	if (ac == 2)
+	{
+		std::string moves = av[1];
+		std::vector<string> el = {};
+		split(std::string(moves), ' ', el);
 
-	//rubik.move("U");
-	// rubik.move("D'");
+		for (auto it = el.begin(); it != el.end(); ++it)
+			rubik.move(*it);
+	}
+	else
+		rubik.shuffle(10);
 
-	// k.solve(rubik);
+	k.solve(rubik);
 
 	return (0);
 }
+
+// D L F2 R2 L2 F' D2 R
+
+// R' D2 B2 F L' F2 R2 L2 B2 D'

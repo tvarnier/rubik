@@ -2,7 +2,6 @@
 
 void    Kociemba::generate_symCubes()
 {
-    lib::printendl("SYM CUBES");
     Cube sym;
     Cube tmpF2 = sym;
     for (int f2 = 0; f2 < 2; ++f2)
@@ -33,7 +32,6 @@ void    Kociemba::generate_symInvCubes()
                 Cube tmp = Cube::multCube(symCubes[i], symCubes[y]);
                 if (tmp.m_corners.p[URF] == URF && tmp.m_corners.p[UFL] == UFL && tmp.m_corners.p[ULB] == ULB)
                 {
-                    printf("// %2d \\\\\n", i);
                     symInvCubes[i] = symCubes[y];
                     break ;
                 }

@@ -36,6 +36,7 @@ void    Kociemba::generate_DephtTable(
     unsigned int                    newCoord;
 
     Q.emplace(0, 0);
+    (this->*setValue_dephtTable)(0, 0);
 
     while (!Q.empty())
     {
@@ -50,8 +51,10 @@ void    Kociemba::generate_DephtTable(
                 newCoord = (this->*getValue_moveTable)(current.coord, i);
                 if (first || ((this->*getValue_dephtTable)(newCoord) == 0 && newCoord != 0))
                 {
-                    first = false;
-                    (this->*setValue_dephtTable)(newCoord, current.depht + 1);
+                    if (!first)
+                        (this->*setValue_dephtTable)(newCoord, current.depht + 1);
+                    else
+                        first = false;
                     Q.emplace(newCoord, current.depht + 1);
                 }
             }

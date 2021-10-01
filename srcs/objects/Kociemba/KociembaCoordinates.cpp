@@ -167,12 +167,27 @@ std::array<EDGES, 12>  Kociemba::generateP2EdgePermutation(unsigned int coord)
 
 static int          binomialCoeff(int n, int k)
 {
-    if (k > n)
-        return 0;
-    if (k == 0 || k == n)
-        return 1;
-    return binomialCoeff(n - 1, k - 1)
-           + binomialCoeff(n - 1, k);
+    // if (k > n)
+    //     return 0;
+    // if (k == 0 || k == n)
+    //     return 1;
+    // return binomialCoeff(n - 1, k - 1)
+    //        + binomialCoeff(n - 1, k);
+
+    int res = 1;
+ 
+    // Since C(n, k) = C(n, n-k)
+    if (k > n - k)
+        k = n - k;
+ 
+    // Calculate value of
+    // [n * (n-1) *---* (n-k+1)] / [k * (k-1) *----* 1]
+    for (int i = 0; i < k; ++i) {
+        res *= (n - i);
+        res /= (i + 1);
+    }
+ 
+    return res;
 }
 
 unsigned int        Kociemba::UDSliceCoordinates(const std::array<EDGES, 12>& edgePermutation)
