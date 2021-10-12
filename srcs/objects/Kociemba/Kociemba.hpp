@@ -11,9 +11,11 @@ class Cube;
 # define UD_SLICE_MOVETABLE_SIZE            495
 # define FLIP_UD_SLICE_MOVETABLE_SIZE       1013760
 
+# define UD_SLICE_SORTED_MOVETABLE_SIZE     11880
+
 # define CORNER_PERMUTATION_MOVETABLE_SIZE  40320
 # define P2_EDGE_PERMUTATION_MOVETABLE_SIZE 40320
-# define UD_SLICE_SORTED_MOVETABLE_SIZE     24
+# define P2_UD_SLICE_MOVETABLE_SIZE         24
 
 # define P1_NBR_MOVE 18
 # define P2_NBR_MOVE 10
@@ -33,25 +35,33 @@ class   Kociemba
 
         std::array< std::array<unsigned int, 18>,  CORNER_ORIENTATION_MOVETABLE_SIZE >  CornerOrientation_MoveTable {};
         std::array< std::array<unsigned int, 18>,    EDGE_ORIENTATION_MOVETABLE_SIZE >  EdgeOrientation_MoveTable   {};
-        std::array< std::array<unsigned int, 18>,            UD_SLICE_MOVETABLE_SIZE >  UdSlice_MoveTable           {};
-        std::vector< std::array<unsigned int, 18> >  FlipUdSlice_MoveTable       {};
+        std::array< std::array<unsigned int, 18>,            UD_SLICE_MOVETABLE_SIZE >  UDSlice_MoveTable           {};
+        std::vector< std::array<unsigned int, 18> >  FlipUDSlice_MoveTable       {};
+
+        std::vector< std::array<unsigned int, 18> >  UDSliceSorted_MoveTable     {};
+        std::vector< std::array<unsigned int, 18> >  FBSliceSorted_MoveTable     {};
+        std::vector< std::array<unsigned int, 18> >  RLSliceSorted_MoveTable     {};
 
         std::array< std::array<unsigned int, 18>,  CORNER_PERMUTATION_MOVETABLE_SIZE >  CornerPermutation_MoveTable {};
         std::array< std::array<unsigned int, 18>, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >  P2EdgePermutation_MoveTable {};
-        std::array< std::array<unsigned int, 18>,     UD_SLICE_SORTED_MOVETABLE_SIZE >  UdSliceSorted_MoveTable     {};
+        std::array< std::array<unsigned int, 18>,         P2_UD_SLICE_MOVETABLE_SIZE >  P2UDSlice_MoveTable         {};
+
+        std::vector< std::array<unsigned int, 24> > edge8Perm {};
+
+        std::array< unsigned int,         UD_SLICE_SORTED_MOVETABLE_SIZE >                 UDSliceSorted_DephtTable {};
 
         std::array< unsigned int,  CORNER_PERMUTATION_MOVETABLE_SIZE >                  CornerPermutation_DephtTable {};
         std::array< unsigned int, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >                  EdgePermutation_DephtTable {};
-        std::array< unsigned int,     UD_SLICE_SORTED_MOVETABLE_SIZE >                  UdSliceSorted_DephtTable {};
+        std::array< unsigned int,         P2_UD_SLICE_MOVETABLE_SIZE >                  P2UDSlice_DephtTable {};
 
-        std::array< Cube, 16 >    symCubes {};
-        std::array< Cube, 16 > symInvCubes {};
+        std::array< Cube, 48 >    symCubes {};
+        std::array< Cube, 48 > symInvCubes {};
 
         std::array< unsigned int, 2768 >    CornPerm_SymRep {};
         std::array< std::pair< unsigned int, std::vector<unsigned int> >, CORNER_PERMUTATION_MOVETABLE_SIZE >    CornPerm_Sym {};
 
-        std::array< unsigned int, 64430 >    FlipUdSlice_SymRep {};
-        std::vector< std::pair< unsigned int, std::vector<unsigned int> > >    FlipUdSlice_Sym {};
+        std::array< unsigned int, 64430 >    FlipUDSlice_SymRep {};
+        std::vector< std::pair< unsigned int, std::vector<unsigned int> > >    FlipUDSlice_Sym {};
 
 
         static std::vector< std::array<unsigned int, 16> > P2EdgePermSym_MoveTable;
@@ -76,8 +86,17 @@ class   Kociemba
         unsigned int                    UDSliceCoordinates(const std::array<EDGES, 12>& edgePermutation);
         std::array<EDGES, 12>           generateUDSlice(unsigned int coord);
 
+        unsigned int                    P2UDSliceCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        std::array<EDGES, 12>           generateP2UDSlice(unsigned int coord);
+
         unsigned int                    UDSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
         std::array<EDGES, 12>           generateUDSliceSorted(unsigned int coord);
+
+        unsigned int                    FBSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        std::array<EDGES, 12>           generateFBSliceSorted(unsigned int coord);
+
+        unsigned int                    RLSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        std::array<EDGES, 12>           generateRLSliceSorted(unsigned int coord);
     
         // Symmetries
 
@@ -93,15 +112,21 @@ class   Kociemba
 
         void    generate_CornerOrientation_MoveTable();
         void    generate_EdgeOrientation_MoveTable();
-        void    generate_UdSlice_MoveTable();
+        void    generate_UDSlice_MoveTable();
 
-        void    generateFlipUdSLiceRep();
-        void    getFLipUdSLiceRep();
-        void    generate_FlipUdSlice_MoveTable();
+        void    generateFlipUDSliceRep();
+        void    getFLipUDSliceRep();
+        void    generate_FlipUDSlice_MoveTable();
+
+        void    generate_UDSliceSorted_MoveTable();
+        void    generate_RLSliceSorted_MoveTable();
+        void    generate_FBSliceSorted_MoveTable();
 
         void    generate_CornerPermutation_MoveTable();
         void    generate_P2EdgePermutation_MoveTable();
-        void    generate_UdSliceSorted_MoveTable();
+        void    generate_P2UDSlice_MoveTable();
+
+        void    generateEdge8Perm();
 
         //  PruneTables
 
@@ -191,32 +216,38 @@ class   Kociemba
         void            setValue_EdgePerm_DephtTable(unsigned int index, unsigned int depht);
         unsigned int    getValue_EdgePerm_DephtTable(unsigned int index);
 
-        unsigned int    getValue_UdSliceSorted_MoveTable(unsigned int index, unsigned int move);
-        void            setValue_UdSliceSorted_DephtTable(unsigned int index, unsigned int depht);
-        unsigned int    getValue_UdSliceSorted_DephtTable(unsigned int index);
+        unsigned int    getValue_P2UDSlice_MoveTable(unsigned int index, unsigned int move);
+        void            setValue_P2UDSlice_DephtTable(unsigned int index, unsigned int depht);
+        unsigned int    getValue_P2UDSlice_DephtTable(unsigned int index);
 
 
         // Solve
         struct P1 {
             unsigned int        cornOrient;
-            unsigned int        flipUdSlice;
-            uint8_t             depht;
-            bool                passedSol;
+            unsigned int        flipUDSlice;
+            unsigned int        UDSliceSorted;
+            unsigned int        RLSliceSorted;
+            unsigned int        FBSliceSorted;
+            uint8_t             pruning;
+            size_t              depht;
+            unsigned int        nbrMove;
 
-            P1(unsigned int co = 0, unsigned int fus = 0, uint8_t p1d = 0, unsigned int ps = false) :
-            cornOrient(co), flipUdSlice(fus), depht(p1d), passedSol(ps) {}
+            P1(unsigned int co = 0, unsigned int fus = 0, unsigned int uss = 0, unsigned int rls = 0, unsigned int fbs = 0, uint8_t p = 0, size_t d = 0, unsigned int nm = 0) :
+            cornOrient(co), flipUDSlice(fus), UDSliceSorted(uss), RLSliceSorted(rls), FBSliceSorted(fbs), pruning(p), depht(d), nbrMove(nm) {}
         };
 
         struct P2 {
             unsigned int        cornPerm;
             unsigned int        edgePerm;
-            unsigned int        udSliceSorted;
+            unsigned int        UDSlice;
             uint8_t             CPEP;
-            unsigned int        udSliceSortedDepht;
+            uint8_t             CPUS;
+            uint8_t             USEP;
+            size_t              depht;
+            unsigned int        cornPermDepht;
 
-
-            P2(unsigned int cp = 0, unsigned int ep = 0, unsigned int uss = 0, uint8_t cpep = 0, unsigned int ussDepht = 0) :
-            cornPerm(cp), edgePerm(ep), udSliceSorted(uss), CPEP(cpep), udSliceSortedDepht(ussDepht) {}
+            P2(unsigned int cp = 0, unsigned int ep = 0, unsigned int us = 0, uint8_t cpep = 0, uint8_t cpus = 0, uint8_t usep = 0, size_t d= 0, unsigned int cpDepht = 0) :
+            cornPerm(cp), edgePerm(ep), UDSlice(us), CPEP(cpep), CPUS(cpus), USEP(usep), depht(d), cornPermDepht(cpDepht) {}
         };
 
         struct SolvingState {
@@ -225,21 +256,27 @@ class   Kociemba
             short               phase;
             int                 depht;
             std::vector<int>    path;
+            size_t              pathHash;
             int                 lastMove;
 
             SolvingState( struct P1 phase1 = P1(), struct P2 phase2 = P2(),
-                          short ph = 1, int d = 0, const std::vector<int>& p = std::vector<int>(), int lm = -1)
-            : p1(phase1), p2(phase2), phase(ph), depht(d), path(p), lastMove(lm) {}
+                          short ph = 1, int d = 0, const std::vector<int>& p = std::vector<int>(), size_t pHash = 0, int lm = -1)
+            : p1(phase1), p2(phase2), phase(ph), depht(d), path(p), pathHash(pHash), lastMove(lm) {}
 
-            bool operator<(const SolvingState& other) const { return ((depht == other.depht) ? path.size() > other.path.size() : depht > other.depht); }
-            bool operator==(const SolvingState& other) const { return (path == other.path); }
+            bool operator<(const SolvingState& other) const { return ((depht == other.depht) ? ((path.size() == other.path.size()) ? pathHash < other.pathHash : path.size() < other.path.size()) : depht < other.depht); }
+            bool operator==(const SolvingState& other) const { return (pathHash == other.pathHash); }
         };
 
         void    solveP1(Cube& rubik);
-        void    solveP2(Cube& rubik);
+        void    solveP2(SolvingState current, const Cube& rubik);
 
-        void    generateChilds(std::priority_queue<SolvingState>& open, std::unordered_set<size_t>& close, SolvingState& current, const Cube& rubik);
-        void    solveSucess(Cube& rubik, SolvingState& solution, size_t& nbrOpenedStates);
+        size_t  getP1Length(unsigned int cornOrient, unsigned int flipUdSlice, uint8_t pruning);
+        size_t  getP2Length(unsigned int cornPerm, unsigned int edgePerm, uint8_t pruning);
+
+        bool     isStateUseless(const short& phase, const unsigned int& size, const P1& phase1, const P2& phase2);
+
+        void    generateChilds(std::set<SolvingState>& open, std::unordered_set<size_t>& close, SolvingState& current, const Cube& rubik);
+        void    solveSucess(const Cube& rubik, SolvingState& solution, size_t nbrOpenedStates);
 };
 
 #endif

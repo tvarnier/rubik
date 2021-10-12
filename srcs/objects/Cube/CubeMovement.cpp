@@ -217,7 +217,7 @@ edges           Cube::multEdges(const edges& first, const edges& second)
 std::array<EDGES, 12>     Cube::multEdgePerm(const std::array<EDGES, 12>& first, const std::array<EDGES, 12>& second)
 {
     std::array<EDGES, 12> tmp {};
-    for (unsigned int i = 0; i < 8; ++i)
+    for (unsigned int i = 0; i < 12; ++i)
     {
         tmp[i] = first[ second[i] ];
     }

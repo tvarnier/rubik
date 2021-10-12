@@ -21,9 +21,9 @@ unsigned int    Kociemba::getValue_EdgePerm_MoveTable(unsigned int index, unsign
 void            Kociemba::setValue_EdgePerm_DephtTable(unsigned int index, unsigned int depht) { EdgePermutation_DephtTable[index] = depht; }
 unsigned int    Kociemba::getValue_EdgePerm_DephtTable(unsigned int index) { return (EdgePermutation_DephtTable[index]); }
 
-unsigned int    Kociemba::getValue_UdSliceSorted_MoveTable(unsigned int index, unsigned int move){ return (UdSliceSorted_MoveTable[index][move]); }
-void            Kociemba::setValue_UdSliceSorted_DephtTable(unsigned int index, unsigned int depht) { UdSliceSorted_DephtTable[index] = depht; }
-unsigned int    Kociemba::getValue_UdSliceSorted_DephtTable(unsigned int index) { return (UdSliceSorted_DephtTable[index]); }
+unsigned int    Kociemba::getValue_P2UDSlice_MoveTable(unsigned int index, unsigned int move){ return (P2UDSlice_MoveTable[index][move]); }
+void            Kociemba::setValue_P2UDSlice_DephtTable(unsigned int index, unsigned int depht) { P2UDSlice_DephtTable[index] = depht; }
+unsigned int    Kociemba::getValue_P2UDSlice_DephtTable(unsigned int index) { return (P2UDSlice_DephtTable[index]); }
 
 void    Kociemba::generate_DephtTable(
     unsigned int (Kociemba::*getValue_moveTable)(unsigned int index, unsigned int move),
@@ -45,18 +45,14 @@ void    Kociemba::generate_DephtTable(
 
         for (unsigned int i = 0; i < 18; ++i)
         {
-            if ((i / 3 == UP || i / 3 == DOWN)
-                || (i % 3 == 1))
+            newCoord = (this->*getValue_moveTable)(current.coord, i);
+            if (first || ((this->*getValue_dephtTable)(newCoord) == 0 && newCoord != 0))
             {
-                newCoord = (this->*getValue_moveTable)(current.coord, i);
-                if (first || ((this->*getValue_dephtTable)(newCoord) == 0 && newCoord != 0))
-                {
-                    if (!first)
-                        (this->*setValue_dephtTable)(newCoord, current.depht + 1);
-                    else
-                        first = false;
-                    Q.emplace(newCoord, current.depht + 1);
-                }
+                if (!first)
+                    (this->*setValue_dephtTable)(newCoord, current.depht + 1);
+                else
+                    first = false;
+                Q.emplace(newCoord, current.depht + 1);
             }
         }
     }
@@ -75,8 +71,8 @@ void    Kociemba::generate_dephtTables()
         &Kociemba::getValue_EdgePerm_DephtTable
     );
     generate_DephtTable(
-        &Kociemba::getValue_UdSliceSorted_MoveTable,
-        &Kociemba::setValue_UdSliceSorted_DephtTable,
-        &Kociemba::getValue_UdSliceSorted_DephtTable
+        &Kociemba::getValue_P2UDSlice_MoveTable,
+        &Kociemba::setValue_P2UDSlice_DephtTable,
+        &Kociemba::getValue_P2UDSlice_DephtTable
     );
 }

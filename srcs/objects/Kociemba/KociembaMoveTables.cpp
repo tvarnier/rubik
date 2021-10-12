@@ -63,12 +63,12 @@ void    Kociemba::generate_EdgeOrientation_MoveTable()
     }
 }
 
-void    Kociemba::generate_UdSlice_MoveTable()
+void    Kociemba::generate_UDSlice_MoveTable()
 {
     for (int i = 0; i < UD_SLICE_MOVETABLE_SIZE; ++i)
     {
         for (int y = 0; y < P1_NBR_MOVE; ++y)
-            UdSlice_MoveTable[i][y] = 0;
+            UDSlice_MoveTable[i][y] = 0;
     }
 
     for (unsigned int raw = 0; raw < UD_SLICE_MOVETABLE_SIZE; ++raw)
@@ -81,14 +81,14 @@ void    Kociemba::generate_UdSlice_MoveTable()
             for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
             {
                 edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
-                UdSlice_MoveTable[raw][moveId] = UDSliceCoordinates(edgePermRotated);
+                UDSlice_MoveTable[raw][moveId] = UDSliceCoordinates(edgePermRotated);
                 ++moveId;
             }
         }
     }
 }
 
-void    Kociemba::generateFlipUdSLiceRep()
+void    Kociemba::generateFlipUDSliceRep()
 {
     int repId(-1);
 
@@ -110,18 +110,18 @@ void    Kociemba::generateFlipUdSLiceRep()
         }
 
         if (i == 16)
-            FlipUdSlice_SymRep[++repId] = raw;
+            FlipUDSlice_SymRep[++repId] = raw;
     }
     printf("RepId : %d\n", repId);
 }
 
-void    Kociemba::getFLipUdSLiceRep()
+void    Kociemba::getFLipUDSliceRep()
 {
     std::ifstream fileP1;
-    fileP1.open(std::string("./data/flipUdSLice_Rep").c_str());
+    fileP1.open(std::string("./data/flipUDSlice_Rep").c_str());
     if (fileP1)
     {
-        lib::printendl("Loading FlipUdSlice Rep ...");
+        lib::printendl("Loading FlipUDSlice Rep ...");
         fileP1.seekg(0, std::ios::end);
         size_t length = fileP1.tellg();
         fileP1.seekg(0, std::ios::beg);
@@ -129,35 +129,35 @@ void    Kociemba::getFLipUdSLiceRep()
         {
             length = 257720 ;
         }
-        fileP1.read((char*)FlipUdSlice_SymRep.data(), length);
+        fileP1.read((char*)FlipUDSlice_SymRep.data(), length);
     }
     else
     {
-        lib::printendl("Creating FlipUdSlice Rep ...");
+        lib::printendl("Creating FlipUDSlice Rep ...");
         
-        generateFlipUdSLiceRep();
+        generateFlipUDSliceRep();
 
         std::fstream file;
-        file.open(std::string("./data/flipUdSLice_Rep").c_str(), std::fstream::out);
-        file.write((char*)FlipUdSlice_SymRep.data(), 257720 );
+        file.open(std::string("./data/flipUDSlice_Rep").c_str(), std::fstream::out);
+        file.write((char*)FlipUDSlice_SymRep.data(), 257720 );
         file.close();
 
-        lib::printendl("FlipUdSlice Rep Created.");
+        lib::printendl("FlipUDSlice Rep Created.");
     }
 }
 
-void    Kociemba::generate_FlipUdSlice_MoveTable()
+void    Kociemba::generate_FlipUDSlice_MoveTable()
 {
-    FlipUdSlice_MoveTable.resize(1013760);
-    FlipUdSlice_Sym.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
+    FlipUDSlice_MoveTable.resize(1013760);
+    FlipUDSlice_Sym.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
 
-    getFLipUdSLiceRep();
+    getFLipUDSliceRep();
 
     size_t repId(0);
 
     for (unsigned int raw = 0; raw < FLIP_UD_SLICE_MOVETABLE_SIZE; ++raw)
     {
-        if (raw == FlipUdSlice_SymRep[repId])
+        if (raw == FlipUDSlice_SymRep[repId])
         {
             struct edges Coord;
             Coord.o = generateEdgeOrientation(raw / UD_SLICE_MOVETABLE_SIZE);
@@ -170,8 +170,8 @@ void    Kociemba::generate_FlipUdSlice_MoveTable()
                 tmpCoord = Cube::multEdges(Cube::multEdges(symCubes[sym].m_edges, tmpCoord), symInvCubes[sym].m_edges);
 
                 unsigned int coord = edgeOrientationCoordinates(tmpCoord.o) * UD_SLICE_MOVETABLE_SIZE + UDSliceCoordinates(tmpCoord.p);                
-                FlipUdSlice_Sym[coord].first = repId;
-                FlipUdSlice_Sym[coord].second.push_back(sym);
+                FlipUDSlice_Sym[coord].first = repId;
+                FlipUDSlice_Sym[coord].second.push_back(sym);
             }
             repId++;
         }
@@ -181,7 +181,7 @@ void    Kociemba::generate_FlipUdSlice_MoveTable()
         {
             for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
             {
-                FlipUdSlice_MoveTable[raw][moveId] = EdgeOrientation_MoveTable[raw / UD_SLICE_MOVETABLE_SIZE][moveId] * UD_SLICE_MOVETABLE_SIZE + UdSlice_MoveTable[raw % UD_SLICE_MOVETABLE_SIZE][moveId];//;
+                FlipUDSlice_MoveTable[raw][moveId] = EdgeOrientation_MoveTable[raw / UD_SLICE_MOVETABLE_SIZE][moveId] * UD_SLICE_MOVETABLE_SIZE + UDSlice_MoveTable[raw % UD_SLICE_MOVETABLE_SIZE][moveId];//;
                 ++moveId;
             }
         }
@@ -189,6 +189,84 @@ void    Kociemba::generate_FlipUdSlice_MoveTable()
 }
 
 /* ===================== P2 ===================== */
+
+void    Kociemba::generate_UDSliceSorted_MoveTable()
+{
+    UDSliceSorted_MoveTable.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
+    for (int i = 0; i < UD_SLICE_SORTED_MOVETABLE_SIZE; ++i)
+    {
+        for (int y = 0; y < 18; ++y)
+            UDSliceSorted_MoveTable[i][y] = 0;
+    }
+
+    for (unsigned int raw = 0; raw < UD_SLICE_SORTED_MOVETABLE_SIZE; ++raw)
+    {
+        std::array<EDGES, 12> edgePerm = generateUDSliceSorted(raw);
+        unsigned int moveId = 0;
+        for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
+        {
+            std::array<EDGES, 12> edgePermRotated = edgePerm;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
+            {
+                edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
+                UDSliceSorted_MoveTable[raw][moveId] = UDSliceSortedCoordinates(edgePermRotated);
+                ++moveId;
+            }
+        }
+    }
+}
+
+void    Kociemba::generate_FBSliceSorted_MoveTable()
+{
+    FBSliceSorted_MoveTable.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
+    for (int i = 0; i < UD_SLICE_SORTED_MOVETABLE_SIZE; ++i)
+    {
+        for (int y = 0; y < 18; ++y)
+            FBSliceSorted_MoveTable[i][y] = 0;
+    }
+
+    for (unsigned int raw = 0; raw < UD_SLICE_SORTED_MOVETABLE_SIZE; ++raw)
+    {
+        std::array<EDGES, 12> edgePerm = generateFBSliceSorted(raw);
+        unsigned int moveId = 0;
+        for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
+        {
+            std::array<EDGES, 12> edgePermRotated = edgePerm;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
+            {
+                edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
+                FBSliceSorted_MoveTable[raw][moveId] = FBSliceSortedCoordinates(edgePermRotated);
+                ++moveId;
+            }
+        }
+    }
+}
+
+void    Kociemba::generate_RLSliceSorted_MoveTable()
+{
+    RLSliceSorted_MoveTable.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
+    for (int i = 0; i < UD_SLICE_SORTED_MOVETABLE_SIZE; ++i)
+    {
+        for (int y = 0; y < 18; ++y)
+            RLSliceSorted_MoveTable[i][y] = 0;
+    }
+
+    for (unsigned int raw = 0; raw < UD_SLICE_SORTED_MOVETABLE_SIZE; ++raw)
+    {
+        std::array<EDGES, 12> edgePerm = generateRLSliceSorted(raw);
+        unsigned int moveId = 0;
+        for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
+        {
+            std::array<EDGES, 12> edgePermRotated = edgePerm;
+            for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
+            {
+                edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
+                RLSliceSorted_MoveTable[raw][moveId] = RLSliceSortedCoordinates(edgePermRotated);
+                ++moveId;
+            }
+        }
+    }
+}
 
 void    Kociemba::generate_CornerPermutation_MoveTable()
 {
@@ -294,31 +372,46 @@ void    Kociemba::generate_P2EdgePermutation_MoveTable()
     }
 }
 
-void    Kociemba::generate_UdSliceSorted_MoveTable()
+void    Kociemba::generate_P2UDSlice_MoveTable()
 {
-    for (int i = 0; i < UD_SLICE_SORTED_MOVETABLE_SIZE; ++i)
+    for (int i = 0; i < P2_UD_SLICE_MOVETABLE_SIZE; ++i)
     {
         for (int y = 0; y < 18; ++y)
-            UdSliceSorted_MoveTable[i][y] = 0;
+            P2UDSlice_MoveTable[i][y] = 0;
     }
 
-    for (unsigned int raw = 0; raw < UD_SLICE_SORTED_MOVETABLE_SIZE; ++raw)
+    for (unsigned int raw = 0; raw < P2_UD_SLICE_MOVETABLE_SIZE; ++raw)
     {
-        std::array<EDGES, 12> edgePerm = generateUDSliceSorted(raw);
+        std::array<EDGES, 12> edgePerm = generateP2UDSlice(raw);
         unsigned int moveId = 0;
         for (unsigned int rotateId = 0; rotateId < 6; ++rotateId)
         {
             std::array<EDGES, 12> edgePermRotated = edgePerm;
-            // unsigned int maxRotation = (rotateId == UP || rotateId == DOWN) ? 3 : 1;
             for (unsigned int nbrRotate = 0; nbrRotate < 3 ; ++nbrRotate)
             {
                 edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
-                // if (rotateId != UP && rotateId != DOWN)
-                //     edgePermRotated = Cube::rotateEdgePerm(edgePermRotated, rotateId);
-                UdSliceSorted_MoveTable[raw][moveId] = UDSliceSortedCoordinates(edgePermRotated);
+                P2UDSlice_MoveTable[raw][moveId] = P2UDSliceCoordinates(edgePermRotated);
                 ++moveId;
             }
         }
+    }
+}
+
+void    Kociemba::generateEdge8Perm()
+{
+    edge8Perm.resize(11880);
+    for (int i = 0; i < UD_SLICE_SORTED_MOVETABLE_SIZE; ++i)
+    {
+        for (int y = 0; y < 24; ++y)
+            edge8Perm[i][y] = 0;
+    }
+
+    for (unsigned int raw = 0; raw < P2_EDGE_PERMUTATION_MOVETABLE_SIZE; ++raw)
+    {
+        std::array<EDGES, 12> edgePerm = generateP2EdgePermutation(raw);
+        unsigned int RLSliceSortedCoord = RLSliceSortedCoordinates(edgePerm);//the RLSliceSortedCoord
+        unsigned int FBSliceSortedCoord = FBSliceSortedCoordinates(edgePerm);//the FBSliceSortedCoord
+        edge8Perm[RLSliceSortedCoord][FBSliceSortedCoord % 24] = raw;
     }
 }
 
@@ -326,12 +419,21 @@ int     Kociemba::generate_moveTables()
 {
     generate_CornerOrientation_MoveTable();
     generate_EdgeOrientation_MoveTable();
-    generate_UdSlice_MoveTable();
-    generate_FlipUdSlice_MoveTable();
+    generate_UDSlice_MoveTable();
+    generate_FlipUDSlice_MoveTable();
+
+    generate_UDSliceSorted_MoveTable();
+    generate_FBSliceSorted_MoveTable();
+    generate_RLSliceSorted_MoveTable();
 
     generate_CornerPermutation_MoveTable();
     generate_P2EdgePermutation_MoveTable();
-    generate_UdSliceSorted_MoveTable();
+    generate_P2UDSlice_MoveTable();
+
+    generateEdge8Perm();
 
     return (0);
 }
+
+
+

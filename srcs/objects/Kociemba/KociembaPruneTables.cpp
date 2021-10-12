@@ -31,7 +31,7 @@ void    Kociemba::setValue_P1_PruneTable(unsigned long long index, char value) {
 // void    Kociemba::setValue_P1_COUS_PruneTable(unsigned long long index, char value) { Kociemba::P1_COUS_PruneTable[index / 4] =  Kociemba::P1_COUS_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
 // void    Kociemba::getNewCoords_COUS(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2) {
 //     newCoord1 = CornerOrientation_MoveTable[coord1][moveId];
-//     newCoord2 = UdSlice_MoveTable[coord2][moveId];
+//     newCoord2 = UDSlice_MoveTable[coord2][moveId];
 // }
 // void    Kociemba::fileRead_COUS(std::ifstream& file, size_t length) { file.read(P1_COUS_PruneTable, length); }
 // int     Kociemba::filePut_COUS(std::string filename) {
@@ -49,7 +49,7 @@ void    Kociemba::setValue_P1_PruneTable(unsigned long long index, char value) {
 // char    Kociemba::getValue_P1_USEO_PruneTable(unsigned long long index) { return ( (Kociemba::P1_USEO_PruneTable[index / 4] >> (6 - ((index % 4) * 2))) & 3 ); }
 // void    Kociemba::setValue_P1_USEO_PruneTable(unsigned long long index, char value) { Kociemba::P1_USEO_PruneTable[index / 4] =  Kociemba::P1_USEO_PruneTable[index / 4] | ( value << (6 - ((index % 4) * 2)) ); }
 // void    Kociemba::getNewCoords_USEO(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2) {
-//     newCoord1 = UdSlice_MoveTable[coord1][moveId];
+//     newCoord1 = UDSlice_MoveTable[coord1][moveId];
 //     newCoord2 = EdgeOrientation_MoveTable[coord2][moveId];
 // }
 // void    Kociemba::fileRead_USEO(std::ifstream& file, size_t length) { file.read(P1_USEO_PruneTable, length); }
@@ -97,7 +97,7 @@ void    Kociemba::setValue_P2_CPUS_PruneTable(unsigned long long index, char val
 void    Kociemba::getNewCoords_CPUS(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2)
 {
     newCoord1 = CornerPermutation_MoveTable[coord1][moveId];
-    newCoord2 = UdSliceSorted_MoveTable[coord2][moveId];
+    newCoord2 = P2UDSlice_MoveTable[coord2][moveId];
 }
 
 void    Kociemba::fileRead_CPUS(std::ifstream& file, size_t length) { file.read(P2_CPUS_PruneTable, length); }
@@ -125,7 +125,7 @@ void    Kociemba::setValue_P2_USEP_PruneTable(unsigned long long index, char val
 
 void    Kociemba::getNewCoords_USEP(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2)
 {
-    newCoord1 = UdSliceSorted_MoveTable[coord1][moveId];
+    newCoord1 = P2UDSlice_MoveTable[coord1][moveId];
     newCoord2 = P2EdgePermutation_MoveTable[coord2][moveId];
 }
 void    Kociemba::fileRead_USEP(std::ifstream& file, size_t length) { file.read(P2_USEP_PruneTable, length); }
@@ -182,17 +182,17 @@ void    Kociemba::generatePruneTable_P1()
             }
 
             newCoord1 = CornerOrientation_MoveTable[Q.top().coord1][i];
-            newCoord2 = FlipUdSlice_MoveTable[Q.top().coord2][i];
-            unsigned int rep = FlipUdSlice_Sym[newCoord2].first;
+            newCoord2 = FlipUDSlice_MoveTable[Q.top().coord2][i];
+            unsigned int rep = FlipUDSlice_Sym[newCoord2].first;
 
-            for (auto sym : FlipUdSlice_Sym[newCoord2].second)
+            for (auto sym : FlipUDSlice_Sym[newCoord2].second)
             {
                 unsigned int newCornOrient = Kociemba::CornOrientSym_MoveTable[newCoord1][sym];
                 newIndex = rep * 2187 + newCornOrient;
                 if (getValue_P1_PruneTable(newIndex) == 0)
                 {
                     setValue_P1_PruneTable(newIndex, ((Q.top().depht + 1) % 3) + 1);
-                    Q.emplace(newCornOrient, FlipUdSlice_SymRep[rep], Q.top().depht + 1);
+                    Q.emplace(newCornOrient, FlipUDSlice_SymRep[rep], Q.top().depht + 1);
                     ++size;
                 }
             }
@@ -471,7 +471,7 @@ void    Kociemba::generate_pruneTables()
         "P2_CPUS",
         241920,
         CORNER_PERMUTATION_MOVETABLE_SIZE,
-        UD_SLICE_SORTED_MOVETABLE_SIZE,
+        P2_UD_SLICE_MOVETABLE_SIZE,
         P2_NBR_MOVE, 
         &Kociemba::setValue_P2_CPUS_PruneTable,
         &Kociemba::getValue_P2_CPUS_PruneTable,
@@ -483,7 +483,7 @@ void    Kociemba::generate_pruneTables()
     create_pruneTable(
         "P2_USEP",
         241920,
-        UD_SLICE_SORTED_MOVETABLE_SIZE,
+        P2_UD_SLICE_MOVETABLE_SIZE,
         P2_EDGE_PERMUTATION_MOVETABLE_SIZE,
         P2_NBR_MOVE, 
         &Kociemba::setValue_P2_USEP_PruneTable,

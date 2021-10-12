@@ -1,6 +1,6 @@
 NAME		= rubik
 
-CC			= clang++ -std=c++17
+CC			= clang++ -std=c++20
 FLAGS		= -O3
 LIB			= lib/lib.a
 
