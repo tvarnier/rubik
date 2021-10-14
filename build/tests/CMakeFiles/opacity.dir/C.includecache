@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/tvarnier/rubik/external_lib/glfw/deps/glad/gl.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/glad/gl.h
 winapifamily.h
 -
 glad/khrplatform.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/deps/glad/khrplatform.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/glad/khrplatform.h
 stdint.h
 -
 inttypes.h
@@ -20,7 +20,7 @@ inttypes.h
 stdint.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/deps/glad_gl.c
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/glad_gl.c
 stdio.h
 -
 stdlib.h
@@ -30,7 +30,7 @@ string.h
 glad/gl.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/deps/nuklear.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/nuklear.h
 sal.h
 -
 stdarg.h
@@ -44,11 +44,11 @@ stdio.h
 assert.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/deps/nuklear_glfw_gl2.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/nuklear_glfw_gl2.h
 GLFW/glfw3.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/include/GLFW/glfw3.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/include/GLFW/glfw3.h
 stddef.h
 -
 stdint.h
@@ -92,7 +92,7 @@ GL/glext.h
 GL/glu.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/tests/opacity.c
+/home/tvarnier/WORK/rubik/external_lib/glfw/tests/opacity.c
 glad/gl.h
 -
 GLFW/glfw3.h

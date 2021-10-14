@@ -1,9 +1,9 @@
 
-if (NOT EXISTS "/home/tvarnier/rubik/build/install_manifest.txt")
-    message(FATAL_ERROR "Cannot find install manifest: \"/home/tvarnier/rubik/build/install_manifest.txt\"")
+if (NOT EXISTS "/home/tvarnier/WORK/rubik/build/install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: \"/home/tvarnier/WORK/rubik/build/install_manifest.txt\"")
 endif()
 
-file(READ "/home/tvarnier/rubik/build/install_manifest.txt" files)
+file(READ "/home/tvarnier/WORK/rubik/build/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

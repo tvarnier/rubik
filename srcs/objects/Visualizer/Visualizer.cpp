@@ -172,7 +172,7 @@ int     Visualizer::init()
 
     // build and compile our shader program
     // ------------------------------------
-    ourShader = Shader("/Users/tvarnier/42/learnOpenGl/resources/shaders/3.3.shader.vs", "/Users/tvarnier/42/learnOpenGl/resources/shaders/3.3.shader.fs");
+    ourShader = Shader("./resources/shaders/3.3.shader.vs", "./resources/shaders/3.3.shader.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------

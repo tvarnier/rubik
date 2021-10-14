@@ -1,1 +1,1 @@
-/usr/bin/cc -rdynamic CMakeFiles/wave.dir/wave.c.o CMakeFiles/wave.dir/__/deps/glad_gl.c.o -o wave  ../src/libglfw3.a -lm -lpthread -lrt -lm -ldl 
+/usr/bin/cc   -rdynamic CMakeFiles/wave.dir/wave.c.o CMakeFiles/wave.dir/__/deps/glad_gl.c.o  -o wave  ../src/libglfw3.a -lm -lpthread -lrt -lm -ldl 

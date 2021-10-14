@@ -1,7 +1,7 @@
 NAME		= rubik
 
 CC			= clang++ -std=c++20
-FLAGS		= -O3 -Wl,--no-as-needed -ldl -pthread
+FLAGS		= -O3 -pthread
 LIB			= lib/lib.a
 
 FRAMEWORKS  = -framework Cocoa -framework OpenGL -framework IOKit
@@ -47,7 +47,7 @@ BIN_SUBDIR  += $(addprefix $(BIN_PATH), $(OBJ_SUBDIR))
 all: $(NAME)
 
 $(NAME): $(BIN_PATH) $(BIN_SUBDIR) $(BINS)
-	$(CC) $(pkg-config --cflags glfw3 gl) $(FLAGS) $(BINS) ./build/src/libglfw3.a -o $@
+	$(CC) $(pkg-config --cflags glfw3 gl) $(FLAGS) $(BINS) ./build/src/libglfw3.a -ldl -o $@
 
 $(BIN_PATH):
 	@ mkdir $@

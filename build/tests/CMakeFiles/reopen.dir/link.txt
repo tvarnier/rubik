@@ -1,1 +1,1 @@
-/usr/bin/cc -rdynamic CMakeFiles/reopen.dir/reopen.c.o CMakeFiles/reopen.dir/__/deps/glad_gl.c.o -o reopen  ../src/libglfw3.a -lm -lpthread -lrt -lm -ldl 
+/usr/bin/cc   -rdynamic CMakeFiles/reopen.dir/reopen.c.o CMakeFiles/reopen.dir/__/deps/glad_gl.c.o  -o reopen  ../src/libglfw3.a -lm -lpthread -lrt -lm -ldl 

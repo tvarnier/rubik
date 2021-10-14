@@ -1,1 +1,1 @@
-/usr/bin/cc -rdynamic CMakeFiles/triangle-opengl.dir/triangle-opengl.c.o CMakeFiles/triangle-opengl.dir/__/deps/glad_gl.c.o -o triangle-opengl  ../src/libglfw3.a -lm -lpthread -lrt -lm -ldl 
+/usr/bin/cc   -rdynamic CMakeFiles/triangle-opengl.dir/triangle-opengl.c.o CMakeFiles/triangle-opengl.dir/__/deps/glad_gl.c.o  -o triangle-opengl  ../src/libglfw3.a -lm -lpthread -lrt -lm -ldl 

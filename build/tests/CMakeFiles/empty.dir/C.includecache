@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/tvarnier/rubik/external_lib/glfw/deps/glad/gl.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/glad/gl.h
 winapifamily.h
 -
 glad/khrplatform.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/deps/glad/khrplatform.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/glad/khrplatform.h
 stdint.h
 -
 inttypes.h
@@ -20,7 +20,7 @@ inttypes.h
 stdint.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/deps/glad_gl.c
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/glad_gl.c
 stdio.h
 -
 stdlib.h
@@ -30,9 +30,9 @@ string.h
 glad/gl.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/deps/tinycthread.c
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/tinycthread.c
 tinycthread.h
-/home/tvarnier/rubik/external_lib/glfw/deps/tinycthread.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/tinycthread.h
 stdlib.h
 -
 signal.h
@@ -50,7 +50,7 @@ process.h
 sys/timeb.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/deps/tinycthread.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/deps/tinycthread.h
 time.h
 -
 sys/time.h
@@ -60,7 +60,7 @@ pthread.h
 windows.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/include/GLFW/glfw3.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/include/GLFW/glfw3.h
 stddef.h
 -
 stdint.h
@@ -104,9 +104,9 @@ GL/glext.h
 GL/glu.h
 -
 
-/home/tvarnier/rubik/external_lib/glfw/tests/empty.c
+/home/tvarnier/WORK/rubik/external_lib/glfw/tests/empty.c
 tinycthread.h
-/home/tvarnier/rubik/external_lib/glfw/tests/tinycthread.h
+/home/tvarnier/WORK/rubik/external_lib/glfw/tests/tinycthread.h
 glad/gl.h
 -
 GLFW/glfw3.h
