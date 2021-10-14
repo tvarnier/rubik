@@ -12,7 +12,11 @@ void split(const string &chaine, char delimiteur, std::vector<string> &elements)
 
 int		main(int ac, char **av)
 {
-	Kociemba k;
+	Visualizer v(1920, 1080);
+
+    v.draw();
+    return 0;
+	/*Kociemba k;
 	Cube	 rubik;
 
 	
@@ -32,7 +36,7 @@ int		main(int ac, char **av)
 	else
 		rubik.shuffle(15);
 
-	k.solve(rubik);
+	k.solve(rubik);*/
 
 	return (0);
 }

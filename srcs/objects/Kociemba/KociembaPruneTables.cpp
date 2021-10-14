@@ -199,7 +199,6 @@ void    Kociemba::generatePruneTable_P1()
         }
         Q.pop();
     }
-    lib::printendl("Size :: ", size);
 }
 
 void    Kociemba::generatePruneTable_P2()
@@ -221,7 +220,7 @@ void    Kociemba::generatePruneTable_P2()
     {
         for (unsigned int i = 0; i < 18; ++i)
         {
-            if ((i / 3 == UP || i / 3 == DOWN)
+            if ((i / 3 == ROT_UP || i / 3 == ROT_DOWN)
                     || (i % 3 == 1))
             {
                 if (Q.top().depht != lastDepht)
@@ -250,7 +249,6 @@ void    Kociemba::generatePruneTable_P2()
         }
         Q.pop();
     }
-    lib::printendl("Size :: ", size);
 }
 
 void    Kociemba::generatePruneTable(
@@ -297,7 +295,6 @@ void    Kociemba::generatePruneTable(
         }
         Q.pop();
     }
-    lib::printendl("Size :: ", size);
 }
 
 /* ============================ ---- ============================ */
@@ -319,7 +316,6 @@ void    Kociemba::create_pruneTable(
     file.open(std::string("./pruningTables/" + filename).c_str());
     if (file)
     {
-        lib::printendl("Loading " + filename + " Prune Table ...");
         file.seekg(0, std::ios::end);
         size_t length = file.tellg();
         file.seekg(0, std::ios::beg);
@@ -331,7 +327,6 @@ void    Kociemba::create_pruneTable(
     }
     else
     {
-        lib::printendl("Creating " + filename + " Prune Table ...");
         generatePruneTable(
             c1size,
             c2Size,
@@ -341,7 +336,6 @@ void    Kociemba::create_pruneTable(
             getNewCoords
         );
         (this->*filePut)(filename);
-        lib::printendl(filename + " Prune Table Created.");
     }
 }
 
@@ -353,7 +347,6 @@ void    Kociemba::generate_pruneTables()
     fileP1.open(std::string("./pruningTables/P1").c_str());
     if (fileP1)
     {
-        lib::printendl("Loading P1 Prune Table ...");
         fileP1.seekg(0, std::ios::end);
         size_t length = fileP1.tellg();
         fileP1.seekg(0, std::ios::beg);
@@ -365,7 +358,6 @@ void    Kociemba::generate_pruneTables()
     }
     else
     {
-        lib::printendl("Creating P1 Prune Table ...");
         generatePruneTable_P1();
 
         FILE *file = fopen(std::string("./pruningTables/P1").c_str(), "w");
@@ -374,8 +366,6 @@ void    Kociemba::generate_pruneTables()
             std::printf("FAIL TO WRITE\n");
         }
         fclose(file);
-
-        lib::printendl("P1 Prune Table Created.");
     }
 
 
@@ -384,7 +374,6 @@ void    Kociemba::generate_pruneTables()
     fileP2.open(std::string("./pruningTables/P2_CPEP").c_str());
     if (fileP2)
     {
-        lib::printendl("Loading P2_CPEP Prune Table ...");
         fileP2.seekg(0, std::ios::end);
         size_t length = fileP2.tellg();
         fileP2.seekg(0, std::ios::beg);
@@ -396,7 +385,6 @@ void    Kociemba::generate_pruneTables()
     }
     else
     {
-        lib::printendl("Creating P2_CPEP Prune Table ...");
         generatePruneTable_P2();
 
         FILE *file = fopen(std::string("./pruningTables/P2_CPEP").c_str(), "w");
@@ -405,8 +393,6 @@ void    Kociemba::generate_pruneTables()
             std::printf("FAIL TO WRITE\n");
         }
         fclose(file);
-
-        lib::printendl("P2_CPEP Prune Table Created.");
     }
 
     /*//////////////////////////////////////////////////////////////

@@ -20,11 +20,14 @@
 # include <fstream>
 # include <iomanip>
 # include <queue>
-# include <set>
+# include <vector>
 
-# include "../lib/includes/lib.hpp"
+using namespace std;
 
 # include "../srcs/objects/Kociemba/Kociemba.hpp"
 class Kociemba;
+
+# include "../srcs/objects/Visualizer/Visualizer.hpp"
+class Visualizer;
 
 #endif

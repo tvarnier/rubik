@@ -121,7 +121,6 @@ void    Kociemba::getFLipUDSliceRep()
     fileP1.open(std::string("./data/flipUDSlice_Rep").c_str());
     if (fileP1)
     {
-        lib::printendl("Loading FlipUDSlice Rep ...");
         fileP1.seekg(0, std::ios::end);
         size_t length = fileP1.tellg();
         fileP1.seekg(0, std::ios::beg);
@@ -133,16 +132,12 @@ void    Kociemba::getFLipUDSliceRep()
     }
     else
     {
-        lib::printendl("Creating FlipUDSlice Rep ...");
-        
         generateFlipUDSliceRep();
 
         std::fstream file;
         file.open(std::string("./data/flipUDSlice_Rep").c_str(), std::fstream::out);
         file.write((char*)FlipUDSlice_SymRep.data(), 257720 );
         file.close();
-
-        lib::printendl("FlipUDSlice Rep Created.");
     }
 }
 

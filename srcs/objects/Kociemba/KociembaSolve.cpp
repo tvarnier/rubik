@@ -105,7 +105,7 @@ size_t  Kociemba::getP2Length(unsigned int cornPerm, unsigned int edgePerm, uint
 {
     for (int moveId = 0; moveId < 18; ++moveId)
     {
-        if (moveId / 3 != UP && moveId / 3 != DOWN && moveId % 3 != 1 )
+        if (moveId / 3 != ROT_UP && moveId / 3 != ROT_DOWN && moveId % 3 != 1 )
             continue ;
         unsigned int newCornPerm = CornerPermutation_MoveTable[cornPerm][moveId];
         unsigned int newEdgePerm = P2EdgePermutation_MoveTable[edgePerm][moveId];
@@ -129,7 +129,7 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
     for (int moveId = 0; moveId < 18; ++moveId)
     {
         if ((current.lastMove != -1 && moveId / 3 == current.lastMove / 3) ||
-            (current.phase == 2 && moveId / 3 != UP && moveId / 3 != DOWN && moveId % 3 != 1 ))
+            (current.phase == 2 && moveId / 3 != ROT_UP && moveId / 3 != ROT_DOWN && moveId % 3 != 1 ))
             continue ;
         struct P1 phase1 = current.p1;
         struct P2 phase2 = current.p2;
@@ -138,7 +138,7 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
 
         if (phase == 1)
         {
-            if (moveId / 3 != UP && moveId / 3 != DOWN && moveId % 3 != 1 )
+            if (moveId / 3 != ROT_UP && moveId / 3 != ROT_DOWN && moveId % 3 != 1 )
                 phase1.nbrMove++;
 
             unsigned int newCornOrient = CornerOrientation_MoveTable[phase1.cornOrient][moveId];

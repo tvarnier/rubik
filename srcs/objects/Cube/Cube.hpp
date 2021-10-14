@@ -23,17 +23,17 @@
 enum CORNERS : unsigned int {URF=0,UFL=1,ULB=2,UBR=3,DFR=4,DLF=5,DBL=6,DRB=7};
 enum EDGES : unsigned int {UR=0,UF=1,UL=2,UB=3,DR=4,DF=5,DL=6,DB=7,FR=8,FL=9,BL=10,BR=11};
 
-# define UP         0
-# define RIGHT      1
-# define FRONT      2
-# define DOWN       3
-# define LEFT       4
-# define BACK       5
+# define ROT_UP     0
+# define ROT_RIGHT  1
+# define ROT_FRONT  2
+# define ROT_DOWN   3
+# define ROT_LEFT   4
+# define ROT_BACK   5
 
-# define ROT_URF3       6
-# define ROT_F2         7
-# define ROT_U4         8
-# define ROT_LR2        9
+# define ROT_URF3   6
+# define ROT_F2     7
+# define ROT_U4     8
+# define ROT_LR2    9
 
 struct corners {
     std::array<CORNERS, 8>          p;

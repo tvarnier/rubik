@@ -1,8 +1,10 @@
 NAME		= rubik
 
 CC			= clang++ -std=c++20
-FLAGS		= -O3
+FLAGS		= -O3 -Wl,--no-as-needed -ldl -pthread
 LIB			= lib/lib.a
+
+FRAMEWORKS  = -framework Cocoa -framework OpenGL -framework IOKit
 
 INCLUDES	= ./includes/rubik.hpp
 
@@ -16,10 +18,18 @@ OBJ			= Cube/Cube.cpp \
 			  Kociemba/KociembaMoveTables.cpp \
 			  Kociemba/KociembaPruneTables.cpp \
 			  Kociemba/KociembaDepht.cpp \
-			  Kociemba/KociembaSolve.cpp
+			  Kociemba/KociembaSolve.cpp \
+			  Visualizer/glad.cpp \
+			  Visualizer/Visualizer.cpp \
+			  Visualizer/Rubik3d/Rubik3d.cpp \
+			  Visualizer/Rubik3d/Rubik3dMovements.cpp
+
 OBJ_DIR		= objects/
 OBJ_SUBDIR	= objects/Cube \
-			  objects/Kociemba
+			  objects/Kociemba \
+			  objects/Visualizer \
+			  objects/Visualizer/Cubies3d \
+			  objects/Visualizer/Rubik3d
 
 SRC_PATH	= ./srcs/
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
@@ -36,8 +46,8 @@ BIN_SUBDIR  += $(addprefix $(BIN_PATH), $(OBJ_SUBDIR))
 
 all: $(NAME)
 
-$(NAME): $(LIB) $(BIN_PATH) $(BIN_SUBDIR) $(BINS)
-	$(CC) $(FLAGS) $(BINS) $(LIB) -o $@
+$(NAME): $(BIN_PATH) $(BIN_SUBDIR) $(BINS)
+	$(CC) $(pkg-config --cflags glfw3 gl) $(FLAGS) $(BINS) ./build/src/libglfw3.a -o $@
 
 $(BIN_PATH):
 	@ mkdir $@
@@ -45,18 +55,13 @@ $(BIN_PATH):
 $(BIN_SUBDIR):
 	 mkdir $@
 
-$(LIB):
-	@ make -C lib
-
 $(BIN_PATH)%.o: $(SRC_PATH)%.cpp
 	$(CC) -I includes -o $@ -c $< $(FLAGS)
 
 clean:
-	@ make -C lib clean
 	@ rm -rf $(BIN_PATH)
 
 fclean: clean
-	@ rm -rf $(LIB)
 	@ rm -f $(NAME)
 
 re: fclean all

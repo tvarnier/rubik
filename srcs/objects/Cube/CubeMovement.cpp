@@ -148,29 +148,29 @@ std::array<unsigned int, 12>  Cube::rotateEdgeOrient(const std::array<unsigned i
     return tmp;
 }
 
-void        Cube::up() { rotation(UP); }
-void        Cube::upR() { rotation(UP); rotation(UP); rotation(UP); }
-void        Cube::up2() { rotation(UP); rotation(UP); }
+void        Cube::up() { rotation(ROT_UP); }
+void        Cube::upR() { rotation(ROT_UP); rotation(ROT_UP); rotation(ROT_UP); }
+void        Cube::up2() { rotation(ROT_UP); rotation(ROT_UP); }
 
-void        Cube::down() { rotation(DOWN); }
-void        Cube::downR() { rotation(DOWN); rotation(DOWN); rotation(DOWN); }
-void        Cube::down2() { rotation(DOWN); rotation(DOWN); }
+void        Cube::down() { rotation(ROT_DOWN); }
+void        Cube::downR() { rotation(ROT_DOWN); rotation(ROT_DOWN); rotation(ROT_DOWN); }
+void        Cube::down2() { rotation(ROT_DOWN); rotation(ROT_DOWN); }
 
-void        Cube::right() { rotation(RIGHT); }
-void        Cube::rightR() { rotation(RIGHT); rotation(RIGHT); rotation(RIGHT); }
-void        Cube::right2() { rotation(RIGHT); rotation(RIGHT); }
+void        Cube::right() { rotation(ROT_RIGHT); }
+void        Cube::rightR() { rotation(ROT_RIGHT); rotation(ROT_RIGHT); rotation(ROT_RIGHT); }
+void        Cube::right2() { rotation(ROT_RIGHT); rotation(ROT_RIGHT); }
 
-void        Cube::left() { rotation(LEFT); }
-void        Cube::leftR() { rotation(LEFT); rotation(LEFT); rotation(LEFT); }
-void        Cube::left2() { rotation(LEFT); rotation(LEFT); }
+void        Cube::left() { rotation(ROT_LEFT); }
+void        Cube::leftR() { rotation(ROT_LEFT); rotation(ROT_LEFT); rotation(ROT_LEFT); }
+void        Cube::left2() { rotation(ROT_LEFT); rotation(ROT_LEFT); }
 
-void        Cube::front() { rotation(FRONT); }
-void        Cube::frontR() { rotation(FRONT); rotation(FRONT); rotation(FRONT); }
-void        Cube::front2() { rotation(FRONT); rotation(FRONT); }
+void        Cube::front() { rotation(ROT_FRONT); }
+void        Cube::frontR() { rotation(ROT_FRONT); rotation(ROT_FRONT); rotation(ROT_FRONT); }
+void        Cube::front2() { rotation(ROT_FRONT); rotation(ROT_FRONT); }
 
-void        Cube::back() { rotation(BACK); }
-void        Cube::backR() { rotation(BACK); rotation(BACK); rotation(BACK); }
-void        Cube::back2() { rotation(BACK); rotation(BACK); }
+void        Cube::back() { rotation(ROT_BACK); }
+void        Cube::backR() { rotation(ROT_BACK); rotation(ROT_BACK); rotation(ROT_BACK); }
+void        Cube::back2() { rotation(ROT_BACK); rotation(ROT_BACK); }
 
 Cube        Cube::multCube(const Cube& first, const Cube& second)
 {

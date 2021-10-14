@@ -1,5 +1,0 @@
-Shader ourShader("/Users/tvarnier/42/learnOpenGl/resources/shaders/3.3.shader.vs", "/Users/tvarnier/42/learnOpenGl/resources/shaders/3.3.shader.fs");
-
-unsigned char *data = stbi_load("/Users/tvarnier/42/learnOpenGl/resources/textures/wall.jpg", &width, &height, &nrChannels, 0);
-
-data = stbi_load("/Users/tvarnier/42/learnOpenGl/resources/textures/wall.jpg", &width, &height, &nrChannels, 0);

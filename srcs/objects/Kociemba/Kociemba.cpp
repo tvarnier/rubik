@@ -9,12 +9,8 @@ std::vector< std::array<unsigned int, 16> > Kociemba::P2EdgePermSym_MoveTable = 
 std::vector< std::array<unsigned int, 16> > Kociemba::CornOrientSym_MoveTable = {};
 
 Kociemba::Kociemba() {
-    lib::printendl("SYMMETRIES");
     generate_symmetries();
-    lib::printendl("MOVE_TABLES");
     generate_moveTables();
-    lib::printendl("PRUNE_TABLES");
     generate_pruneTables();
-    lib::printendl("DEPHT_TABLES");
     generate_dephtTables();
 }
