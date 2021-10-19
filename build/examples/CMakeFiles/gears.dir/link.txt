@@ -1,1 +1,0 @@
-/usr/bin/cc   -rdynamic CMakeFiles/gears.dir/gears.c.o CMakeFiles/gears.dir/__/deps/glad_gl.c.o  -o gears  ../src/libglfw3.a -lm -lpthread -lrt -lm -ldl 

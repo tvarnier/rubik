@@ -22,14 +22,16 @@ OBJ			= Cube/Cube.cpp \
 			  Visualizer/glad.cpp \
 			  Visualizer/Visualizer.cpp \
 			  Visualizer/Rubik3d/Rubik3d.cpp \
-			  Visualizer/Rubik3d/Rubik3dMovements.cpp
+			  Visualizer/Rubik3d/Rubik3dMovements.cpp \
+			  RubikProgram/RubikProgram.cpp
 
 OBJ_DIR		= objects/
 OBJ_SUBDIR	= objects/Cube \
 			  objects/Kociemba \
 			  objects/Visualizer \
 			  objects/Visualizer/Cubies3d \
-			  objects/Visualizer/Rubik3d
+			  objects/Visualizer/Rubik3d \
+			  objects/RubikProgram
 
 SRC_PATH	= ./srcs/
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))

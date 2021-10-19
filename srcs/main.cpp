@@ -12,32 +12,7 @@ void split(const string &chaine, char delimiteur, std::vector<string> &elements)
 
 int		main(int ac, char **av)
 {
-	Visualizer v(1920, 1080);
-
-    v.draw();
-    return 0;
-	/*Kociemba k;
-	Cube	 rubik;
-
-	
-	// F R' L U2 R2 L2
-
-	// F B L D2 R2 D2
-
-	if (ac == 2)
-	{
-		std::string moves = av[1];
-		std::vector<string> el = {};
-		split(std::string(moves), ' ', el);
-
-		for (auto it = el.begin(); it != el.end(); ++it)
-			rubik.move(*it);
-	}
-	else
-		rubik.shuffle(15);
-
-	k.solve(rubik);*/
-
+	RubikProgram	R(ac, av);
 	return (0);
 }
 

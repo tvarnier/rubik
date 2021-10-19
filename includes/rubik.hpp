@@ -24,10 +24,8 @@
 
 using namespace std;
 
-# include "../srcs/objects/Kociemba/Kociemba.hpp"
-class Kociemba;
+# include "../srcs/objects/RubikProgram/RubikProgram.hpp"
+class RubikProgram;
 
-# include "../srcs/objects/Visualizer/Visualizer.hpp"
-class Visualizer;
 
 #endif

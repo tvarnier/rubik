@@ -1,10 +1,29 @@
 #ifndef KOCIEMBA_HPP
 # define KOCIEMBA_HPP
 
+# include <string>
+# include <iostream>
+# include <limits>
+# include <iterator>
+# include <sstream>
+# include <algorithm>
+# include <set>
+# include <unordered_set>
+# include <unordered_map>
+# include <map>
+# include <array>
+# include <functional>
+# include <regex>
+# include <array>
+# include <cmath>
+# include <list>
+# include <fstream>
+# include <iomanip>
+# include <queue>
+# include <vector>
+
 # include "../Cube/Cube.hpp"
 class Cube;
-
-# include "rubik.hpp"
 
 # define CORNER_ORIENTATION_MOVETABLE_SIZE  2187
 # define EDGE_ORIENTATION_MOVETABLE_SIZE    2048
