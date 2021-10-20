@@ -22,97 +22,105 @@ Visualizer::~Visualizer()
 
 int     Visualizer::draw()
 {
-    while (!glfwWindowShouldClose(window))
+    // per-frame time logic
+    // --------------------
+    float currentFrame = glfwGetTime();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+
+    // input
+    // -----
+    processInput(window);
+
+    // render
+    // ------
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+
+    // activate shader
+    ourShader.use();
+
+    // pass projection matrix to shader (note that in this case it could change every frame)
+    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)m_width / (float)m_height, 0.1f, 100.0f);
+    ourShader.setMat4("projection", projection);
+
+    rubik3d.endRotation();
+
+
+    // camera/view transformation
+    glm::mat4 rubikRotation = rubik3d.getRotation();
+    glm::mat4 view;
+    glm::vec4 cameraPosition = glm::vec4(camera.GetPosition(), 1.0f);
+
+    if (rubik3d.rot.isRotating)
     {
-        // per-frame time logic
-        // --------------------
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        float angleRad = glm::radians(rubik3d.rot.angle);
+        glm::mat4x4 cameraMatRot = glm::rotate( angleRad, rubik3d.rot.axis );
+        //cameraPosition = rotateAround( cameraPosition, rubik3d.rot.center, cameraMatRot );
+        rubikRotation = glm::rotate(angleRad, rubik3d.rot.axis) * rubikRotation ;
+    }
+    view = glm::lookAt(glm::vec3(cameraPosition), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-        // input
-        // -----
-        processInput(window);
+    view = view * rubikRotation;
+    ourShader.setMat4("view", view);
 
-        // render
-        // ------
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+    if (rubik3d.rot.isAnimated)
+        rubik3d.rot.angle += ((rubik3d.rot.speed) * deltaTime);
 
-        // activate shader
-        ourShader.use();
+    // render boxes
+    glBindVertexArray(VAO);
+    for (unsigned int i = 0; i < 27; i++)
+    {
+        Cubies3d cubie3d = rubik3d.getCubie(i);
+        float* color = cubie3d.getColors();
+        glm::vec4 position = cubie3d.getPosition();
+        glm::mat4 cubieRotation = cubie3d.getRotation();
+        glBindBuffer(GL_ARRAY_BUFFER, color_buffer);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, 108 * sizeof(float), color);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), ((void*)0));
+        glEnableVertexAttribArray(1);
 
-        // pass projection matrix to shader (note that in this case it could change every frame)
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)m_width / (float)m_height, 0.1f, 100.0f);
-        ourShader.setMat4("projection", projection);
-
-        rubik3d.endRotation();
+        glm::mat4 model = glm::mat4(1.0f);
 
 
-        // camera/view transformation
-        glm::mat4 rubikRotation = rubik3d.getRotation();
-        glm::mat4 view;
-        glm::vec4 cameraPosition = glm::vec4(camera.GetPosition(), 1.0f);
-
-        if (rubik3d.rot.isRotating)
+        if (cubie3d.isAnimated())
         {
+            glm::vec4 v4RotCenter( rubik3d.rot.center );
+            glm::vec3 v3RotAxis( rubik3d.rot.axis );
             float angleRad = glm::radians(rubik3d.rot.angle);
-            glm::mat4x4 cameraMatRot = glm::rotate( angleRad, rubik3d.rot.axis );
-            //cameraPosition = rotateAround( cameraPosition, rubik3d.rot.center, cameraMatRot );
-            rubikRotation = glm::rotate(angleRad, rubik3d.rot.axis) * rubikRotation ;
-        }
-        view = glm::lookAt(glm::vec3(cameraPosition), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-        view = view * rubikRotation;
-        ourShader.setMat4("view", view);
-
-        if (rubik3d.rot.isAnimated)
-            rubik3d.rot.angle += ((rubik3d.rot.speed) * deltaTime);
-
-        
-
-
-
-        // render boxes
-        glBindVertexArray(VAO);
-        for (unsigned int i = 0; i < 27; i++)
-        {
-            Cubies3d cubie3d = rubik3d.getCubie(i);
-            float* color = cubie3d.getColors();
-            glm::vec4 position = cubie3d.getPosition();
-            glm::mat4 cubieRotation = cubie3d.getRotation();
-            glBindBuffer(GL_ARRAY_BUFFER, color_buffer);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, 108 * sizeof(float), color);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), ((void*)0));
-            glEnableVertexAttribArray(1);
-
-            glm::mat4 model = glm::mat4(1.0f);
-
-
-            if (cubie3d.isAnimated())
-            {
-                glm::vec4 v4RotCenter( rubik3d.rot.center );
-                glm::vec3 v3RotAxis( rubik3d.rot.axis );
-                float angleRad = glm::radians(rubik3d.rot.angle);
-                glm::mat4x4 matRot = glm::rotate( angleRad, v3RotAxis );
-                position = rotateAround( position, v4RotCenter, matRot );
-                cubieRotation = glm::rotate(angleRad, v3RotAxis) * cubieRotation ;
-            }
-
-            model = glm::translate(model, glm::vec3(position));
-            model = model * cubieRotation;
-
-            ourShader.setMat4("model", model);
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glm::mat4x4 matRot = glm::rotate( angleRad, v3RotAxis );
+            position = rotateAround( position, v4RotCenter, matRot );
+            cubieRotation = glm::rotate(angleRad, v3RotAxis) * cubieRotation ;
         }
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        model = glm::translate(model, glm::vec3(position));
+        model = model * cubieRotation;
+
+        ourShader.setMat4("model", model);
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
     }
 
+    // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+    // -------------------------------------------------------------------------------
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+    return (0);
+}
+
+int     Visualizer::drawLoop()
+{
+    //glfwMakeContextCurrent(window);
+    while (!glfwWindowShouldClose(window))
+    {
+        if ( !moveQueue.empty() && rubik3d.rot.isAnimated == false )
+        {
+            rubik3d.rotate(moveQueue.front());
+            moveQueue.pop();
+        }
+        
+        draw();
+    }
     return (0);
 }
 
@@ -130,14 +138,24 @@ int     Visualizer::init()
 
     // glfw: initialize and configure
     // ------------------------------
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+    
+
+
+
     #ifdef __APPLE__
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
+
+
 
     // glfw window creation
     // --------------------
@@ -150,14 +168,11 @@ int     Visualizer::init()
     }
     glfwMakeContextCurrent(window);
     glfwSetWindowUserPointer(window, this);
-    glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)&(framebuffer_size_callback));
-    glfwSetCursorPosCallback(window, (GLFWcursorposfun)&(mouse_callback));
-    glfwSetScrollCallback(window, (GLFWscrollfun)&(scroll_callback));
-    glfwSetErrorCallback((GLFWerrorfun)&error_callback);
-
-    // tell GLFW to capture our mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+    //glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)&(framebuffer_size_callback));
+    //glfwSetCursorPosCallback(window, (GLFWcursorposfun)&(mouse_callback));
+    //glfwSetScrollCallback(window, (GLFWscrollfun)&(scroll_callback));
+    //glfwSetErrorCallback((GLFWerrorfun)&error_callback);
+    
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -172,7 +187,8 @@ int     Visualizer::init()
 
     // build and compile our shader program
     // ------------------------------------
-    ourShader = Shader("./resources/shaders/3.3.shader.vs", "./resources/shaders/3.3.shader.fs");
+
+    ourShader = Shader("./shaders/3.3.shader.vs", "./shaders/3.3.shader.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------

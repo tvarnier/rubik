@@ -337,7 +337,7 @@ void    Kociemba::solveP1(Cube& rubik)
         if (current.phase == 2 && current.p2.cornPerm == 0 && current.p2.edgePerm == 0 && current.p2.UDSlice == 0)
         {
             solveSucess(rubik, current, opened);
-            auto count = std::erase_if(open,overMinSol);
+            std::erase_if(open,overMinSol);
             // if ((--solFound) == 0)
             // {
             //     return ;

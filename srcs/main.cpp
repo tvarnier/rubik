@@ -1,15 +1,5 @@
 #include "rubik.hpp"
 
-void split(const string &chaine, char delimiteur, std::vector<string> &elements)
-{
-	stringstream ss(chaine);
-	string sousChaine;
-	while (getline(ss, sousChaine, delimiteur))
-	{
-		elements.push_back(sousChaine);
-	}
-}
-
 int		main(int ac, char **av)
 {
 	RubikProgram	R(ac, av);
@@ -36,3 +26,5 @@ int		main(int ac, char **av)
 // U2 D' R' F' B D U' D F' B
 
 // D L' U R2 U' D' F2 B2 R' L2
+
+// D R L F L2 F' D2 R' L F'

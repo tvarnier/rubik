@@ -1,28 +1,79 @@
 # include "RubikProgram.hpp"
 
-RubikProgram::RubikProgram(int ac, char **av) {
-    if (ac > 1)
-        ;
-    else
-    {
-        c.shuffle(50);
-        k.solve(c);
-    }
+void thread_func(Visualizer& visu)
+{
+    //printf("%x\n", v);
+    visu.drawLoop();
 }
 
-void    RubikProgram::parseOptions(int ac, char **av)
-{
-    for (int i = 1; i < ac; ++ac)
+RubikProgram::RubikProgram(int ac, char **av) {
+    RubikProgramOptions options;
+
+    std::printf("BEGIN\n");
+    if (parsing(ac, av, options))
+        return ;
+    
+    Visualizer visu(1080, 1080);
+
+    visu.draw();
+
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+    visu.moveQueue.emplace("F");
+
+    
+    visu.drawLoop();
+
+    //visu.drawLoop();
+
+    //v = new Visualizer(1080, 1080);
+    // v->draw();
+
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+    // v->moveQueue.emplace("F");
+
+    // v->drawLoop();
+
+    
+
+    if (options.visu)
     {
-        if (string(av[i]) == "-v")
-            options.visu = true;
-        else if (string(av[i]) == "-s")
-        {
-            if (i + 1 >= ac)
-            {
-                printf();
-                return ;
-            }
-        }
+        //v = std::make_shared<Visualizer>(1920, 1080);
+        std::printf("   VISU\n");
+        //v = new Visualizer(1920, 1080);
+        visuThread = new std::thread(thread_func, std::ref(visu));
+        visuThread->detach();
     }
+
+
+    std::printf("WAIT ...\n");
+    while (1);
+    std::printf("END\n");
 }

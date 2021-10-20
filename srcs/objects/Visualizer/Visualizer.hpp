@@ -13,6 +13,9 @@ class Visualizer {
         ~Visualizer();
 
         int             draw();
+        int             drawLoop();
+
+        std::queue<std::string> moveQueue = {};
 
         GLFWwindow*     window;
 

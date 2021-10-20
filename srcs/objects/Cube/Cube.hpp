@@ -64,6 +64,7 @@ class Cube
         Cube();
 
         int             move(const std::string m);
+        static bool     isMove(const std::string m);
         void            shuffle(int iterations = 100);
 
         void                            rotation(const unsigned int& rot);

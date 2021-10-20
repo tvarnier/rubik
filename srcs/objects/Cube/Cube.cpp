@@ -12,6 +12,7 @@ std::map<std::string, Cube::moveFunction> Cube::moveMap = {
 Cube::Cube() {}
 
 int         Cube::move(const std::string m) { if (moveMap[m]) { (this->*moveMap[m])() ; return (0); } else return (1); }
+bool        Cube::isMove(const std::string m) { return (moveMap[m]); }
 
 void        Cube::shuffle(int iterations)
 {

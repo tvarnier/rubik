@@ -19,6 +19,7 @@
 # include <fstream>
 # include <iomanip>
 # include <vector>
+# include <queue>
 
 # ifdef STB_IMAGE_IMPLEMENTATION
 #   define STB_IMAGE_IMPLEMENTATION

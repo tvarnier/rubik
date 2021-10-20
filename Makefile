@@ -1,10 +1,12 @@
 NAME		= rubik
 
-CC			= clang++ -std=c++20
+OS := $(shell uname)
+
+CC			= clang++ -std=c++2a
 FLAGS		= -O3 -pthread
 LIB			= lib/lib.a
 
-FRAMEWORKS  = -framework Cocoa -framework OpenGL -framework IOKit
+OSX_FRAMEWORKS  = -framework Cocoa -framework OpenGL -framework IOKit
 
 INCLUDES	= ./includes/rubik.hpp
 
@@ -23,7 +25,8 @@ OBJ			= Cube/Cube.cpp \
 			  Visualizer/Visualizer.cpp \
 			  Visualizer/Rubik3d/Rubik3d.cpp \
 			  Visualizer/Rubik3d/Rubik3dMovements.cpp \
-			  RubikProgram/RubikProgram.cpp
+			  RubikProgram/RubikProgram.cpp \
+			  RubikProgram/RubikProgramParsing.cpp
 
 OBJ_DIR		= objects/
 OBJ_SUBDIR	= objects/Cube \
@@ -32,6 +35,9 @@ OBJ_SUBDIR	= objects/Cube \
 			  objects/Visualizer/Cubies3d \
 			  objects/Visualizer/Rubik3d \
 			  objects/RubikProgram
+
+BUILD_DIR	= ./build/
+BUILD_MAKE	= 
 
 SRC_PATH	= ./srcs/
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
@@ -48,22 +54,33 @@ BIN_SUBDIR  += $(addprefix $(BIN_PATH), $(OBJ_SUBDIR))
 
 all: $(NAME)
 
-$(NAME): $(BIN_PATH) $(BIN_SUBDIR) $(BINS)
+$(NAME): $(BUILD_DIR) $(BIN_PATH) $(BIN_SUBDIR) $(BINS)
+ifeq ($(OS), Darwin)
+	$(CC) $(pkg-config --cflags glfw3 gl) $(FLAGS) $(BINS) ./build/src/libglfw3.a -ldl $(OSX_FRAMEWORKS) -o $@
+else
 	$(CC) $(pkg-config --cflags glfw3 gl) $(FLAGS) $(BINS) ./build/src/libglfw3.a -ldl -o $@
+endif
+	
 
 $(BIN_PATH):
 	@ mkdir $@
 
 $(BIN_SUBDIR):
-	 mkdir $@
+	@ mkdir $@
 
 $(BIN_PATH)%.o: $(SRC_PATH)%.cpp
 	$(CC) -I includes -o $@ -c $< $(FLAGS)
+
+$(BUILD_DIR):
+	@ mkdir $@
+	@ cmake -S ./external_lib/glfw/ -B $(BUILD_DIR)
+	@ make -C $(BUILD_DIR)
 
 clean:
 	@ rm -rf $(BIN_PATH)
 
 fclean: clean
 	@ rm -f $(NAME)
+	@ rm -rf $(BUILD_DIR)
 
 re: fclean all
