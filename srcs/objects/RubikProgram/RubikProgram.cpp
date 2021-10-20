@@ -1,79 +1,47 @@
 # include "RubikProgram.hpp"
 
-void thread_func(Visualizer& visu)
-{
-    //printf("%x\n", v);
-    visu.drawLoop();
-}
-
 RubikProgram::RubikProgram(int ac, char **av) {
     RubikProgramOptions options;
 
-    std::printf("BEGIN\n");
+    options.moves.clear();
+
     if (parsing(ac, av, options))
         return ;
-    
-    Visualizer visu(1080, 1080);
-
-    visu.draw();
-
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-    visu.moveQueue.emplace("F");
-
-    
-    visu.drawLoop();
-
-    //visu.drawLoop();
-
-    //v = new Visualizer(1080, 1080);
-    // v->draw();
-
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-    // v->moveQueue.emplace("F");
-
-    // v->drawLoop();
-
-    
-
     if (options.visu)
     {
-        //v = std::make_shared<Visualizer>(1920, 1080);
-        std::printf("   VISU\n");
-        //v = new Visualizer(1920, 1080);
-        visuThread = new std::thread(thread_func, std::ref(visu));
-        visuThread->detach();
+        v = new Visualizer(1080, 1080);
+        v->draw();
     }
 
 
-    std::printf("WAIT ...\n");
-    while (1);
-    std::printf("END\n");
+    if (!options.moves.empty() || options.shuffle)
+    {
+        if (options.shuffle)
+            options.moves = c.shuffle(options.shuffleIterations);
+        else
+            for (auto& m: options.moves)
+                c.move(m);
+        printf("MIX (%lu) : ", options.moves.size());
+        for (auto& m: options.moves)
+        {
+            printf("%-2s ", m.c_str());
+            if (options.visu)
+                v->moveQueue.emplace(m);
+        }
+        printf("\n");
+        if (options.visu)
+            v->drawLoop();
+
+        std::vector<std::string> solPath = k.solve(c);
+        printf("SOL (%lu) : ", solPath.size());
+        for (auto& m: solPath)
+        {
+            printf("%-2s ", m.c_str());
+            if (options.visu)
+                v->moveQueue.emplace(m);
+        }
+        printf("\n");
+        if (options.visu)
+            v->drawLoop();
+    }
 }

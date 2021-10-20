@@ -113,6 +113,8 @@ int     Visualizer::drawLoop()
     //glfwMakeContextCurrent(window);
     while (!glfwWindowShouldClose(window))
     {
+        if (rubik3d.rot.isAnimated == false  && moveQueue.empty())
+            return (0);
         if ( !moveQueue.empty() && rubik3d.rot.isAnimated == false )
         {
             rubik3d.rotate(moveQueue.front());
@@ -144,7 +146,7 @@ int     Visualizer::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
+    glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     
@@ -292,34 +294,6 @@ void    Visualizer::processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
-
-    auto key_rotation = [&](int key_press, char key) {
-        std::string s;
-        s += key;
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && glfwGetKey(window, key_press) == GLFW_PRESS)
-        {   if ( ptr->rubik3d.rot.isAnimated == false ) ptr->rubik3d.rotate(s + "'"); }
-        else if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS && glfwGetKey(window, key_press) == GLFW_PRESS)
-        {   if ( ptr->rubik3d.rot.isAnimated == false ) ptr->rubik3d.rotate(s + "2"); }
-        else if (glfwGetKey(window, key_press) == GLFW_PRESS)
-        {   if ( ptr->rubik3d.rot.isAnimated == false ) ptr->rubik3d.rotate(s); }
-    };
-
-    key_rotation(GLFW_KEY_KP_5, 'F');
-    key_rotation(GLFW_KEY_KP_0, 'B');
-    key_rotation(GLFW_KEY_KP_6, 'R');
-    key_rotation(GLFW_KEY_KP_4, 'L');
-    key_rotation(GLFW_KEY_KP_8, 'U');
-    key_rotation(GLFW_KEY_KP_2, 'D');
-
 
     if (glfwGetKey(window, GLFW_KEY_LEFT ) == GLFW_PRESS)
     {   if ( ptr->rubik3d.rot.isAnimated == false ) ptr->rubik3d.rotate("Y"); }

@@ -29,10 +29,11 @@ int     RubikProgram::parsing(int ac, char **av, RubikProgramOptions& options)
         {
             if (!options.moves.empty()) { std::printf("Error: Shuffle or specific Moves, not both\n"); return (1); }
             options.shuffle = true;
-            if (i + 1 >= ac && is_number(av[i + 1]))
+            if (i + 1 < ac && is_number(av[i + 1]))
             {
                 options.shuffleIterations = strtol(av[i + 1], NULL, 10);
                 if (options.shuffleIterations < 0 || options.shuffleIterations > 100) { std::printf("ERROR: 0 >= ShuffleIterations <= 100\n"); return (1); }
+                ++i;
             }
         }
         else

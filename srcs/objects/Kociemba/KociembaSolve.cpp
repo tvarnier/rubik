@@ -3,6 +3,8 @@
 int minSol = 100;
 int firstSol = 100;
 
+std::vector<std::string>    solPath = {};
+
 size_t  hashPath(std::vector<int> path)
 {
     size_t seed(0);
@@ -50,7 +52,7 @@ std::string moveP1(int i)
     return (moves[i]);
 }
 
-void    Kociemba::solveSucess(const Cube& rubik, SolvingState& solution, size_t nbrOpenedStates)
+void    Kociemba::solveSucess(const Cube& rubik, SolvingState& solution)
 {
     std::string moves[18] = {
         "U", "U2", "U'",
@@ -67,18 +69,11 @@ void    Kociemba::solveSucess(const Cube& rubik, SolvingState& solution, size_t 
     if (solution.path.size() < minSol)
         minSol = solution.path.size();
 
-    size_t count(0);
-
     Cube tmp = rubik;
 
-    std::printf("   -> Opened = %zu | %2lu : ", nbrOpenedStates, solution.path.size());
+    solPath.clear();
     for (auto it = solution.path.begin(); it != solution.path.end(); ++it)
-    {
-        std::printf("%-2s ", moves[*it].c_str());
-        tmp.move(moves[*it].c_str());
-        count++;
-    }
-    std::printf("\n");
+        solPath.emplace_back(moves[*it]);
 }
 
 size_t  Kociemba::getP1Length(unsigned int cornOrient, unsigned int flipUDSlice, uint8_t pruning)
@@ -125,7 +120,6 @@ size_t  Kociemba::getP2Length(unsigned int cornPerm, unsigned int edgePerm, uint
 
 void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_set<size_t>& close, SolvingState& current, const Cube& rubik)
 {
-    // printf("            %s[\n", GREY);
     for (int moveId = 0; moveId < 18; ++moveId)
     {
         if ((current.lastMove != -1 && moveId / 3 == current.lastMove / 3) ||
@@ -193,11 +187,9 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
             unsigned int newCPUS = getValue_P2_CPUS_PruneTable(newCornPerm * P2_UD_SLICE_MOVETABLE_SIZE + newP2UDSlice);
             unsigned int newUSEP = getValue_P2_USEP_PruneTable(newP2UDSlice * P2_EDGE_PERMUTATION_MOVETABLE_SIZE + newEdgePerm);
 
-            // if (pruneDiff(phase2.CPEP, newCPEP) != -1)
-            //     continue;
             unsigned int pruneDiffP2 = pruneDiff(phase2.CPEP, newCPEP);
             
-            newDepht += (pruneDiffP2 * 2);// + pruneDiff(phase2.CPUS, newCPUS) + pruneDiff(phase2.USEP, newUSEP);
+            newDepht += (pruneDiffP2 * 2);
             phase2.depht += pruneDiffP2;
         
             phase2.cornPerm = newCornPerm;
@@ -209,10 +201,7 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
         }
 
         if ( isStateUseless(phase, current.path.size() + 1, phase1, phase2) )
-        {
-                // printf("                %2s -> PHASE : %d [ S:%2u; P1D:%2u; P2D:%2u; P2_CPD:%2u ]\n", moveP1(moveId).c_str(), phase, current.path.size() + 1, phase1.depht, phase2.depht, phase2.cornPermDepht);
-                continue ;
-        }
+            continue ;
         
         std::vector<int> newPath = current.path;
         newPath.push_back(moveId);
@@ -223,13 +212,8 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
         {
             close.insert( newIndex );
             open.emplace(phase1, phase2, phase, newDepht + 1, newPath, newIndex, moveId);
-            // if (open.emplace(phase1, phase2, phase, newDepht + 1, newPath, newIndex, moveId).second == true)
-            //     printf(" %2s(%d)", moveP1(moveId).c_str(), newDepht + 1);
-
-        
         }
     }
-    // printf("            ]%s\n", RESET);
 }
 
 void    Kociemba::solveP1(Cube& rubik)
@@ -282,38 +266,11 @@ void    Kociemba::solveP1(Cube& rubik)
     size_t  opened = 0;
 
     auto overMinSol = [this](auto const& x) {
-        // for (auto it = x.path.begin(); it != x.path.end(); ++it)
-        // {
-        //     std::printf(" %-2s ", moveP1(*it).c_str());
-        // }
-        // std::printf("\n");
-        // if (isStateUseless(x.phase, x.path.size(), x.p1, x.p2))
-        //     printf(" PHASE : %d [ S:%2u; P1D:%2u; P2D:%2u; P2_CPD:%2u ]\n", x.phase, x.path.size(), x.p1.depht, x.p2.depht, x.p2.cornPermDepht);
-        return( isStateUseless(x.phase, x.path.size(), x.p1, x.p2) );
+       return( isStateUseless(x.phase, x.path.size(), x.p1, x.p2) );
     };
 
     while (!open.empty())
     {
-        // if ( (open.begin()->phase == 1 && (unsigned int)(open.begin()->path.size() + open.begin()->p1.depht) > 12)
-        //     || (open.begin()->phase == 1 && (unsigned int)(open.begin()->path.size() +  ((open.begin()->p1.depht > open.begin()->p2.cornPermDepht) ? open.begin()->p1.depht : open.begin()->p2.cornPermDepht)) >= minSol)
-        //     || (open.begin()->phase == 2 && (unsigned int)(open.begin()->path.size() + open.begin()->p2.depht) >= ((minSol < 31) ? minSol : 31)))
-        // {
-        //     printf(" > POP\n");
-
-        //     printf("%s %10d :: %2d - ( %5u %8u | %5u %5u %5u ) [%2lu] %2u + %2u %s ",
-        //         (open.begin()->phase == 1) ? RED : GREEN, minSol, open.begin()->depht,
-        //         open.begin()->p1.cornOrient, open.begin()->p1.flipUDSlice,
-        //         open.begin()->p2.cornPerm, open.begin()->p2.edgePerm, open.begin()->p2.UDSlice,
-        //         open.begin()->path.size(), open.begin()->p1.depht, open.begin()->p2.depht, RESET);
-        //     for (auto it = open.begin()->path.begin(); it != open.begin()->path.end(); ++it)
-        //     {
-        //         std::printf(" %-2s ", moveP1(*it).c_str());
-        //     }
-        //     std::printf("\n");
-
-        //     open.erase(open.begin());
-        //     continue ;
-        // }
         SolvingState current = *(open.begin());
         open.erase(open.begin());
 
@@ -321,65 +278,24 @@ void    Kociemba::solveP1(Cube& rubik)
         if (minSol <= current.path.size())
             continue ;
 
-        // printf("%s %10d :: %d %2d - ( %5u %8u | %5u %5u %5u ) [%2lu] %2u + %2u + %2u %s      ||      ",
-        //         (current.phase == 1) ? RED : GREEN, minSol, current.phase, current.depht,
-        //         current.p1.cornOrient, current.p1.flipUDSlice,
-        //         current.p2.cornPerm, current.p2.edgePerm, current.p2.UDSlice,
-        //         current.path.size(), current.p1.depht, current.p2.depht, current.p2.cornPermDepht, RESET);
-        // for (auto it = current.path.begin(); it != current.path.end(); ++it)
-        // {
-        //     std::printf(" %-2s ", moveP1(*it).c_str());
-        // }
-        // std::printf("\n");
-        
-        opened++;
-
         if (current.phase == 2 && current.p2.cornPerm == 0 && current.p2.edgePerm == 0 && current.p2.UDSlice == 0)
         {
-            solveSucess(rubik, current, opened);
+            solveSucess(rubik, current);
             std::erase_if(open,overMinSol);
-            // if ((--solFound) == 0)
-            // {
-            //     return ;
-            // }
         }
         else
             generateChilds(open, close, current, rubik);
     }
-    printf("\n\n Min : %d - First : %d\n\n", minSol, firstSol);
 }
 
-void    Kociemba::solve(Cube rubik)
+std::vector<std::string>    Kociemba::solve(Cube& rubik)
 {
-    unsigned int cornOrient = cornerOrientationCoordinates(rubik.m_corners.o);
-    unsigned int edgeOrient = edgeOrientationCoordinates(rubik.m_edges.o);
-    unsigned int UDSlice = UDSliceCoordinates(rubik.m_edges.p);
-    unsigned int cornPerm = cornerPermutationCoordinates(rubik.m_corners.p);
-    unsigned int edgePerm = phase2EdgePermutationCoordinates(rubik.m_edges.p);
-    unsigned int UDSliceS = P2UDSliceCoordinates(rubik.m_edges.p);
-
-
-    std::printf("CORNER ORIENTATION     : %u\n", cornOrient);
-    std::printf("EDGE ORIENTATION       : %u\n", edgeOrient);
-    std::printf("UD SLICE               : %u\n", UDSlice);
-    std::printf("CORNER PERMUTATION     : %u\n", cornPerm);
-    std::printf("EDGE ORIENTATION       : %u\n", edgePerm);
-    std::printf("P2 UD SLICE            : %u\n", UDSliceS);
+    solPath.clear();
 
     solveP1(rubik);
 
-    cornOrient = cornerOrientationCoordinates(rubik.m_corners.o);
-    edgeOrient = edgeOrientationCoordinates(rubik.m_edges.o);
-    UDSlice = UDSliceCoordinates(rubik.m_edges.p);
-    cornPerm = cornerPermutationCoordinates(rubik.m_corners.p);
-    edgePerm = phase2EdgePermutationCoordinates(rubik.m_edges.p);
-    UDSliceS = P2UDSliceCoordinates(rubik.m_edges.p);
+    for (auto m : solPath)
+        rubik.move(m);
 
-
-    std::printf("CORNER ORIENTATION     : %u\n", cornOrient);
-    std::printf("EDGE ORIENTATION       : %u\n", edgeOrient);
-    std::printf("UD SLICE               : %u\n", UDSlice);
-    std::printf("CORNER PERMUTATION     : %u\n", cornPerm);
-    std::printf("EDGE ORIENTATION       : %u\n", edgePerm);
-    std::printf("P2 UD SLICE            : %u\n", UDSliceS);
+    return (solPath);
 }

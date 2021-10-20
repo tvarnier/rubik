@@ -14,42 +14,32 @@ Cube::Cube() {}
 int         Cube::move(const std::string m) { if (moveMap[m]) { (this->*moveMap[m])() ; return (0); } else return (1); }
 bool        Cube::isMove(const std::string m) { return (moveMap[m]); }
 
-void        Cube::shuffle(int iterations)
+std::vector<std::string>    Cube::shuffle(int iterations)
 {
+    std::vector<std::string> shuffleMoves = {};
     int     lastMove(-1);
-    moveFunction    arrayMoves[6][3] = {
-        { &Cube::up, &Cube::upR, &Cube::up2 },
-        { &Cube::down, &Cube::downR, &Cube::down2 },
-        { &Cube::right, &Cube::rightR, &Cube::right2 },
-        { &Cube::left, &Cube::leftR, &Cube::left2 },
-        { &Cube::front, &Cube::frontR, &Cube::front2 },
-        { &Cube::back, &Cube::backR, &Cube::back2 }
+    std::string     arrayMoves[6][3] = {
+        { "U", "U2", "U'"},
+        { "D", "D2", "D'"},
+        { "R", "R2", "R'"},
+        { "L", "L2", "L'"},
+        { "F", "F2", "F'"},
+        { "B", "B2", "B'"}
     };
-    // moveFunction    arrayMoves[6][3] = {
-    //     { &Cube::up, &Cube::upR, &Cube::up2 },
-    //     { &Cube::down, &Cube::downR, &Cube::down2 },
-    //     { &Cube::right2, &Cube::right2, &Cube::right2 },
-    //     { &Cube::left2, &Cube::left2, &Cube::left2 },
-    //     { &Cube::front2, &Cube::front2, &Cube::front2 },
-    //     { &Cube::back2, &Cube::back2, &Cube::back2 }
-    // };
     srand (time(NULL));
-
-    int r = rand() % 18 + 0;
 
     while (iterations)
     {
+        int r = rand() % 18 + 0;
         if (r / 3 == lastMove)
-            r += 3;
-        for (auto it = moveMap.begin(); it != moveMap.end(); ++it)
-            if (it->second == arrayMoves[r / 3][r % 3])      
-                std::printf("%s ", std::string(it->first).c_str());
-        (this->*arrayMoves[r / 3][r % 3])();
+            r = (r + 3) % 18;
+        shuffleMoves.emplace_back(arrayMoves[r / 3][r % 3]);
+        move(arrayMoves[r / 3][r % 3]);
         lastMove = r / 3;
-        r = rand() % 15 + 0;
         --iterations;
     }
-    printf("\n");
+
+    return (shuffleMoves);
 }
 
 Cube&               Cube::operator = (const Cube& other)

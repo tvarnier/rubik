@@ -43,7 +43,7 @@ class   Kociemba
 {
     public:
         Kociemba();
-        void    solve(Cube rubik);
+        std::vector<std::string>    solve(Cube& rubik);
 
     private:
         static char     P1_PruneTable[35227103];
@@ -295,7 +295,7 @@ class   Kociemba
         bool     isStateUseless(const short& phase, const unsigned int& size, const P1& phase1, const P2& phase2);
 
         void    generateChilds(std::set<SolvingState>& open, std::unordered_set<size_t>& close, SolvingState& current, const Cube& rubik);
-        void    solveSucess(const Cube& rubik, SolvingState& solution, size_t nbrOpenedStates);
+        void    solveSucess(const Cube& rubik, SolvingState& solution);
 };
 
 #endif

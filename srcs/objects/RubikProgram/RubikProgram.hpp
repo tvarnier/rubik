@@ -2,7 +2,6 @@
 # define RUBIK_PROGRAM_HPP
 
 # include "rubik.hpp"
-# include <memory>
 
 # include "../Kociemba/Kociemba.hpp"
 class Kociemba;
@@ -29,12 +28,9 @@ class   RubikProgram
         Cube            c;
         Kociemba        k;
         Visualizer*     v;
-        std::thread*    visuThread;
 
         void        init();
         int         parsing(int ac, char **av, RubikProgramOptions& options);
 };
-
-// -v visu      -s n SHUFFLE  
 
 #endif
