@@ -29,6 +29,8 @@ std::vector< std::pair< unsigned int, std::vector<unsigned int> > > Kociemba::Fl
 std::vector< std::array<unsigned int, 16> > Kociemba::P2EdgePermSym_MoveTable = {};
 std::vector< std::array<unsigned int, 16> > Kociemba::CornOrientSym_MoveTable = {};
 
+std::vector< unsigned int >                  Kociemba::CornerPermutation_DephtTable;
+
 std::array< Cube, 48 > Kociemba::symCubes = {};
 std::array< Cube, 48 > Kociemba::symInvCubes = {};
 
@@ -56,6 +58,8 @@ void    Kociemba::initContainers() {
 
     Kociemba::P2EdgePermSym_MoveTable.resize(40320);
     Kociemba::CornOrientSym_MoveTable.resize(2187);
+    
+    Kociemba::CornerPermutation_DephtTable.resize(CORNER_PERMUTATION_MOVETABLE_SIZE);
 }
 
 Kociemba::Kociemba() {

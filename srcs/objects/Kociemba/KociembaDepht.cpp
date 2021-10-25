@@ -17,14 +17,6 @@ unsigned int    Kociemba::getValue_CornPerm_MoveTable(unsigned int index, unsign
 void            Kociemba::setValue_CornPerm_DephtTable(unsigned int index, unsigned int depht) { CornerPermutation_DephtTable[index] = depht; }
 unsigned int    Kociemba::getValue_CornPerm_DephtTable(unsigned int index) { return (CornerPermutation_DephtTable[index]); }
 
-unsigned int    Kociemba::getValue_EdgePerm_MoveTable(unsigned int index, unsigned int move){ return (P2EdgePermutation_MoveTable[index][move]); }
-void            Kociemba::setValue_EdgePerm_DephtTable(unsigned int index, unsigned int depht) { EdgePermutation_DephtTable[index] = depht; }
-unsigned int    Kociemba::getValue_EdgePerm_DephtTable(unsigned int index) { return (EdgePermutation_DephtTable[index]); }
-
-unsigned int    Kociemba::getValue_P2UDSlice_MoveTable(unsigned int index, unsigned int move){ return (P2UDSlice_MoveTable[index][move]); }
-void            Kociemba::setValue_P2UDSlice_DephtTable(unsigned int index, unsigned int depht) { P2UDSlice_DephtTable[index] = depht; }
-unsigned int    Kociemba::getValue_P2UDSlice_DephtTable(unsigned int index) { return (P2UDSlice_DephtTable[index]); }
-
 void    Kociemba::generate_DephtTable(
     unsigned int (Kociemba::*getValue_moveTable)(unsigned int index, unsigned int move),
     void         (Kociemba::*setValue_dephtTable)(unsigned int index, unsigned int depht),
@@ -64,15 +56,5 @@ void    Kociemba::generate_dephtTables()
         &Kociemba::getValue_CornPerm_MoveTable,
         &Kociemba::setValue_CornPerm_DephtTable,
         &Kociemba::getValue_CornPerm_DephtTable
-    );
-    generate_DephtTable(
-        &Kociemba::getValue_EdgePerm_MoveTable,
-        &Kociemba::setValue_EdgePerm_DephtTable,
-        &Kociemba::getValue_EdgePerm_DephtTable
-    );
-    generate_DephtTable(
-        &Kociemba::getValue_P2UDSlice_MoveTable,
-        &Kociemba::setValue_P2UDSlice_DephtTable,
-        &Kociemba::getValue_P2UDSlice_DephtTable
     );
 }

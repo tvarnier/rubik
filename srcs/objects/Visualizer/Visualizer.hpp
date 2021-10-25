@@ -31,6 +31,8 @@ class Visualizer {
         float           deltaTime;
         float           lastFrame;
 
+        float           lastRotation;
+
     private:
 
         Shader          ourShader;

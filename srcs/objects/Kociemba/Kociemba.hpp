@@ -75,11 +75,7 @@ class   Kociemba
         static std::vector< std::array<unsigned int, 16> > P2EdgePermSym_MoveTable;
         static std::vector< std::array<unsigned int, 16> > CornOrientSym_MoveTable;
 
-        std::array< unsigned int,         UD_SLICE_SORTED_MOVETABLE_SIZE >                 UDSliceSorted_DephtTable;
-
-        std::array< unsigned int,  CORNER_PERMUTATION_MOVETABLE_SIZE >                  CornerPermutation_DephtTable;
-        std::array< unsigned int, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >                  EdgePermutation_DephtTable;
-        std::array< unsigned int,         P2_UD_SLICE_MOVETABLE_SIZE >                  P2UDSlice_DephtTable;
+        static std::vector< unsigned int >  CornerPermutation_DephtTable;
 
         static std::array< Cube, 48 >    symCubes;
         static std::array< Cube, 48 > symInvCubes;
@@ -161,68 +157,13 @@ class   Kociemba
         void    generatePruneTable_P1();
         void    generatePruneTable_P2();
 
-        void    generatePruneTable(
-            unsigned int c1size,
-            unsigned int c2Size,
-            int nbrMoves,
-            void (Kociemba::*set)(unsigned long long, char),
-            char (Kociemba::*get)(unsigned long long),
-            void (Kociemba::*getNewCoords)(int, const unsigned int&, const unsigned int&, unsigned int&, unsigned int&)
-        );
-        void    create_pruneTable(
-            std::string filename,
-            unsigned long long size,
-            unsigned int c1size,
-            unsigned int c2Size,
-            int nbrMoves,
-            void (Kociemba::*set)(unsigned long long, char),
-            char (Kociemba::*get)(unsigned long long),
-            void (Kociemba::*getNewCoords)(int, const unsigned int&, const unsigned int&, unsigned int&, unsigned int&),
-            void (Kociemba::*fileRead)(std::ifstream&, size_t),
-            int  (Kociemba::*filePut)(std::string)
-        );
-
         char    getValue_P1_PruneTable(unsigned long long index);
         void    setValue_P1_PruneTable(unsigned long long index, char value);
 
-        // char    getValue_P2_PruneTable(unsigned long long index);
-        // void    setValue_P2_PruneTable(unsigned long long index, char value);
-
-        char    getValue_P1_COEO_PruneTable(unsigned long long index);
-        void    setValue_P1_COEO_PruneTable(unsigned long long index, char value);
-        void    getNewCoords_COEO(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2);
-        void    fileRead_COEO(std::ifstream& file, size_t length);
-        int     filePut_COEO(std::string filename);
-
-        char    getValue_P1_COUS_PruneTable(unsigned long long index);
-        void    setValue_P1_COUS_PruneTable(unsigned long long index, char value);
-        void    getNewCoords_COUS(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2);
-        void    fileRead_COUS(std::ifstream& file, size_t length);
-        int     filePut_COUS(std::string filename);
-
-        char    getValue_P1_USEO_PruneTable(unsigned long long index);
-        void    setValue_P1_USEO_PruneTable(unsigned long long index, char value);
-        void    getNewCoords_USEO(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2);
-        void    fileRead_USEO(std::ifstream& file, size_t length);
-        int     filePut_USEO(std::string filename);
 
         char    getValue_P2_CPEP_PruneTable(unsigned long long index);
         void    setValue_P2_CPEP_PruneTable(unsigned long long index, char value);
-        void    getNewCoords_CPEP(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2);
-        void    fileRead_CPEP(std::ifstream& file, size_t length);
-        int     filePut_CPEP(std::string filename);
 
-        char    getValue_P2_CPUS_PruneTable(unsigned long long index);
-        void    setValue_P2_CPUS_PruneTable(unsigned long long index, char value);
-        void    getNewCoords_CPUS(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2);
-        void    fileRead_CPUS(std::ifstream& file, size_t length);
-        int     filePut_CPUS(std::string filename);
-
-        char    getValue_P2_USEP_PruneTable(unsigned long long index);
-        void    setValue_P2_USEP_PruneTable(unsigned long long index, char value);
-        void    getNewCoords_USEP(int moveId, const unsigned int& coord1, const unsigned int& coord2, unsigned int& newCoord1, unsigned int& newCoord2);
-        void    fileRead_USEP(std::ifstream& file, size_t length);
-        int     filePut_USEP(std::string filename);
 
         // Depht Tables
 
@@ -238,16 +179,8 @@ class   Kociemba
         void            setValue_CornPerm_DephtTable(unsigned int index, unsigned int depht);
         unsigned int    getValue_CornPerm_DephtTable(unsigned int index);
 
-        unsigned int    getValue_EdgePerm_MoveTable(unsigned int index, unsigned int move);
-        void            setValue_EdgePerm_DephtTable(unsigned int index, unsigned int depht);
-        unsigned int    getValue_EdgePerm_DephtTable(unsigned int index);
-
-        unsigned int    getValue_P2UDSlice_MoveTable(unsigned int index, unsigned int move);
-        void            setValue_P2UDSlice_DephtTable(unsigned int index, unsigned int depht);
-        unsigned int    getValue_P2UDSlice_DephtTable(unsigned int index);
-
-
         // Solve
+
         struct P1 {
             unsigned int        cornOrient;
             unsigned int        flipUDSlice;
@@ -258,8 +191,8 @@ class   Kociemba
             size_t              depht;
             unsigned int        nbrMove;
 
-            P1(unsigned int co = 0, unsigned int fus = 0, unsigned int uss = 0, unsigned int rls = 0, unsigned int fbs = 0, uint8_t p = 0, size_t d = 0, unsigned int nm = 0) :
-            cornOrient(co), flipUDSlice(fus), UDSliceSorted(uss), RLSliceSorted(rls), FBSliceSorted(fbs), pruning(p), depht(d), nbrMove(nm) {}
+            P1(unsigned int co = 0, unsigned int fus = 0, unsigned int uss = 0, unsigned int rls = 0, unsigned int fbs = 0, uint8_t p = 0, size_t d = 0) :
+            cornOrient(co), flipUDSlice(fus), UDSliceSorted(uss), RLSliceSorted(rls), FBSliceSorted(fbs), pruning(p), depht(d) {}
         };
 
         struct P2 {
@@ -267,13 +200,11 @@ class   Kociemba
             unsigned int        edgePerm;
             unsigned int        UDSlice;
             uint8_t             CPEP;
-            uint8_t             CPUS;
-            uint8_t             USEP;
             size_t              depht;
             unsigned int        cornPermDepht;
 
-            P2(unsigned int cp = 0, unsigned int ep = 0, unsigned int us = 0, uint8_t cpep = 0, uint8_t cpus = 0, uint8_t usep = 0, size_t d= 0, unsigned int cpDepht = 0) :
-            cornPerm(cp), edgePerm(ep), UDSlice(us), CPEP(cpep), CPUS(cpus), USEP(usep), depht(d), cornPermDepht(cpDepht) {}
+            P2(unsigned int cp = 0, unsigned int ep = 0, unsigned int us = 0, uint8_t cpep = 0, size_t d= 0, unsigned int cpDepht = 0) :
+            cornPerm(cp), edgePerm(ep), UDSlice(us), CPEP(cpep), depht(d), cornPermDepht(cpDepht) {}
         };
 
         struct SolvingState {

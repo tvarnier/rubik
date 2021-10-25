@@ -31,7 +31,6 @@ bool     Kociemba::isStateUseless(const short& phase, const unsigned int& size, 
 {
     if (
         (phase == 1 && (unsigned int)(size + phase1.depht) > 12)
-        // || (phase == 1 && (unsigned int)(phase1.nbrMove + phase1.depht + phase2.cornPermDepht) >= minSol)
         || (phase == 1 && (unsigned int)(size + ((phase1.depht > phase2.cornPermDepht) ? phase1.depht : phase2.cornPermDepht)) >= minSol)
         || (phase == 2 && (unsigned int)(size + phase2.depht) >= ((minSol < 31) ? minSol : 31))
     )
@@ -132,9 +131,6 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
 
         if (phase == 1)
         {
-            if (moveId / 3 != ROT_UP && moveId / 3 != ROT_DOWN && moveId % 3 != 1 )
-                phase1.nbrMove++;
-
             unsigned int newCornOrient = CornerOrientation_MoveTable[phase1.cornOrient][moveId];
             unsigned int newFlipUDSlice = FlipUDSlice_MoveTable[phase1.flipUDSlice][moveId];
 
@@ -166,8 +162,6 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
                 phase2.UDSlice = phase1.UDSliceSorted % 24;
                 phase2.CPEP = getValue_P2_CPEP_PruneTable( P2EdgePermSym_MoveTable[phase2.edgePerm][CornPerm_Sym[phase2.cornPerm].second[0]] * 2768 + 
                                                             CornPerm_Sym[phase2.cornPerm].first );
-                phase2.CPUS = getValue_P2_CPUS_PruneTable(phase2.cornPerm * P2_UD_SLICE_MOVETABLE_SIZE + phase2.UDSlice);
-                phase2.USEP = getValue_P2_USEP_PruneTable(phase2.UDSlice * P2_EDGE_PERMUTATION_MOVETABLE_SIZE + phase2.edgePerm);
 
                 phase2.depht = getP2Length(phase2.cornPerm, phase2.edgePerm, phase2.CPEP);
             }
@@ -184,8 +178,6 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
             unsigned int newEdgePermSym = P2EdgePermSym_MoveTable[newEdgePerm][newSym];
 
             unsigned int newCPEP = getValue_P2_CPEP_PruneTable(newEdgePermSym  * 2768  + newRep);
-            unsigned int newCPUS = getValue_P2_CPUS_PruneTable(newCornPerm * P2_UD_SLICE_MOVETABLE_SIZE + newP2UDSlice);
-            unsigned int newUSEP = getValue_P2_USEP_PruneTable(newP2UDSlice * P2_EDGE_PERMUTATION_MOVETABLE_SIZE + newEdgePerm);
 
             unsigned int pruneDiffP2 = pruneDiff(phase2.CPEP, newCPEP);
             
@@ -196,8 +188,6 @@ void    Kociemba::generateChilds(std::set<SolvingState>& open, std::unordered_se
             phase2.edgePerm = newEdgePerm;
             phase2.UDSlice = newP2UDSlice;
             phase2.CPEP = newCPEP;
-            phase2.CPUS = newCPUS;
-            phase2.USEP = newUSEP;
         }
 
         if ( isStateUseless(phase, current.path.size() + 1, phase1, phase2) )
@@ -254,8 +244,6 @@ void    Kociemba::solveP1(Cube& rubik)
             edgePerm,
             P2UDSlice,
             P2_CPEP_Pruning,
-            getValue_P2_CPUS_PruneTable(cornPerm * P2_UD_SLICE_MOVETABLE_SIZE + P2UDSlice),
-            getValue_P2_USEP_PruneTable(P2UDSlice * P2_EDGE_PERMUTATION_MOVETABLE_SIZE + edgePerm),
             getP2Length(cornPerm, edgePerm, P2_CPEP_Pruning),
             getValue_CornPerm_DephtTable(cornPerm)
         ),

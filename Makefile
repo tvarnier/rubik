@@ -3,7 +3,7 @@ NAME		= rubik
 OS := $(shell uname)
 
 CC			= clang++ -std=c++2a
-FLAGS		= -O3 -pthread
+FLAGS		= -O3
 LIB			= lib/lib.a
 
 OSX_FRAMEWORKS  = -framework Cocoa -framework OpenGL -framework IOKit
@@ -73,7 +73,7 @@ $(BIN_PATH)%.o: $(SRC_PATH)%.cpp
 
 $(BUILD_DIR):
 	@ mkdir $@
-	cmake -S ./external_lib/glfw/ -B $(BUILD_DIR) -DGLFW_USE_CHDIR=0
+	cmake -S ./external_lib/glfw/ -B $(BUILD_DIR)
 	make -C $(BUILD_DIR)
 
 clean:
