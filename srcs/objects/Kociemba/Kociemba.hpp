@@ -47,44 +47,44 @@ class   Kociemba
 
     private:
         static char     P1_PruneTable[35227103];
-        //static char     P2_PruneTable[27901440];
         static char     P2_CPEP_PruneTable[27901440];
         static char     P2_CPUS_PruneTable[241920];
         static char     P2_USEP_PruneTable[241920];
 
-        std::array< std::array<unsigned int, 18>,  CORNER_ORIENTATION_MOVETABLE_SIZE >  CornerOrientation_MoveTable {};
-        std::array< std::array<unsigned int, 18>,    EDGE_ORIENTATION_MOVETABLE_SIZE >  EdgeOrientation_MoveTable   {};
-        std::array< std::array<unsigned int, 18>,            UD_SLICE_MOVETABLE_SIZE >  UDSlice_MoveTable           {};
-        std::vector< std::array<unsigned int, 18> >  FlipUDSlice_MoveTable       {};
+        static std::vector< std::array<unsigned int, 18> >  CornerOrientation_MoveTable;
+        static std::vector< std::array<unsigned int, 18> >  EdgeOrientation_MoveTable  ;
+        static std::vector< std::array<unsigned int, 18> >  UDSlice_MoveTable          ;
+        static std::vector< std::array<unsigned int, 18> >  FlipUDSlice_MoveTable      ;
 
-        std::vector< std::array<unsigned int, 18> >  UDSliceSorted_MoveTable     {};
-        std::vector< std::array<unsigned int, 18> >  FBSliceSorted_MoveTable     {};
-        std::vector< std::array<unsigned int, 18> >  RLSliceSorted_MoveTable     {};
+        static std::vector< std::array<unsigned int, 18> >  UDSliceSorted_MoveTable    ;
+        static std::vector< std::array<unsigned int, 18> >  FBSliceSorted_MoveTable    ;
+        static std::vector< std::array<unsigned int, 18> >  RLSliceSorted_MoveTable    ;
 
-        std::array< std::array<unsigned int, 18>,  CORNER_PERMUTATION_MOVETABLE_SIZE >  CornerPermutation_MoveTable {};
-        std::array< std::array<unsigned int, 18>, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >  P2EdgePermutation_MoveTable {};
-        std::array< std::array<unsigned int, 18>,         P2_UD_SLICE_MOVETABLE_SIZE >  P2UDSlice_MoveTable         {};
+        static std::vector< std::array<unsigned int, 18> >  CornerPermutation_MoveTable;
+        static std::vector< std::array<unsigned int, 18> >  P2EdgePermutation_MoveTable;
+        static std::vector< std::array<unsigned int, 18> >  P2UDSlice_MoveTable        ;
 
-        std::vector< std::array<unsigned int, 24> > edge8Perm {};
+        static std::vector< std::array<unsigned int, 24> > edge8Perm;
 
-        std::array< unsigned int,         UD_SLICE_SORTED_MOVETABLE_SIZE >                 UDSliceSorted_DephtTable {};
+        static std::vector< unsigned int >    CornPerm_SymRep;
+        static std::vector< std::pair< unsigned int, std::vector<unsigned int> > >  CornPerm_Sym;
 
-        std::array< unsigned int,  CORNER_PERMUTATION_MOVETABLE_SIZE >                  CornerPermutation_DephtTable {};
-        std::array< unsigned int, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >                  EdgePermutation_DephtTable {};
-        std::array< unsigned int,         P2_UD_SLICE_MOVETABLE_SIZE >                  P2UDSlice_DephtTable {};
-
-        std::array< Cube, 48 >    symCubes {};
-        std::array< Cube, 48 > symInvCubes {};
-
-        std::array< unsigned int, 2768 >    CornPerm_SymRep {};
-        std::array< std::pair< unsigned int, std::vector<unsigned int> >, CORNER_PERMUTATION_MOVETABLE_SIZE >    CornPerm_Sym {};
-
-        std::array< unsigned int, 64430 >    FlipUDSlice_SymRep {};
-        std::vector< std::pair< unsigned int, std::vector<unsigned int> > >    FlipUDSlice_Sym {};
-
+        static std::vector< unsigned int >    FlipUDSlice_SymRep;
+        static std::vector< std::pair< unsigned int, std::vector<unsigned int> > >  FlipUDSlice_Sym;
 
         static std::vector< std::array<unsigned int, 16> > P2EdgePermSym_MoveTable;
         static std::vector< std::array<unsigned int, 16> > CornOrientSym_MoveTable;
+
+        std::array< unsigned int,         UD_SLICE_SORTED_MOVETABLE_SIZE >                 UDSliceSorted_DephtTable;
+
+        std::array< unsigned int,  CORNER_PERMUTATION_MOVETABLE_SIZE >                  CornerPermutation_DephtTable;
+        std::array< unsigned int, P2_EDGE_PERMUTATION_MOVETABLE_SIZE >                  EdgePermutation_DephtTable;
+        std::array< unsigned int,         P2_UD_SLICE_MOVETABLE_SIZE >                  P2UDSlice_DephtTable;
+
+        static std::array< Cube, 48 >    symCubes;
+        static std::array< Cube, 48 > symInvCubes;
+
+        void    initContainers();
 
         //  Coordinates
 
@@ -130,19 +130,26 @@ class   Kociemba
         int     generate_moveTables();
 
         void    generate_CornerOrientation_MoveTable();
+        void    generate_CornerOrientationSym_Movetable();
+
         void    generate_EdgeOrientation_MoveTable();
         void    generate_UDSlice_MoveTable();
 
         void    generateFlipUDSliceRep();
         void    getFLipUDSliceRep();
         void    generate_FlipUDSlice_MoveTable();
-
+        void    generate_FLipUDSliceSym_MoveTable();
+        
         void    generate_UDSliceSorted_MoveTable();
         void    generate_RLSliceSorted_MoveTable();
         void    generate_FBSliceSorted_MoveTable();
 
         void    generate_CornerPermutation_MoveTable();
+        void    generate_CornerPermutationSym_MoveTable();
+        
         void    generate_P2EdgePermutation_MoveTable();
+        void    generate_P2EdgePermutationSym_MoveTable();
+
         void    generate_P2UDSlice_MoveTable();
 
         void    generateEdge8Perm();

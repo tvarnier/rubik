@@ -24,7 +24,7 @@ RubikProgram::RubikProgram(int ac, char **av) {
         printf("MIX (%lu) : ", options.moves.size());
         for (auto& m: options.moves)
         {
-            printf("%-2s ", m.c_str());
+            printf("%s ", m.c_str());
             if (options.visu)
                 v->moveQueue.emplace(m);
         }
@@ -36,7 +36,7 @@ RubikProgram::RubikProgram(int ac, char **av) {
         printf("SOL (%lu) : ", solPath.size());
         for (auto& m: solPath)
         {
-            printf("%-2s ", m.c_str());
+            printf("%s ", m.c_str());
             if (options.visu)
                 v->moveQueue.emplace(m);
         }

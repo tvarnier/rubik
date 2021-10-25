@@ -73,8 +73,8 @@ $(BIN_PATH)%.o: $(SRC_PATH)%.cpp
 
 $(BUILD_DIR):
 	@ mkdir $@
-	@ cmake -S ./external_lib/glfw/ -B $(BUILD_DIR)
-	@ make -C $(BUILD_DIR)
+	cmake -S ./external_lib/glfw/ -B $(BUILD_DIR) -DGLFW_USE_CHDIR=0
+	make -C $(BUILD_DIR)
 
 clean:
 	@ rm -rf $(BIN_PATH)
