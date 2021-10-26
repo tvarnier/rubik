@@ -1,4 +1,4 @@
-#include "RubikProgram.hpp"
+#include "rubik.hpp"
 
 void split(const std::string &chaine, char delimiteur, std::vector<std::string> &elements)
 {
@@ -17,7 +17,7 @@ static bool     is_number(const std::string& s)
     return !s.empty() && it == s.end();
 }
 
-int     RubikProgram::parsing(int ac, char **av, RubikProgramOptions& options)
+int     parsing(int ac, char **av, RubikOptions& options)
 {
     if (ac > 4)
         return (1);

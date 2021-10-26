@@ -8,7 +8,8 @@ OSX_FRAMEWORKS  = -framework Cocoa -framework OpenGL -framework IOKit
 
 INCLUDES	= ./includes/rubik.hpp
 
-SRC			= main.cpp
+SRC			= main.cpp \
+			  parser.cpp
 
 OBJ			= Cube/Cube.cpp \
 			  Cube/CubeMovement.cpp \
@@ -22,9 +23,7 @@ OBJ			= Cube/Cube.cpp \
 			  Visualizer/glad.cpp \
 			  Visualizer/Visualizer.cpp \
 			  Visualizer/Rubik3d/Rubik3d.cpp \
-			  Visualizer/Rubik3d/Rubik3dMovements.cpp \
-			  RubikProgram/RubikProgram.cpp \
-			  RubikProgram/RubikProgramParsing.cpp
+			  Visualizer/Rubik3d/Rubik3dMovements.cpp
 
 OBJ_DIR		= objects/
 OBJ_SUBDIR	= objects/Cube \

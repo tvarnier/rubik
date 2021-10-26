@@ -26,8 +26,9 @@ class Cube;
 class   Kociemba
 {
     public:
-        Kociemba();
-        std::vector<std::string>    solve(Cube& rubik);
+        static int      init();
+        static std::vector<std::string>    solve(Cube& rubik);
+
 
     private:
         static char     P1_PruneTable[35227103];
@@ -62,104 +63,103 @@ class   Kociemba
         static std::array< Cube, 48 >    symCubes;
         static std::array< Cube, 48 > symInvCubes;
 
-        void    initContainers();
+        static void                     initContainers();
 
         //  Coordinates
 
         static unsigned int             cornerOrientationCoordinates(const std::array<unsigned int, 8>& cornerOrientation);
-        std::array<unsigned int, 8>     generateCornerOrientation(unsigned int coord);
+        static std::array<unsigned int, 8>     generateCornerOrientation(unsigned int coord);
         
         static unsigned int             cornerPermutationCoordinates(const std::array<CORNERS, 8>& cornerPermutation);
-        std::array<CORNERS, 8>          generateCornerPermutation(unsigned int coord);
+        static  std::array<CORNERS, 8>          generateCornerPermutation(unsigned int coord);
 
-        unsigned int                    edgeOrientationCoordinates(const std::array<unsigned int, 12>& edgeOrientation);
-        std::array<unsigned int, 12>    generateEdgeOrientation(unsigned int coord);
+        static unsigned int                    edgeOrientationCoordinates(const std::array<unsigned int, 12>& edgeOrientation);
+        static  std::array<unsigned int, 12>    generateEdgeOrientation(unsigned int coord);
 
-        unsigned int                    edgePermutationCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        static unsigned int                    edgePermutationCoordinates(const std::array<EDGES, 12>& edgePermutation);
 
-        unsigned int                    phase2EdgePermutationCoordinates(const std::array<EDGES, 12>& edgePermutation);
-        std::array<EDGES, 12>           generateP2EdgePermutation(unsigned int coord);
+        static unsigned int                    phase2EdgePermutationCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        static std::array<EDGES, 12>           generateP2EdgePermutation(unsigned int coord);
 
-        unsigned int                    UDSliceCoordinates(const std::array<EDGES, 12>& edgePermutation);
-        std::array<EDGES, 12>           generateUDSlice(unsigned int coord);
+        static unsigned int                    UDSliceCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        static std::array<EDGES, 12>           generateUDSlice(unsigned int coord);
 
-        unsigned int                    P2UDSliceCoordinates(const std::array<EDGES, 12>& edgePermutation);
-        std::array<EDGES, 12>           generateP2UDSlice(unsigned int coord);
+        static unsigned int                    P2UDSliceCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        static std::array<EDGES, 12>           generateP2UDSlice(unsigned int coord);
 
-        unsigned int                    UDSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
-        std::array<EDGES, 12>           generateUDSliceSorted(unsigned int coord);
+        static unsigned int                    UDSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        static std::array<EDGES, 12>           generateUDSliceSorted(unsigned int coord);
 
-        unsigned int                    FBSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
-        std::array<EDGES, 12>           generateFBSliceSorted(unsigned int coord);
+        static unsigned int                    FBSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        static std::array<EDGES, 12>           generateFBSliceSorted(unsigned int coord);
 
-        unsigned int                    RLSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
-        std::array<EDGES, 12>           generateRLSliceSorted(unsigned int coord);
+        static unsigned int                    RLSliceSortedCoordinates(const std::array<EDGES, 12>& edgePermutation);
+        static std::array<EDGES, 12>           generateRLSliceSorted(unsigned int coord);
     
         // Symmetries
 
-        void    generate_symmetries();
-        void    generate_symCubes();
-        void    generate_symInvCubes();
+        static void    generate_symmetries();
+        static void    generate_symCubes();
+        static void    generate_symInvCubes();
 
-        unsigned int    getCornPermSymRep(const std::array<CORNERS, 8> cornPerm);
+        static unsigned int    getCornPermSymRep(const std::array<CORNERS, 8> cornPerm);
 
         //  MoveTables
 
-        int     generate_moveTables();
+        static int     generate_moveTables();
 
-        void    generate_CornerOrientation_MoveTable();
-        void    generate_CornerOrientationSym_Movetable();
+        static void    generate_CornerOrientation_MoveTable();
+        static void    generate_CornerOrientationSym_Movetable();
 
-        void    generate_EdgeOrientation_MoveTable();
-        void    generate_UDSlice_MoveTable();
+        static void    generate_EdgeOrientation_MoveTable();
+        static void    generate_UDSlice_MoveTable();
 
-        void    generateFlipUDSliceRep();
-        void    getFLipUDSliceRep();
-        void    generate_FlipUDSlice_MoveTable();
-        void    generate_FlipUDSliceSym_MoveTable();
+        static void    generateFlipUDSliceRep();
+        static void    getFLipUDSliceRep();
+        static void    generate_FlipUDSlice_MoveTable();
+        static void    generate_FlipUDSliceSym_MoveTable();
         
-        void    generate_UDSliceSorted_MoveTable();
-        void    generate_RLSliceSorted_MoveTable();
-        void    generate_FBSliceSorted_MoveTable();
+        static void    generate_UDSliceSorted_MoveTable();
+        static void    generate_RLSliceSorted_MoveTable();
+        static void    generate_FBSliceSorted_MoveTable();
 
-        void    generate_CornerPermutation_MoveTable();
-        void    generate_CornerPermutationSym_MoveTable();
+        static void    generate_CornerPermutation_MoveTable();
+        static void    generate_CornerPermutationSym_MoveTable();
         
-        void    generate_P2EdgePermutation_MoveTable();
-        void    generate_P2EdgePermutationSym_MoveTable();
+        static void    generate_P2EdgePermutation_MoveTable();
+        static void    generate_P2EdgePermutationSym_MoveTable();
 
-        void    generate_P2UDSlice_MoveTable();
+        static void    generate_P2UDSlice_MoveTable();
 
-        void    generateEdge8Perm();
+        static void    generateEdge8Perm();
 
         //  PruneTables
 
-        void    generate_pruneTables();
+        static int     generate_pruneTables();
         
-        void    generatePruneTable_P1();
-        void    generatePruneTable_P2();
+        static void    generatePruneTable_P1();
+        static void    generatePruneTable_P2();
 
-        char    getValue_P1_PruneTable(unsigned long long index);
-        void    setValue_P1_PruneTable(unsigned long long index, char value);
+        static char    getValue_P1_PruneTable(unsigned long long index);
+        static void    setValue_P1_PruneTable(unsigned long long index, char value);
 
-
-        char    getValue_P2_CPEP_PruneTable(unsigned long long index);
-        void    setValue_P2_CPEP_PruneTable(unsigned long long index, char value);
+        static char    getValue_P2_CPEP_PruneTable(unsigned long long index);
+        static void    setValue_P2_CPEP_PruneTable(unsigned long long index, char value);
 
 
         // Depht Tables
 
-        void            generate_dephtTables();
+        static void            generate_dephtTables();
 
-        void            generate_DephtTable(
-            unsigned int (Kociemba::*getValue_moveTable)(unsigned int index, unsigned int move),
-            void         (Kociemba::*setValue_dephtTable)(unsigned int index, unsigned int depht),
-            unsigned int (Kociemba::*getValue_dephtTable)(unsigned int index)
+        static void            generate_DephtTable(
+            unsigned int (*getValue_moveTable)(unsigned int index, unsigned int move),
+            void         (*setValue_dephtTable)(unsigned int index, unsigned int depht),
+            unsigned int (*getValue_dephtTable)(unsigned int index)
         );
 
-        unsigned int    getValue_CornPerm_MoveTable(unsigned int index, unsigned int move);
-        void            setValue_CornPerm_DephtTable(unsigned int index, unsigned int depht);
-        unsigned int    getValue_CornPerm_DephtTable(unsigned int index);
+        static unsigned int    getValue_CornPerm_MoveTable(unsigned int index, unsigned int move);
+        static void            setValue_CornPerm_DephtTable(unsigned int index, unsigned int depht);
+        static unsigned int    getValue_CornPerm_DephtTable(unsigned int index);
 
         // Solve
 
@@ -206,16 +206,16 @@ class   Kociemba
             bool operator==(const SolvingState& other) const { return (pathHash == other.pathHash); }
         };
 
-        void    solveP1(Cube& rubik);
-        void    solveP2(SolvingState current, const Cube& rubik);
+        static void    solveP1(Cube& rubik);
+        static void    solveP2(SolvingState current, const Cube& rubik);
 
-        size_t  getP1Length(unsigned int cornOrient, unsigned int flipUdSlice, uint8_t pruning);
-        size_t  getP2Length(unsigned int cornPerm, unsigned int edgePerm, uint8_t pruning);
+        static size_t  getP1Length(unsigned int cornOrient, unsigned int flipUdSlice, uint8_t pruning);
+        static size_t  getP2Length(unsigned int cornPerm, unsigned int edgePerm, uint8_t pruning);
 
-        bool     isStateUseless(const short& phase, const unsigned int& size, const P1& phase1, const P2& phase2);
+        static bool    isStateUseless(const short& phase, const unsigned int& size, const P1& phase1, const P2& phase2);
 
-        void    generateChilds(std::set<SolvingState>& open, std::unordered_set<size_t>& close, SolvingState& current, const Cube& rubik);
-        void    solveSucess(const Cube& rubik, SolvingState& solution);
+        static void    generateChilds(std::set<SolvingState>& open, std::unordered_set<size_t>& close, SolvingState& current, const Cube& rubik);
+        static void    solveSucess(const Cube& rubik, SolvingState& solution);
 };
 
 #endif

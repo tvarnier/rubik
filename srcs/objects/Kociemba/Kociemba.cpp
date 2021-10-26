@@ -60,11 +60,16 @@ void    Kociemba::initContainers() {
     Kociemba::CornerPermutation_DephtTable.resize(CORNER_PERMUTATION_MOVETABLE_SIZE);
 }
 
-Kociemba::Kociemba() {
+int     Kociemba::init()
+{
     initContainers();
 
     generate_symmetries();
-    generate_moveTables();
-    generate_pruneTables();
+    if (generate_moveTables())
+        return(1);
+    if (generate_pruneTables())
+        return(1);
     generate_dephtTables();
+
+    return (0);
 }

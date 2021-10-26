@@ -123,7 +123,7 @@ void    Kociemba::generatePruneTable_P2()
     }
 }
 
-void    Kociemba::generate_pruneTables()
+int     Kociemba::generate_pruneTables()
 {
     std::ifstream fileP1;
     fileP1.open(std::string("./data/P1").c_str());
@@ -176,4 +176,6 @@ void    Kociemba::generate_pruneTables()
         }
         fclose(file);
     }
+
+    return (0);
 }

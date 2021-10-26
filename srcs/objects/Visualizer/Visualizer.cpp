@@ -240,13 +240,19 @@ int     Visualizer::drawLoop()
     while (!glfwWindowShouldClose(window))
     {
         if (rubik3d.rot.isAnimated == false  && moveQueue.empty())
-            return (0);
+            break ;
         if ( !moveQueue.empty() && rubik3d.rot.isAnimated == false && glfwGetTime() - lastRotation > 0.075f && glfwGetTime() - c > 0.5f)
         {
             rubik3d.rotate(moveQueue.front());
             moveQueue.pop();
         }
         draw();
+    }
+    if (!glfwWindowShouldClose(window))
+    {
+        c = glfwGetTime();
+        while (glfwGetTime() - c < 0.5f)
+            draw();
     }
     return (0);
 }

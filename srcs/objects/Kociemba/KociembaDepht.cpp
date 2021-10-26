@@ -18,9 +18,9 @@ void            Kociemba::setValue_CornPerm_DephtTable(unsigned int index, unsig
 unsigned int    Kociemba::getValue_CornPerm_DephtTable(unsigned int index) { return (CornerPermutation_DephtTable[index]); }
 
 void    Kociemba::generate_DephtTable(
-    unsigned int (Kociemba::*getValue_moveTable)(unsigned int index, unsigned int move),
-    void         (Kociemba::*setValue_dephtTable)(unsigned int index, unsigned int depht),
-    unsigned int (Kociemba::*getValue_dephtTable)(unsigned int index)
+    unsigned int (*getValue_moveTable)(unsigned int index, unsigned int move),
+    void         (*setValue_dephtTable)(unsigned int index, unsigned int depht),
+    unsigned int (*getValue_dephtTable)(unsigned int index)
 )
 {
     std::priority_queue<StateDepht>    Q;
@@ -28,7 +28,7 @@ void    Kociemba::generate_DephtTable(
     unsigned int                    newCoord;
 
     Q.emplace(0, 0);
-    (this->*setValue_dephtTable)(0, 0);
+    (*setValue_dephtTable)(0, 0);
 
     while (!Q.empty())
     {
@@ -37,11 +37,11 @@ void    Kociemba::generate_DephtTable(
 
         for (unsigned int i = 0; i < 18; ++i)
         {
-            newCoord = (this->*getValue_moveTable)(current.coord, i);
-            if (first || ((this->*getValue_dephtTable)(newCoord) == 0 && newCoord != 0))
+            newCoord = (*getValue_moveTable)(current.coord, i);
+            if (first || ((*getValue_dephtTable)(newCoord) == 0 && newCoord != 0))
             {
                 if (!first)
-                    (this->*setValue_dephtTable)(newCoord, current.depht + 1);
+                    (*setValue_dephtTable)(newCoord, current.depht + 1);
                 else
                     first = false;
                 Q.emplace(newCoord, current.depht + 1);

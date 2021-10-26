@@ -253,7 +253,7 @@ void    Kociemba::solveP1(Cube& rubik)
 
     size_t  opened = 0;
 
-    auto overMinSol = [this](auto const& x) {
+    auto overMinSol = [](auto const& x) {
        return( isStateUseless(x.phase, x.path.size(), x.p1, x.p2) );
     };
 
