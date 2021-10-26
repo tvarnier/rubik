@@ -135,13 +135,13 @@ void    Kociemba::getFLipUDSliceRep()
     }
 }
 
-void    Kociemba::generate_FLipUDSliceSym_MoveTable()
+void    Kociemba::generate_FlipUDSliceSym_MoveTable()
 {
     getFLipUDSliceRep();
 
     size_t repId(0);
 
-    for (unsigned int raw = 0; raw < FLIP_UD_SLICE_MOVETABLE_SIZE; ++raw)
+    for (unsigned int raw = 0; raw < FLIP_UD_SLICE_MOVETABLE_SIZE && repId < 64430; ++raw)
     {
         if (raw == Kociemba::FlipUDSlice_SymRep[repId])
         {
@@ -380,7 +380,7 @@ int     Kociemba::generate_moveTables()
     generate_UDSlice_MoveTable();
 
     generate_FlipUDSlice_MoveTable();
-    generate_FLipUDSliceSym_MoveTable();
+    generate_FlipUDSliceSym_MoveTable();
 
     generate_UDSliceSorted_MoveTable();
     generate_FBSliceSorted_MoveTable();

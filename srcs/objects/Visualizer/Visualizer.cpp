@@ -13,6 +13,8 @@ Visualizer::~Visualizer()
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &color_buffer);
 
+    glfwDestroyWindow(window);
+
     glfwTerminate();
 }
 
@@ -61,7 +63,7 @@ int     Visualizer::init()
     }
     glfwMakeContextCurrent(window);
     glfwSetWindowUserPointer(window, this);
-    //glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)&(framebuffer_size_callback));
+    glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)&(framebuffer_size_callback));
     //glfwSetCursorPosCallback(window, (GLFWcursorposfun)&(mouse_callback));
     //glfwSetScrollCallback(window, (GLFWscrollfun)&(scroll_callback));
     glfwSetErrorCallback((GLFWerrorfun)&error_callback);

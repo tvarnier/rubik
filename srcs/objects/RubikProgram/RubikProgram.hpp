@@ -16,13 +16,14 @@ typedef struct opt {
     bool            visu = false;
     bool            shuffle = false;
     long int        shuffleIterations = SHUFFLE_DEFAULT_ITERATIONS;
-    std::vector<string> moves = {};
+    std::vector<std::string> moves = {};
 } RubikProgramOptions;
     
 class   RubikProgram
 {
     public:
         RubikProgram(int ac, char **av);
+        ~RubikProgram();
 
     private:
         Cube            c;

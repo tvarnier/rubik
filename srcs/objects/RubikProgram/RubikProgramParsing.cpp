@@ -1,9 +1,9 @@
 #include "RubikProgram.hpp"
 
-void split(const string &chaine, char delimiteur, std::vector<string> &elements)
+void split(const std::string &chaine, char delimiteur, std::vector<std::string> &elements)
 {
-	stringstream ss(chaine);
-	string sousChaine;
+	std::stringstream ss(chaine);
+	std::string sousChaine;
 	while (getline(ss, sousChaine, delimiteur))
 	{
 		elements.push_back(sousChaine);
@@ -23,9 +23,9 @@ int     RubikProgram::parsing(int ac, char **av, RubikProgramOptions& options)
         return (1);
     for (int i = 1; i < ac; ++i)
     {
-        if (string(av[i]) == "-v")
+        if (std::string(av[i]) == "-v")
             options.visu = true;
-        else if (string(av[i]) == "-s")
+        else if (std::string(av[i]) == "-s")
         {
             if (!options.moves.empty()) { std::printf("Error: Shuffle or specific Moves, not both\n"); return (1); }
             options.shuffle = true;

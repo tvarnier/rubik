@@ -3,9 +3,7 @@ NAME		= rubik
 OS := $(shell uname)
 
 CC			= clang++ -std=c++2a
-FLAGS		= -O3
-LIB			= lib/lib.a
-
+FLAGS		= -O3 -pthread -g
 OSX_FRAMEWORKS  = -framework Cocoa -framework OpenGL -framework IOKit
 
 INCLUDES	= ./includes/rubik.hpp
@@ -58,7 +56,7 @@ $(NAME): $(BUILD_DIR) $(BIN_PATH) $(BIN_SUBDIR) $(BINS)
 ifeq ($(OS), Darwin)
 	$(CC) $(pkg-config --cflags glfw3 gl) $(FLAGS) $(BINS) ./build/src/libglfw3.a -ldl $(OSX_FRAMEWORKS) -o $@
 else
-	$(CC) $(pkg-config --cflags glfw3 gl) $(FLAGS) $(BINS) ./build/src/libglfw3.a -ldl -o $@
+	$(CC) $(pkg-config --cflags glfw3 gl) $(FLAGS) $(BINS) ./build/src/libglfw3.a -ldl -lX11 -o $@
 endif
 	
 

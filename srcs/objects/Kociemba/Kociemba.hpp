@@ -1,26 +1,10 @@
 #ifndef KOCIEMBA_HPP
 # define KOCIEMBA_HPP
 
-# include <string>
-# include <iostream>
-# include <limits>
-# include <iterator>
-# include <sstream>
-# include <algorithm>
 # include <set>
 # include <unordered_set>
-# include <unordered_map>
-# include <map>
-# include <array>
-# include <functional>
-# include <regex>
-# include <array>
-# include <cmath>
-# include <list>
 # include <fstream>
-# include <iomanip>
 # include <queue>
-# include <vector>
 
 # include "../Cube/Cube.hpp"
 class Cube;
@@ -48,8 +32,6 @@ class   Kociemba
     private:
         static char     P1_PruneTable[35227103];
         static char     P2_CPEP_PruneTable[27901440];
-        static char     P2_CPUS_PruneTable[241920];
-        static char     P2_USEP_PruneTable[241920];
 
         static std::vector< std::array<unsigned int, 18> >  CornerOrientation_MoveTable;
         static std::vector< std::array<unsigned int, 18> >  EdgeOrientation_MoveTable  ;
@@ -134,7 +116,7 @@ class   Kociemba
         void    generateFlipUDSliceRep();
         void    getFLipUDSliceRep();
         void    generate_FlipUDSlice_MoveTable();
-        void    generate_FLipUDSliceSym_MoveTable();
+        void    generate_FlipUDSliceSym_MoveTable();
         
         void    generate_UDSliceSorted_MoveTable();
         void    generate_RLSliceSorted_MoveTable();

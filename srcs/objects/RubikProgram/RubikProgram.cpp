@@ -45,3 +45,8 @@ RubikProgram::RubikProgram(int ac, char **av) {
             v->drawLoop();
     }
 }
+
+RubikProgram::~RubikProgram(){
+    if (v)
+        delete(v);
+}

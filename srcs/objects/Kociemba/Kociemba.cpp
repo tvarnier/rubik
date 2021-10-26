@@ -2,8 +2,6 @@
 
 char Kociemba::P1_PruneTable[35227103] = {};
 char Kociemba::P2_CPEP_PruneTable[27901440] = {};
-char Kociemba::P2_CPUS_PruneTable[241920] = {};
-char Kociemba::P2_USEP_PruneTable[241920] = {};
 
 std::vector< std::array<unsigned int, 18> > Kociemba::CornerOrientation_MoveTable = {};
 std::vector< std::array<unsigned int, 18> > Kociemba::EdgeOrientation_MoveTable   = {};
