@@ -32,7 +32,7 @@ bool     Kociemba::isStateUseless(const short& phase, const unsigned int& size, 
     if (
         (phase == 1 && (unsigned int)(size + phase1.depht) > 12)
         || (phase == 1 && (unsigned int)(size + ((phase1.depht > phase2.cornPermDepht) ? phase1.depht : phase2.cornPermDepht)) >= minSol)
-        || (phase == 2 && (unsigned int)(size + phase2.depht) >= ((minSol < 31) ? minSol : 31))
+        || (phase == 2 && (unsigned int)(size + phase2.depht) >= minSol)
     )
         return (true);
     return (false);

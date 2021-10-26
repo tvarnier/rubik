@@ -44,6 +44,7 @@ int		main(int ac, char **av)
 	{
 		std::vector<std::string> solPath = Kociemba::solve(c);
 		printMoves(std::string("SOL"), solPath, options.visu, v);
+		solPath.clear();
 	}
 
     if (v != NULL)

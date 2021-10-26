@@ -43,9 +43,9 @@ class Visualizer {
 
         int             init();
 
-        glm::vec4   rotateAround( const glm::vec4&   aPointToRotate, const glm::vec4&   aRotationCenter, const glm::mat4x4& aRotationMatrix );
+        glm::vec4       rotateAround( const glm::vec4&   aPointToRotate, const glm::vec4&   aRotationCenter, const glm::mat4x4& aRotationMatrix );
         
-        void processInput(GLFWwindow *window);
+        void            processInput(GLFWwindow *window);
 };
 
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
