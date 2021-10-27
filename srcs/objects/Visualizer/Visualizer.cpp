@@ -50,8 +50,6 @@ int     Visualizer::init()
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     #endif
 
-
-
     // glfw window creation
     // --------------------
     window = glfwCreateWindow(m_width, m_height, "Rubik", NULL, NULL);
@@ -61,12 +59,16 @@ int     Visualizer::init()
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(window);
+
     glfwSetWindowUserPointer(window, this);
     glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)&(framebuffer_size_callback));
     //glfwSetCursorPosCallback(window, (GLFWcursorposfun)&(mouse_callback));
     //glfwSetScrollCallback(window, (GLFWscrollfun)&(scroll_callback));
     glfwSetErrorCallback((GLFWerrorfun)&error_callback);
+    glfwSetWindowCloseCallback(window, window_close_callback);
+
+    glfwMakeContextCurrent(window);
+
     
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -210,7 +212,6 @@ int     Visualizer::draw()
 
         glm::mat4 model = glm::mat4(1.0f);
 
-
         if (cubie3d.isAnimated())
         {
             glm::vec4 v4RotCenter( rubik3d.rot.center );
@@ -308,4 +309,9 @@ static void     scroll_callback(GLFWwindow* window, double xoffset, double yoffs
 static void     error_callback(int error, const char* description)
 {
     std::cout << "Error: %s\n" << description << std::endl;
+}
+
+void window_close_callback(GLFWwindow* window)
+{
+    glfwSetWindowShouldClose(window, GLFW_FALSE);
 }

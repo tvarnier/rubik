@@ -52,5 +52,6 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 static void error_callback(int error, const char* description);
+static void window_close_callback(GLFWwindow* window);
 
 #endif
