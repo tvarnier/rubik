@@ -1,5 +1,5 @@
-// clang++ -std=c++2a -O3 -pthread -g tests/basicGLFW.cpp ./srcs/objects/Visualizer/glad.cpp ./build/src/libglfw3.a -ldl -framework Cocoa -framework OpenGL -framework IOKit -o test -I includes
-// clang++ -std=c++2a -O3 -pthread -g tests/basicGLFW.cpp ./srcs/objects/Visualizer/glad.cpp ./build/src/libglfw3.a -ldl -lX11 -o test -I includes
+// clang++ -std=c++2a -O3 -pthread -g testsLeaksGLFW/basicGLFW.cpp ./srcs/objects/Visualizer/glad.cpp ./build/src/libglfw3.a -ldl -framework Cocoa -framework OpenGL -framework IOKit -o test -I includes
+// clang++ -std=c++2a -O3 -pthread -g testsLeaksGLFW/basicGLFW.cpp ./srcs/objects/Visualizer/glad.cpp ./build/src/libglfw3.a -ldl -lX11 -o test -I includes
 
 // valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-reachable=no --show-possibly-lost=no ./test
 

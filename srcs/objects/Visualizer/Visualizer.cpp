@@ -32,8 +32,6 @@ int     Visualizer::init()
 
     lastRotation = 0.0f;
 
-    // glfw: initialize and configure
-    // ------------------------------
     #ifdef __APPLE__
         glfwInitHint(GLFW_COCOA_CHDIR_RESOURCES, GLFW_FALSE);
     #endif
@@ -50,8 +48,6 @@ int     Visualizer::init()
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     #endif
 
-    // glfw window creation
-    // --------------------
     window = glfwCreateWindow(m_width, m_height, "Rubik", NULL, NULL);
     if (window == NULL)
     {
@@ -62,33 +58,21 @@ int     Visualizer::init()
 
     glfwSetWindowUserPointer(window, this);
     glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)&(framebuffer_size_callback));
-    //glfwSetCursorPosCallback(window, (GLFWcursorposfun)&(mouse_callback));
-    //glfwSetScrollCallback(window, (GLFWscrollfun)&(scroll_callback));
     glfwSetErrorCallback((GLFWerrorfun)&error_callback);
     glfwSetWindowCloseCallback(window, window_close_callback);
 
     glfwMakeContextCurrent(window);
 
-    
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
 
-    // configure global opengl state
-    // -----------------------------
     glEnable(GL_DEPTH_TEST);
-
-    // build and compile our shader program
-    // ------------------------------------
 
     ourShader = Shader("./resources/shaders/3.3.shader.vs", "./resources/shaders/3.3.shader.fs");
 
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
     float vertices[] = {
         -SIZE_CUBIE / 2.0f, -SIZE_CUBIE / 2.0f, -SIZE_CUBIE / 2.0f,
          SIZE_CUBIE / 2.0f, -SIZE_CUBIE / 2.0f, -SIZE_CUBIE / 2.0f,

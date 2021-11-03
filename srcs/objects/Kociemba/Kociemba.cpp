@@ -1,75 +1,116 @@
 #include "Kociemba.hpp"
 
-char Kociemba::P1_PruneTable[35227103] = {};
-char Kociemba::P2_CPEP_PruneTable[27901440] = {};
+char Kociemba::PruneTable::P1[35227103] = {};
+char Kociemba::PruneTable::P2_CPEP[27901440] = {};
 
-std::vector< std::array<unsigned int, 18> > Kociemba::CornerOrientation_MoveTable = {};
-std::vector< std::array<unsigned int, 18> > Kociemba::EdgeOrientation_MoveTable   = {};
-std::vector< std::array<unsigned int, 18> > Kociemba::UDSlice_MoveTable           = {};
-std::vector< std::array<unsigned int, 18> > Kociemba::FlipUDSlice_MoveTable       = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::CornerOrientation = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::EdgeOrientation   = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::UDSlice           = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::FlipUDSlice       = {};
 
-std::vector< std::array<unsigned int, 18> > Kociemba::UDSliceSorted_MoveTable     = {};
-std::vector< std::array<unsigned int, 18> > Kociemba::FBSliceSorted_MoveTable     = {};
-std::vector< std::array<unsigned int, 18> > Kociemba::RLSliceSorted_MoveTable     = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::UDSliceSorted     = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::FBSliceSorted     = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::RLSliceSorted     = {};
 
-std::vector< std::array<unsigned int, 18> > Kociemba::CornerPermutation_MoveTable = {};
-std::vector< std::array<unsigned int, 18> > Kociemba::P2EdgePermutation_MoveTable = {};
-std::vector< std::array<unsigned int, 18> > Kociemba::P2UDSlice_MoveTable         = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::CornerPermutation = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::P2EdgePermutation = {};
+std::vector< std::array<unsigned int, 18> > Kociemba::MoveTable::P2UDSlice         = {};
 
-std::vector< std::array<unsigned int, 24> > Kociemba::edge8Perm = {};
+std::vector< std::array<unsigned int, 24> > Kociemba::MoveTable::edge8Perm = {};
 
-std::vector< unsigned int >    Kociemba::CornPerm_SymRep = {};
-std::vector< std::pair< unsigned int, std::vector<unsigned int> > > Kociemba::CornPerm_Sym = {};
 
-std::vector< unsigned int >    Kociemba::FlipUDSlice_SymRep = {};
-std::vector< std::pair< unsigned int, std::vector<unsigned int> > > Kociemba::FlipUDSlice_Sym = {};
+std::array< Cube, 48 > Kociemba::Sym::Cubes = {};
+std::array< Cube, 48 > Kociemba::Sym::invCubes = {};
 
-std::vector< std::array<unsigned int, 16> > Kociemba::P2EdgePermSym_MoveTable = {};
-std::vector< std::array<unsigned int, 16> > Kociemba::CornOrientSym_MoveTable = {};
+std::vector< std::array<unsigned int, 16> > Kociemba::Sym::MoveTable::P2EdgePermutation = {};
+std::vector< std::array<unsigned int, 16> > Kociemba::Sym::MoveTable::cornerOrientation = {};
 
-std::vector< unsigned int >                  Kociemba::CornerPermutation_DephtTable;
+std::vector< unsigned int >    Kociemba::Sym::Rep::cornerPermutation = {};
+std::vector< unsigned int >    Kociemba::Sym::Rep::FlipUDSlice = {};
 
-std::array< Cube, 48 > Kociemba::symCubes = {};
-std::array< Cube, 48 > Kociemba::symInvCubes = {};
+std::vector< std::pair< unsigned int, std::vector<unsigned int> > > Kociemba::Sym::RepTable::cornerPermutation = {};
+std::vector< std::pair< unsigned int, std::vector<unsigned int> > > Kociemba::Sym::RepTable::FlipUDSlice = {};
 
-void    Kociemba::initContainers() {
-    Kociemba::CornerOrientation_MoveTable.resize(CORNER_ORIENTATION_MOVETABLE_SIZE);
-    Kociemba::EdgeOrientation_MoveTable.resize(EDGE_ORIENTATION_MOVETABLE_SIZE);
-    Kociemba::UDSlice_MoveTable.resize(UD_SLICE_MOVETABLE_SIZE);
-    Kociemba::FlipUDSlice_MoveTable.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
-
-    Kociemba::UDSliceSorted_MoveTable.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
-    Kociemba::FBSliceSorted_MoveTable.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
-    Kociemba::RLSliceSorted_MoveTable.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
-
-    Kociemba::CornerPermutation_MoveTable.resize(CORNER_PERMUTATION_MOVETABLE_SIZE);
-    Kociemba::P2EdgePermutation_MoveTable.resize(P2_EDGE_PERMUTATION_MOVETABLE_SIZE);
-    Kociemba::P2UDSlice_MoveTable.resize(P2_UD_SLICE_MOVETABLE_SIZE);
-
-    Kociemba::edge8Perm.resize(11880);
-
-    Kociemba::CornPerm_SymRep.resize(2768);
-    Kociemba::CornPerm_Sym.resize(CORNER_PERMUTATION_MOVETABLE_SIZE);
-
-    Kociemba::FlipUDSlice_SymRep.resize(64430 );
-    Kociemba::FlipUDSlice_Sym.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
-
-    Kociemba::P2EdgePermSym_MoveTable.resize(40320);
-    Kociemba::CornOrientSym_MoveTable.resize(2187);
-    
-    Kociemba::CornerPermutation_DephtTable.resize(CORNER_PERMUTATION_MOVETABLE_SIZE);
-}
+std::vector< unsigned int >                  Kociemba::DephtTable::CornerPermutation;
 
 int     Kociemba::init()
 {
-    initContainers();
-
-    generate_symmetries();
-    if (generate_moveTables())
+    if (Sym::Generate::all())
+        return (1);
+    if (MoveTable::Generate::all())
         return(1);
-    if (generate_pruneTables())
+    if (PruneTable::Generate::all())
         return(1);
-    generate_dephtTables();
+    DephtTable::Generate::all();
 
     return (0);
+}
+
+int     Kociemba::Sym::Generate::all()
+{
+    Sym::MoveTable::P2EdgePermutation.resize(40320);
+    Sym::MoveTable::cornerOrientation.resize(2187);
+
+    Sym::Rep::cornerPermutation.resize(2768);
+    Sym::Rep::FlipUDSlice.resize(64430 );
+    
+    Sym::RepTable::cornerPermutation.resize(CORNER_PERMUTATION_MOVETABLE_SIZE);
+    Sym::RepTable::FlipUDSlice.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
+
+    Sym::Generate::Cubes();
+    Sym::Generate::invCubes();
+
+    Sym::MoveTable::Generate::cornerOrientation();
+    Sym::MoveTable::Generate::P2EdgePermutation();
+
+    if (Sym::Rep::Generate::FlipUDSlice())
+        return (1);
+    Sym::RepTable::Generate::FlipUDSlice();
+    Sym::RepTable::Generate::generate_CornerPermutationSym_MoveTable();
+    return (0);
+}
+
+int     Kociemba::MoveTable::Generate::all()
+{
+    MoveTable::CornerOrientation.resize(CORNER_ORIENTATION_MOVETABLE_SIZE);
+    MoveTable::EdgeOrientation.resize(EDGE_ORIENTATION_MOVETABLE_SIZE);
+    MoveTable::UDSlice.resize(UD_SLICE_MOVETABLE_SIZE);
+    MoveTable::FlipUDSlice.resize(FLIP_UD_SLICE_MOVETABLE_SIZE);
+
+    MoveTable::UDSliceSorted.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
+    MoveTable::FBSliceSorted.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
+    MoveTable::RLSliceSorted.resize(UD_SLICE_SORTED_MOVETABLE_SIZE);
+
+    MoveTable::CornerPermutation.resize(CORNER_PERMUTATION_MOVETABLE_SIZE);
+    MoveTable::P2EdgePermutation.resize(P2_EDGE_PERMUTATION_MOVETABLE_SIZE);
+    MoveTable::P2UDSlice.resize(P2_UD_SLICE_MOVETABLE_SIZE);
+
+    MoveTable::edge8Perm.resize(11880);
+    
+    MoveTable::Generate::CornerOrientation();
+    MoveTable::Generate::EdgeOrientation();
+    MoveTable::Generate::UDSlice();
+    MoveTable::Generate::FlipUDSlice();
+
+    MoveTable::Generate::UDSliceSorted();
+    MoveTable::Generate::FBSliceSorted();
+    MoveTable::Generate::RLSliceSorted();
+
+    MoveTable::Generate::CornerPermutation();
+    MoveTable::Generate::P2EdgePermutation();
+    MoveTable::Generate::P2UDSlice();
+
+    MoveTable::Generate::Edge8Perm();
+
+    return (0);
+}
+
+void    Kociemba::DephtTable::Generate::all()
+{
+    DephtTable::CornerPermutation.resize(CORNER_PERMUTATION_MOVETABLE_SIZE);
+    Kociemba::DephtTable::Generate::one(
+        Kociemba::DephtTable::CornerPermutation,
+        Kociemba::MoveTable::CornerPermutation,
+        18
+    );
 }

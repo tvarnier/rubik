@@ -21,18 +21,21 @@ int		main(int ac, char **av)
 
     options.moves.clear();
 
+	// Parsing
     if (parsing(ac, av, options))
         return (1);
 
     Cube        c;
     Visualizer* v = NULL;
 
+	// Init Visualizer if option activated
     if (options.visu)
     {
         v = new Visualizer(1080, 1080);
         v->draw();
     }
 
+	// Apply Moves to Cube
     if (options.moves.empty())
 		options.moves = c.shuffle(options.shuffleIterations);
 	else
@@ -40,6 +43,7 @@ int		main(int ac, char **av)
 			c.move(m);
 	printMoves(std::string("MIX"), options.moves, options.visu, v);
 
+	// init Kociemba and Find Solution
 	if (!(ret = Kociemba::init()))
 	{
 		std::vector<std::string> solPath = Kociemba::solve(c);
