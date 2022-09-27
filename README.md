@@ -1,4 +1,4 @@
-# FDF [[Sujet](https://github.com/tvarnier/rubik/blob/master/rubik.pdf)]
+# RUBRIK [[Sujet](https://github.com/tvarnier/rubik/blob/master/rubik.pdf)]
 
 <br>
 
