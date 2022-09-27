@@ -27,10 +27,11 @@ Lancer la commande `make` pour compiler le projet.
 Il suffit ensuite de lancer la commande `./rubik [-v] [-s <nbrIterations> ou <rotations>]`
  * `-v` pour lancer le visualisateur
  * De base le programe fait un melange du Rubik de 30 iterations sinon :
- * * `-s <nbrIterations>` pour choisir le nombre d'iterations
- * * `<rotations>` indiquer une serie de rotations precise, exemple `"R U2 L' B' D2 F"`
+   * `-s <nbrIterations>` pour choisir le nombre d'iterations
+   * `<rotations>` indiquer une serie de rotations precise, exemple `"R U2 L' B' D2 F"`
 
 <br>
 
 L'algorithme utilisé est grandement inspiré par celui de [Kociemba](http://kociemba.org/cube.htm)
+
 Il permet de resoudre rapidement un cube en 30 rotations ou moins maximum
