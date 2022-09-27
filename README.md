@@ -1,4 +1,4 @@
-# RUBRIK [[Sujet](https://github.com/tvarnier/rubik/blob/master/rubik.pdf)]
+# RUBIK [[Sujet](https://github.com/tvarnier/rubik/blob/master/rubik.pdf)]
 
 <br>
 
