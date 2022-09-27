@@ -32,7 +32,7 @@ Il suffit ensuite de lancer la commande `./rubik [-v] [-s <nbrIterations> ou <ro
 
 <br>
 
-les rotations disponibles sont `F` / `R` / `U` / `B` / `L` / `D` pour Front / Right
+les rotations disponibles sont `F` `R` `U` `B` `L` `D` pour Front / Right
 / Up / Back / Left / Down (Voir [notations](https://www.francocube.com/notation) pour une representation visuelle)
 
 Auquels on peut ajouter `'` pour signifier l'inverse (ex: `F'`) et `2` pour un demi-tour (ex: `F2`)
