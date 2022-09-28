@@ -41,4 +41,4 @@ Auquels on peut ajouter `'` pour signifier l'inverse (ex: `F'`) et `2` pour un d
 
 L'algorithme utilisé est grandement inspiré par celui de [Kociemba](http://kociemba.org/cube.htm)
 
-Il permet de resoudre rapidement un cube en 30 rotations ou moins maximum
+Il permet de trouver une solution de 30 rotations ou moins rapidement
