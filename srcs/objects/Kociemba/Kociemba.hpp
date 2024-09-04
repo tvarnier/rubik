@@ -7,6 +7,7 @@
 # include <queue>
 # include <filesystem>
 # include <iostream>
+# include <algorithm>
 
 # include "../Cube/Cube.hpp"
 class Cube;

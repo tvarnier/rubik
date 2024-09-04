@@ -178,7 +178,7 @@ int     Visualizer::draw()
 
     if (rubik3d.rot.isAnimated)
     {
-        rubik3d.rot.angle += ((rubik3d.rot.speed) * deltaTime);
+	rubik3d.rot.angle += ((rubik3d.rot.speed) * deltaTime);
         lastRotation = currentFrame;
     }
 

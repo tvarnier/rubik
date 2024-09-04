@@ -9,15 +9,15 @@
 # include <vector>
 # include <queue>
 
-# include "glad/glad.h"
-# include "../external_lib/glfw/include/GLFW/glfw3.h"
+# include <glad/glad.h>
+# include <GLFW/glfw3.h>
 
-# include "../external_lib/glm/glm.hpp"
-# include "../external_lib/glm/gtc/type_ptr.hpp"
-# include "../external_lib/glm/vec3.hpp"
-# include "../external_lib/glm/vec4.hpp"
-# include "../external_lib/glm/mat4x4.hpp"
-# include "../external_lib/glm/gtc/matrix_transform.hpp"
-# include "../external_lib/glm/gtx/transform.hpp"
+# include <glm/glm.hpp>
+# include <glm/gtc/type_ptr.hpp>
+# include <glm/vec3.hpp>
+# include <glm/vec4.hpp>
+# include <glm/mat4x4.hpp>
+# include <glm/gtc/matrix_transform.hpp>
+# include <glm/gtx/transform.hpp>
 
 #endif

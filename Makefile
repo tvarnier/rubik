@@ -54,9 +54,6 @@ OBJ_SUBDIR	= objects/Cube \
 			  objects/Visualizer/Rubik3d \
 			  objects/RubikProgram
 
-BUILD_DIR	= ./build/
-BUILD_MAKE	= 
-
 SRC_PATH	= ./srcs/
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 SRCS		+= $(addprefix $(SRC_PATH), $(OBJ_DIR), $(OBJ))
@@ -65,20 +62,15 @@ BIN			= $(SRC:%.cpp=%.o)
 BIN			+= $(addprefix $(OBJ_DIR), $(OBJ:%.cpp=%.o))
 BIN_PATH	= ./bins/
 BINS		= $(addprefix $(BIN_PATH), $(BIN))
-BIN_SUBDIR  = $(addprefix $(BIN_PATH), $(OBJ_DIR))
-BIN_SUBDIR  += $(addprefix $(BIN_PATH), $(OBJ_SUBDIR))
+BIN_SUBDIR  	= $(addprefix $(BIN_PATH), $(OBJ_DIR))
+BIN_SUBDIR  	+= $(addprefix $(BIN_PATH), $(OBJ_SUBDIR))
 
 .PHONY: all clean fclean re
 
 all: $(NAME)
 
 $(NAME): $(BUILD_DIR) $(BIN_PATH) $(BIN_SUBDIR) $(BINS)
-ifeq ($(OS), Darwin)
-	$(CC)  $(FLAGS) $(BINS) ./build/src/libglfw3.a -ldl -framework Cocoa -framework OpenGL -framework IOKit -o $@
-else
-	$(CC) $(FLAGS) $(BINS) ./build/src/libglfw3.a -ldl -lX11 -o $@
-endif
-	
+	$(CC) $(FLAGS) $(BINS) -lglfw -ldl -lX11 -o $@	
 
 $(BIN_PATH):
 	@ mkdir $@
@@ -88,11 +80,6 @@ $(BIN_SUBDIR):
 
 $(BIN_PATH)%.o: $(SRC_PATH)%.cpp
 	$(CC) -I includes -I external_lib -o $@ -c $< $(FLAGS)
-
-$(BUILD_DIR):
-	@ mkdir $@
-	cmake -S ./external_lib/glfw/ -B $(BUILD_DIR)
-	make -C $(BUILD_DIR)
 
 clean:
 	@ rm -rf $(BIN_PATH)
